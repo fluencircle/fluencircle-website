@@ -28,7 +28,6 @@ import { meetingsObj, setUser, currentTopic, setCurrentTopic, addNewCurrentQuest
         logo.onclick = () => {window.location.href = 'index.html'}
 
         openSetMeetingButton.onclick = () =>{
-            alignSelection()
 
             openSetMeetingButton.classList.add('active')
             
@@ -175,7 +174,6 @@ import { meetingsObj, setUser, currentTopic, setCurrentTopic, addNewCurrentQuest
 
 
 openSlideShowButton.onclick = () =>{
-    alignSelection()
     homePage.classList.add('hidden')
     translationButton.classList.remove('hidden')
 
@@ -511,4 +509,3 @@ function clearSelection(){
 
 
 
-alignSelection()
