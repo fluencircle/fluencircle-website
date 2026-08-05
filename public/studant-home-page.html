@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluenTech</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">   
+    <title>FluenTech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">
+            <span>&lt</span><span class="innerLogo">FluenTech </span><span>/&gt</span>
+        </div>
+    </header>
+    <main id="home-page">
+        <div class="content">
+            <div class="home-page-options">
+                <button id="open-flash-cards-button" class="home-btn">Flash Cards</button>
+            </div>
+        </div>
+    </main>
+
+
+
+    <script>
+        const openFlashCardsButton = document.getElementById('open-flash-cards-button')
+        openFlashCardsButton.onclick = () =>{window.location.href = 'flash-cards.html'}
+        localStorage.setItem('user', 'studant')
+
+    </script>
+</body>
+</html>

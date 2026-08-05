@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  
+    <title>FluenTech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+    <header>
+        <div class="logo" id="logo">
+            <span>&lt</span><span class="innerLogo">FluenTech </span><span>/&gt</span>
+        </div>
+    </header>
+    <main id="home-page">
+        <div class="content">
+
+        </div>
+    </main>
+
+<aside class="sidebar" id="sidebar">
+
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="active">
+                <a href="#" onclick="backToHome(); return false;" >
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="open-set-meeting-button">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>Set Meeting</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="open-slide-show-button">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Start Meeting</span>
+                </a>
+            </li>
+            <li >
+                <a href="#" id="open-flash-cards-button">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Flash Cards</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+
+    
+
+    <main id="set-meeting-page" class="hidden">
+        <div class="content">
+
+            <div class="theme-container">
+                <input type="text" placeholder="Set the meeting topic..." id="topic-input" autocomplete="off">
+            </div>
+            <div class="questions-container">
+     <div id="add-question-button">
+                    + Add question
+                </div> 
+                 <div class="questions-list">
+                    
+                </div>
+                     <div id="set-button">
+                    Set
+                </div> 
+            </div>
+          
+            </div>
+        </div>
+    </main>
+
+    <main id="slide-show-page" class="hidden">
+        <div class="content select-content">
+            <p>Select a presentation</p>
+            <select name="" id="presentation-select">
+                <option value="">Loading...</option>
+            </select>
+            <button id="start-presentation-btn">Start</button>
+        </div>
+        <div class="content slide-content"> 
+                                      <div class="back-to-selection back-button" onclick="backToSelection()" >
+                        <i class="fa-solid fa-circle-chevron-left"></i>
+                        <span>Select meeting</span>
+                    </div>
+            <div class="slide">
+                <p>Technology in the future: will the robot replace the human work</p>
+            </div>
+        </div>
+
+    </main>
+
+
+        
+
+
+    <div class="translation-button hidden">
+        <span>Quick Translator</span>
+    </div>
+    
+
+    <div class="modal-container hidden" id="translator-modal">
+        <div class="modal">
+            <button class="close-translation-btn"><i class="fa-solid fa-x"></i></button>
+            <div class="modal-content" id="translation-content">
+                <h3>Translator</h3>
+                <p>Select a language</p>
+                <div class="select-container">
+<select name="translation-options" id="translation-options">
+                    <option value="pt">Portuguese &#x2794 English</option>
+                    <option value="en">English &#x2794 Portuguese</option></select>
+                </div>
+                
+                    
+                    <div class="translation-container">
+                        <input type="text" id="normal-text" placeholder="Type a text" autocomplete="off">
+                        <input type="text" id="translated-text" placeholder="Here is your Translation" readonly>
+                    </div>
+
+                    <div class="flexbox">
+                        <button id="translate-btn">Translate</button>
+                    <button id="add-flashcards-btn">Add to FlashCards</button>
+                    </div>
+                    
+                
+            </div>
+
+            <div class="modal-content hidden"  id="add-flashcard-content">
+                  <h3>Translator</h3>
+                <p>Select the meeting for the flashCard</p>
+                <div class="select-container">
+ <select name="select-meeting" id="select-meeting">
+                </select>
+                </div>
+               
+                <div class="flexbox">
+<button id="save-flashcard-btn">Add</button>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="alert hidden ">
+        <div class="alert-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <p>Added to...</p>
+    </div>
+
+         <div class="loading-gif hidden">
+        <div class="circle one">
+        </div>
+        <div class="circle two">
+        </div>
+        <div class="circle three">
+        </div>
+    </div>
+
+    
+    <script type="module" src="app.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="script.js"></script>
+    
+</body>
+
+
+</html>

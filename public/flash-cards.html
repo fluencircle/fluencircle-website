@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">   
+    <title>FluenTech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">
+            <span>&lt</span><span class="innerLogo">FluenTech </span><span>/&gt</span>
+        </div>
+    </header>
+    <aside class="sidebar" id="sidebar">
+
+    
+    <nav class="sidebar-nav">
+        <ul>
+            <li>
+                <a href="#" onclick="backToHome(); return false;">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="open-set-meeting-button">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                    <span>Set Meeting</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="open-slide-show-button">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Start Meeting</span>
+                </a>
+            </li>
+            <li >
+                <a href="#" id="open-flash-cards-button">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Flash Cards</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+     <div class="loading-gif">
+        <div class="circle one">
+        </div>
+        <div class="circle two">
+        </div>
+        <div class="circle three">
+        </div>
+    </div>
+
+    <body>
+
+        <main>
+
+  <div id="meetings-content" class="content">                   
+
+                          <div class="title">
+                        <h1>Select meeting</h1>
+                    </div>
+            <div class="classes-grid">
+
+            </div>
+        </div>
+
+                <div id="flash-cards-content" class="content hidden">
+                    <div class="back-to-meetings back-button">
+                        <i class="fa-solid fa-circle-chevron-left"></i>
+                        <span>Back to meetings</span>
+                    </div>
+                    <div class="title">
+              
+                        <h1>Meeting Title</h1>
+                        <button id="play-cards-btn"><i class="fa-solid fa-circle-play"></i></button>
+                    
+                    </div>
+            <div class="flash-cards-grid">
+                <div class="flash-card">
+                  
+                </div>
+            </div>
+            <div class="flash-cards-full hidden">
+                <span id="left-arrow"><i class="fa-solid fa-angle-left"></i></span>
+                <span id="right-arrow"><i class="fa-solid fa-angle-right"></i></span>
+                <div class="flash-card" id="full-card">
+                        <span class="flash-card-front"></span>
+                        <span class="flash-card-back"></span>
+                </div>
+            </div>
+        </div>
+
+        </main>
+       
+
+
+        <script type="module" src="app.js"></script>
+        <script type="module" src="cards.js"></script>
+
+    </body>
+
+
+
+
+
+
+
+
+
+       </html> 
+       
