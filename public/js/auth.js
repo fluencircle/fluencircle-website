@@ -1,72 +1,98 @@
- import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, deleteUser } from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { auth } from "./firebase.js";
 
- export const auth = getAuth()
- const loadingGif = document.querySelector('.loading-gif')
-const logoutBtn = document.getElementById('logout-btn')
+const loadingGif = document.querySelector('.loading-gif');
 
-        export function authErrorTreatment(error){
-                     switch (error.code){
-            case 'auth/invalid-email':
-            
-                alert('E-mail inválido!')
-                break
-            case 'auth/missing-password':
-                alert('Insira uma senha')
-                break
-            case 'auth/weak-password':
-                alert('Senha muito fraca')
-                break
-            case 'auth/email-already-in-use':
-                alert('Esse e-mail já está em uso!')
-                break
-            case 'auth/invalid-credential':
-                alert('Senha Incorreta!')
-                break
-        }
-        }
+function setLoading(active) {
+  if (loadingGif) {
+    loadingGif.classList.toggle('hidden', !active);
+  }
+}
 
-      export function signIn(email, password){
-        loadingGif.classList.remove('hidden')
-      signInWithEmailAndPassword(auth, email, password).then((user)=>{window.location.href = 'index.html'; loadingGif.classList.add('hidden')
-      }).catch(error =>{
-        loadingGif.classList.add('hidden')
-        authErrorTreatment(error)
-      })
-    }
+export function showToast(message, type = 'success') {
+  let toast = document.getElementById('auth-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'auth-toast';
+    toast.className = 'toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.className = `toast toast-${type} toast-visible`;
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => toast.classList.remove('toast-visible'), 3500);
+}
 
-  export function createAccount(email, password){
-    loadingGif.classList.remove('hidden')
-      createUserWithEmailAndPassword(auth, email, password).then((user)=>{
-        loadingGif.classList.add('hidden')
-      }).catch(error =>{
-         authErrorTreatment(error)
-         loadingGif.classList.add('hidden')
-      })
-    }
+const ERROR_MESSAGES = {
+  'auth/invalid-email': 'E-mail inválido.',
+  'auth/missing-password': 'Insira uma senha.',
+  'auth/invalid-credential': 'E-mail ou senha incorretos.',
+  'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
+  'auth/user-not-found': 'Usuário não encontrado.',
+  'auth/wrong-password': 'Senha incorreta.'
+};
 
+export function authErrorTreatment(error) {
+  const message = ERROR_MESSAGES[error.code] || 'Ocorreu um erro. Tente novamente.';
+  showToast(message, 'error');
+}
 
-            onAuthStateChanged(auth, user =>{
-            const page = document.querySelector('#authHTML')
-            if(!user && !page){
-                window.location.href='auth.html'
-            }
-        })
-
-
-        if(logoutBtn){
-            logoutBtn.onclick = e =>{
-                const auth = getAuth()
-                loadingGif.classList.remove('hidden')
-                signOut(auth).then(()=>{
-                    loadingGif.classList.remove('hidden')
-                }).catch((error) => {
-      console.error("Erro ao deslogar:", error);
+export function signIn(email, password) {
+  if (!email.trim() || !password) {
+    showToast('Preencha e-mail e senha.', 'error');
+    return;
+  }
+  setLoading(true);
+  signInWithEmailAndPassword(auth, email.trim(), password)
+    .then(() => { window.location.href = 'index.html'; })
+    .catch((error) => {
+      setLoading(false);
+      authErrorTreatment(error);
     });
-                
-            }
-        }else{
-            console.log('Sem botão de logout!')
-        }
-        
+}
 
+export function logout() {
+  setLoading(true);
+  signOut(auth)
+    .then(() => { window.location.href = 'auth.html'; })
+    .catch((error) => {
+      setLoading(false);
+      console.error('Erro ao deslogar:', error);
+      showToast('Erro ao sair. Tente novamente.', 'error');
+    });
+}
 
+export function initAuthGuard() {
+  const isAuthPage = document.getElementById('authHTML');
+
+  onAuthStateChanged(auth, (user) => {
+    if (isAuthPage) {
+      if (user) window.location.href = 'index.html';
+      return;
+    }
+
+    if (!user) {
+      window.location.href = 'auth.html';
+      return;
+    }
+
+    const userEmailEl = document.getElementById('user-email');
+    if (userEmailEl) {
+      userEmailEl.textContent = user.email;
+    }
+  });
+
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+}
+
+initAuthGuard();

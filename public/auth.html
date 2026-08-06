@@ -1,138 +1,59 @@
 <!DOCTYPE html>
-<html lang="en" id="authHTML">
+<html lang="pt-BR" id="authHTML">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">   
-    <title>FluenTech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Fluency — Login</title>
     <link rel="stylesheet" href="css/style.css">
-
 </head>
-<body>
-        <header>
-        <div class="logo" id="logo">
-            <span>&lt</span><span class="innerLogo">FluenTech </span><span>/&gt</span>
+<body class="auth-body">
+    <header class="auth-header">
+        <div class="logo">
+            <span>&lt;</span><span class="innerLogo">Fluency</span><span>/&gt;</span>
         </div>
     </header>
 
-    <div id="auth-elements">
-        <div class="ball ball1"></div>
-        <div class="ball ball2"></div>
-        <div class="ball ball3"></div>
-        <h1>Você aprendeu português <span>falando</span></h1>
-        <p>Participe de sessões de conversação semanais e fique mais perto da fluência.</p>
-        <img src="assets/auth-image.png" alt="">
-        
-        
-        
-    </div>
-    <div class="auth-modal">
-        
-        <div class="auth-content" id="login-content">
-            <h1>Login</h1>
-            <form action="" id="login-form" class="auth-form" method="post">
-                <div class="form-item">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email", id="email" autocomplete="off">
-                </div>
+    <main class="auth-layout">
+        <section id="auth-elements">
+            <div class="ball ball1"></div>
+            <div class="ball ball2"></div>
+            <div class="ball ball3"></div>
+            <h1>Você aprendeu português <span>falando</span></h1>
+            <p>Participe de sessões de conversação semanais e fique mais perto da fluência.</p>
+            <div class="auth-illustration">
+                <i class="fa-solid fa-comments"></i>
+            </div>
+        </section>
+
+        <section class="auth-modal">
+            <div class="auth-content" id="login-content">
+                <h2>Entrar</h2>
+                <p class="auth-subtitle">Acesse sua conta para continuar</p>
+                <form id="login-form" class="auth-form">
                     <div class="form-item">
-                    <label for="email">Senha:</label>
-                    <input type="password" name="password", id="password" autocomplete="off">
-                </div>
-                <button id="login-btn">Login</button>
-
-            </form>                
-
-            <span class="user-suport-message" id="switch-to-create">Não tenho uma conta, mas quero participar!</span>
-        </div>
-
-            <div id="create-content" class="auth-content hidden" >
-                <h1>Crie sua conta</h1>
-            <form action="" id="create-form"class="auth-form" method="post">
-                <div class="form-item">
-                    <label for="email">Email:</label>
-                    <input type="text" name="email", id="email" autocomplete="off">
-                </div>
+                        <label for="email">E-mail</label>
+                        <input type="email" name="email" id="email" placeholder="seu@email.com" autocomplete="email" required>
+                    </div>
                     <div class="form-item">
-                    <label for="email">Senha</label>
-                    <input type="password" name="password", id="password" autocomplete="off">
-                </div>
-                <button id="create-btn">Criar Conta</button>
+                        <label for="password">Senha</label>
+                        <input type="password" name="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" id="login-btn">Entrar</button>
+                </form>
+            </div>
+        </section>
+    </main>
 
-            </form>                
-
-            <span id="switch-to-login" class="user-suport-message" const >Já tenho uma conta</span>
-        </div>
+    <div class="loading-gif hidden">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
     </div>
-
-    
-         <div class="loading-gif hidden">
-        <div class="circle one">
-        </div>
-        <div class="circle two">
-        </div>
-        <div class="circle three">
-        </div>
-    </div>
-
-
 
     <script type="module" src="js/firebase.js"></script>
-
-    <script type="module">
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import * as authentication from  "./auth.js"
-
-
-        const loginContent = document.getElementById('login-content')
-        const createContent = document.getElementById('create-content')
-        const loginBtn = document.getElementById('login-btn')
-        const createBtn = document.getElementById('create-btn')
-        const switchToLogin = document.getElementById('switch-to-login')
-        const switchToCreate = document.getElementById('switch-to-create')
-        const createForm = document.getElementById('create-form')
-        const loginForm = document.getElementById('login-form')
-       
-
-        switchToLogin.onclick = () =>{
-            createContent.classList.add('hidden')
-            loginContent.classList.remove('hidden')
-        }
-        switchToCreate.onclick = () =>{
-            createContent.classList.remove('hidden')
-            loginContent.classList.add('hidden')
-        }
-
-        loginBtn.onclick = (e) =>{
-            e.preventDefault()
-
-            const email = loginForm.email.value
-            const password = loginForm.password.value
-
-            authentication.signIn(email, password)
-        }
-
-        createBtn.onclick = (e) =>{
-
-            e.preventDefault()
-            const email = createForm.email.value
-            const password = createForm.password.value
-            authentication.createAccount(email, password)
-
-            
-        }
-
-
-
-
-        
-
-
-  
-       
-    </script>
-
-
-
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/auth-page.js"></script>
 </body>
+</html>
