@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" id="set-meeting">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,25 +27,25 @@
     <aside class="sidebar" id="sidebar">
         <nav class="sidebar-nav">
             <ul>
-                <li class="active" data-page="home">
+                <li data-page="home" data-file="index.html">
                     <a href="#" onclick="backToHome(); return false;">
                         <i class="fa-solid fa-house"></i>
                         <span>Home</span>
                     </a>
                 </li>
-                <li data-page="set-meeting">
+                <li data-page="set-meeting" data-file="set-meeting.html">
                     <a href="#" id="open-set-meeting-button">
                         <i class="fa-solid fa-calendar-plus"></i>
                         <span>Criar reunião</span>
                     </a>
                 </li>
-                <li data-page="slide-show">
+                <li data-page="slide-show" data-file="presentation.html">
                     <a href="#" id="open-slide-show-button">
                         <i class="fa-solid fa-play"></i>
                         <span>Iniciar reunião</span>
                     </a>
                 </li>
-                <li data-page="flash-cards">
+                <li data-page="flash-cards" data-file="flash-cards.html">
                     <a href="#" id="open-flash-cards-button">
                         <i class="fa-solid fa-layer-group"></i>
                         <span>Flash Cards</span>
@@ -57,26 +57,40 @@
 
 
 
-<main id="set-meeting-page" class="hidden">
+<main id="set-meeting-page">
     <div class="content">
         <div class="page-header">
             <h2>Nova reunião</h2>
             <p>Defina o tema e adicione as perguntas de conversação</p>
         </div>
         <div class="theme-container">
+            <label for="topic-input">Tema da reunião</label>
             <input type="text" placeholder="Tema da reunião..." id="topic-input" autocomplete="off">
         </div>
+
+       
         <div class="questions-container">
-            <div id="add-question-button">
-                <i class="fa-solid fa-plus"></i> Adicionar pergunta
+            <p>Perguntas de conversação</p>
+            <div class="questions-list"></div> <div id="add-question-button">
+                <i class="fa-solid fa-plus"></i> 
             </div>
-            <div class="questions-list"></div>
-            <div id="set-button">Salvar reunião</div>
+
+<div id="set-button">Salvar reunião</div>
+    
+           
+            
         </div>
     </div>
 </main>
 
+<div class="alert hidden">
+    <div class="alert-icon">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <p></p>
+</div>
 
+<script type="module" src="js/menu.js"></script>
 <script type="module" src="js/firebase.js"></script>
 <script type="module" src="js/auth.js"></script>
 <script type="module" src="js/app.js"></script>

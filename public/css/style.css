@@ -32,28 +32,33 @@ html{
 }
 
 
-.sidebar{
+.sidebar {
     position: fixed;
     left: 0;
     top: 0;
     z-index: 200;
     background-color: var(--primary-color);
-    width: var(--sidebar-collapsed-width);
+    width: var(--sidebar-width);
     border-right: 1px solid rgba(255, 255, 255, 0.092);
     height: 100vh;
     transition: width 0.3s ease;
     overflow: hidden;
 }
 
-.sidebar:hover{
+.sidebar.retratil {
+    width: var(--sidebar-collapsed-width);
+}
+
+
+.sidebar.retratil:hover {
     width: var(--sidebar-width);
 }
 
-.sidebar-nav{
+.sidebar-nav {
     margin-top: 100px;
 }
 
-.sidebar-nav ul{
+.sidebar-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -63,7 +68,7 @@ html{
     width: 100%;
 }
 
-.sidebar-nav ul li{
+.sidebar-nav ul li {
     height: 44px;
     width: 100%;
     display: flex;
@@ -72,19 +77,19 @@ html{
     transition: background-color 0.2s ease;
 }
 
-.sidebar:hover li.active{
-    border-radius: 50px 0px  0px 50px;
+.sidebar li.active {
+    border-radius: 50px 0px 0px 50px;
 }
 
-.sidebar-nav ul li.active{
+.sidebar-nav ul li.active {
     background-color: var(--third-color);
 }
 
-.sidebar-nav ul li.active a{
+.sidebar-nav ul li.active a {
     color: var(--primary-color);
 }
 
-.sidebar-nav ul li a{
+.sidebar-nav ul li a {
     display: flex;
     align-items: center;
     width: 100%;
@@ -95,7 +100,7 @@ html{
     transition: color 0.2s ease;
 }
 
-.sidebar-nav ul li a i{
+.sidebar-nav ul li a i {
     width: var(--sidebar-collapsed-width);
     flex-shrink: 0;
     display: flex;
@@ -104,7 +109,7 @@ html{
     font-size: 1.1rem;
 }
 
-.sidebar-nav ul li a span{
+.sidebar-nav ul li a span {
     opacity: 0;
     white-space: nowrap;
     overflow: hidden;
@@ -113,10 +118,13 @@ html{
     pointer-events: none;
 }
 
-.sidebar:hover .sidebar-nav ul li a span{
+.sidebar:not(.retratil) .sidebar-nav ul li a span,
+.sidebar:hover .sidebar-nav ul li a span, 
+.sidebar-open .sidebar-nav ul li a span {
     opacity: 1;
     pointer-events: auto;
 }
+
 
 
 
@@ -138,7 +146,7 @@ header{
     top: 0;
     left: var(--sidebar-collapsed-width);
     right: 0;
-    z-index: 100;
+    z-index: 200;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -251,6 +259,7 @@ header ul{
 
 .page-header{
     text-align: center;
+    margin: 0px auto;
     margin-bottom: 30px;
 }
 
@@ -311,19 +320,30 @@ header ul{
 
 #set-meeting-page .content{
     flex-direction: column;
-
+    position: relative;
     gap: 50px;  
     justify-content: start;
+    align-items: start;
+    width: 40%;
+
+    min-height: 80vh;
+    
+  
 }
 
 .theme-container{
-    width: 90%;
+    width: 100%;
     height: 60px;
+    flex-direction: column;
     font-size: 1.5rem;
     display: flex;
-    align-items: end;
+    align-items: start;
     justify-content: center;
-    gap: 30px;
+    gap: 10px;
+}
+.theme-container label{
+    opacity: .8;
+    font-size: 1rem;
 }
 
 button:hover, #set-button:hover{
@@ -337,19 +357,20 @@ button:active, #set-button:active{
 }
 
 .theme-container input{
-    width: 80%;
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-indent: 25px;
     text-align: center;
 
     transition: 0.3s ease;
     background-color: transparent;
-    height: 100%;
+
     border: none;
     outline: none;    
     color: white;
-    border-radius: 40px;
+    min-height: 40px;
+    border-radius: 100px;
     border: 1px solid rgba(151, 145, 145, 0.37);;
 }
 
@@ -365,13 +386,14 @@ button:active, #set-button:active{
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: center;
+    align-items: start;
     width: 100%;
     max-width: 1200px;
 }
 #add-question-button{
     background-color: var(--second-color);
-    width: 200px;
+    width: 100px;
+    font-size: .8rem;
     height: 40px;
     flex-shrink: 0;
     display: flex;
@@ -401,15 +423,22 @@ button:active, #set-button:active{
     transform: scale(.9);
 }
 
+
+
+
+
+.questions-container p{
+    opacity: .8;
+}
 .questions-list{
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    align-items: center;
-    max-height: 500px;
-    height: 500px;
+    gap: 10px;
+    max-height: 300px;
+
     overflow-y: auto; 
+    padding: 10px 5px;
 }
 
 
@@ -419,8 +448,8 @@ button:active, #set-button:active{
     height: fit-content;
     display: flex;
     width: 100%;
-    gap: 30px;
- 
+    gap: 5px;
+ position: relative;
     height: 40px;
     align-items: center;
     justify-content: center;
@@ -432,26 +461,29 @@ button:active, #set-button:active{
 
 .question-card .questionNumber{
     background-color: #2bfd78;
-    width: 30px;
+    width: 5%;
+ 
     display: flex;
     flex-shrink: 0;
     justify-content: center;
     align-items: center;
     color: var(--primary-color);
-    height: 30px;
+    aspect-ratio: 1;
     border-radius: 50px;
 }
 .question-card input{
     font-family: 'Montserrat', sans-serif;
     background-color: #101c2900;
-    border: 1px solid transparent;
+    border: 1px solid rgba(107, 107, 107, 0.308);
     outline: none;
+    background-color: #72727252;
     transition: .3s ease;
     height: 30px;
     text-indent: 10px;
+    
     color: white;
     border-radius: 40px;
-    width: 90%;
+    width: 95%;
 }
 
 .question-card input:focus{
@@ -463,6 +495,8 @@ button:active, #set-button:active{
 .question-card>button{
     background-color: transparent;
     border: none;
+    position: absolute;
+    right: 10px;
  
     color: white;
 }
@@ -476,6 +510,7 @@ button:active, #set-button:active{
 
 
 .question-card:hover .questionNumber{
+
     background-color: var(--second-color);
     transition: 0.1s ease;
 }
@@ -888,7 +923,7 @@ display: grid;
         top: 0;
         gap: 10px;
         left: 0;
-        z-index: 9999;
+        z-index: 199;
         background-color: rgba(8, 26, 46, 0.85);
         backdrop-filter: blur(4px);
     }
@@ -1140,6 +1175,10 @@ display: grid;
     background-color: var(--third-color);
     padding: 10px 30px;
     border-radius: 50px;
+    position: absolute;
+    right: 0px;
+    font-size: .9rem;
+    bottom: 0px;
    color: var(--primary-color);
 }
 
@@ -1181,7 +1220,7 @@ display: grid;
     cursor: url(../assets/cursor-left.png), auto;
 }
 .cursor-right{
-    cursor: url(../assets/cursor-left.png), auto;
+    cursor: url(../assets/cursor-right.png), auto;
 }
 
 .auth-body{
@@ -1588,7 +1627,7 @@ font-weight: bold;
 }
 
 .theme-container{
-    width: 95vw;
+    width: 100vw;
 }
 
 .theme-container input{
@@ -1599,6 +1638,7 @@ font-weight: bold;
 
 .content{
     width: 90vw;
+   
 }
 
 
@@ -1693,6 +1733,7 @@ font-weight: bold;
 
 .questions-list{
     gap: 10px;
+    border: 1px solid red 1px solid red;
 }
 
 .question-card input{

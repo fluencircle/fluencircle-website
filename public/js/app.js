@@ -30,3 +30,16 @@ export function getCurrentQuestions() {
 export function clearCurrentQuestions() {
     currentQuestions.length = 0;
 }
+
+
+export const alertElement = document.querySelector('.alert');
+
+export function callAlert(type, message) {
+    alertElement.classList.toggle('danger', type === 'danger');
+    alertElement.querySelector('.alert-icon').innerHTML = type === 'danger'
+        ? '<i class="fa-solid fa-circle-exclamation"></i>'
+        : '<i class="fa-solid fa-circle-check"></i>';
+    alertElement.querySelector('p').textContent = message;
+    alertElement.classList.remove('hidden');
+    setTimeout(() => alertElement.classList.add('hidden'), 2500);
+}

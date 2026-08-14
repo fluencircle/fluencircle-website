@@ -1,7 +1,17 @@
 const setMeetingPage = document.getElementById('set-meeting-page');
+const questionListElement = document.querySelector('.questions-list');
+const addQuestionBtn = document.getElementById('add-question-button');
+const topicInput = document.getElementById('topic-input');
+import {
+    meetingsObj,
+    setCurrentTopic,
+    getCurrentQuestions,
+    setMeetingsObj,
+    clearCurrentQuestions,
+    callAlert
+} from "./app.js";
+import { meetingsRef, updateMeetingsDatabase } from "./firebase.js";
 
-setActivePage('set-meeting');
-    showPage(setMeetingPage);
     topicInput.value = '';
     clearCurrentQuestions();
     questionListElement.innerHTML = '';
@@ -72,5 +82,4 @@ setActivePage('set-meeting');
         updateMeetingsDatabase(meetingsObj);
         callAlert('normal', 'Reunião salva com sucesso!');
         clearCurrentQuestions();
-        goHome();
     };
