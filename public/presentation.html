@@ -22,6 +22,7 @@
             </button>
         </div>
     </header>
+ 
 
     <aside class="sidebar" id="sidebar">
         <nav class="sidebar-nav">
@@ -55,27 +56,6 @@
     </aside>
 
 
-<main id="slide-show-page" >
-    <div class="content select-content">
-        <div class="page-header">
-            <h2>Iniciar reunião</h2>
-            <p>Selecione uma apresentação para começar</p>
-        </div>
-        <select id="presentation-select">
-            <option value="">Carregando...</option>
-        </select>
-        <button id="start-presentation-btn">Iniciar</button>
-    </div>
-    <div class="content slide-content hidden">
-        <div class="back-to-selection back-button">
-            <i class="fa-solid fa-circle-chevron-left"></i>
-            <span>Voltar</span>
-        </div>
-        <div class="slide">
-            <p>Selecione uma apresentação para começar</p>
-        </div>
-    </div>
-</main>
 
 <main id="slide-show-page" >
     <div class="content select-content">
@@ -83,10 +63,20 @@
             <h2>Iniciar reunião</h2>
             <p>Selecione uma apresentação para começar</p>
         </div>
-        <select id="presentation-select">
-            <option value="">Carregando...</option>
-        </select>
-        <button id="start-presentation-btn">Iniciar</button>
+
+        <div id="presentation-select">   
+            <div class="loading-gif presentation-gif hidden">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
+    </div>
+            <p id="value">Selecione uma reunião</p>
+          <div id="option-list" class="hidden">
+                <div class="meeting-option"></div>
+            </div><i class="fa-solid fa-caret-down"></i>
+        </div>
+        
+        <button id="start-presentation-btn" class="unclickable">Iniciar</button>
     </div>
     <div class="content slide-content hidden">
         <div class="back-to-selection back-button">
@@ -94,7 +84,7 @@
             <span>Voltar</span>
         </div>
         <div class="slide">
-            <p>Selecione uma apresentação para começar</p>
+
         </div>
     </div>
 </main>

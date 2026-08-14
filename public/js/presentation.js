@@ -3,7 +3,8 @@ import { meetingsRef } from "./firebase.js";
 import {
     meetingsObj,
     setMeetingsObj,
-    callAlert
+    callAlert, 
+    toggleDropdown
 } from "./app.js"; 
 
 
@@ -11,20 +12,30 @@ let topic = '';
 
 const slideShowPage = document.getElementById('slide-show-page');
 const slide = document.querySelector('.slide');
-
+const slideContent = slideShowPage.querySelector('.slide-content');
+const selectContent = slideShowPage.querySelector('.select-content');
 
 
 slideShowPage.querySelector('.select-content').classList.remove('hidden');
 slideShowPage.querySelector('.slide-content').classList.add('hidden');
 
 const presentationSelect = document.getElementById('presentation-select');
+const optionList = document.getElementById('option-list');
 
 async function renderSelect() {
+    presentationSelect.querySelector('.loading-gif').classList.remove('hidden')
+    presentationSelect.querySelector('p').classList.add('hidden')
+    presentationSelect.style.pointerEvents = 'none'
+    presentationSelect.style.opacity = .7
     const snapshot = await get(meetingsRef);
+    presentationSelect.style.opacity = 1
+    presentationSelect.querySelector('.loading-gif').classList.add('hidden')
+    presentationSelect.querySelector('p').classList.remove('hidden')
+    presentationSelect.style.pointerEvents = 'all'
     const updatedMeetings = snapshot.val();
     setMeetingsObj(updatedMeetings);
 
-    presentationSelect.innerHTML = '';
+
     const keys = Object.keys(meetingsObj || {});
 
     if (keys.length === 0) {
@@ -33,28 +44,54 @@ async function renderSelect() {
     }
 
     keys.forEach(key => {
-        const option = document.createElement('option');
+        const option = document.createElement('div');
+        option.classList.add('meeting-option')
         const topicText = meetingsObj[key].topic;
-        option.textContent = `${Number(key) + 1} — ${topicText.length > 40 ? topicText.substring(0, 40) + '...' : topicText}`;
-        option.value = key;
-        presentationSelect.append(option);
+        option.innerHTML = `${Number(key) + 1} — ${topicText.length > 40 ? topicText.substring(0, 40) + '...' : topicText}`;
+        option.dataset.value = key;
+        optionList.append(option);
     });
 }
 
 renderSelect();
 
-document.getElementById('start-presentation-btn').onclick = () => {
-    if (!presentationSelect.value) {
-        callAlert('danger', 'Selecione uma reunião!');
-        return;
-    }
 
-    const slideContent = slideShowPage.querySelector('.slide-content');
+
+presentationSelect.addEventListener('click', e =>{
+    toggleDropdownMeetings()
+
+    if(e.target.classList.contains('meeting-option')){
+        presentationSelect.querySelector('p').innerHTML = `${e.target.innerHTML}`.slice(3)
+        presentationSelect.dataset.value = e.target.dataset.value
+        document.getElementById('start-presentation-btn').classList.remove('unclickable')
+
+        
+    }
+    console.log(e.target)
+})
+
+
+function toggleDropdownMeetings(){
+    toggleDropdown(presentationSelect, optionList, 'bottom')
+}
+
+
+
+
+
+
+
+
+
+document.getElementById('start-presentation-btn').onclick = () => {
+
+
+    
     slideShowPage.querySelector('.select-content').classList.add('hidden');
     slideContent.classList.remove('hidden');
 
-    topic = meetingsObj[presentationSelect.value].topic;
-    const questions = meetingsObj[presentationSelect.value].questions;
+    topic = meetingsObj[presentationSelect.dataset.value].topic;
+    const questions = meetingsObj[presentationSelect.dataset.value].questions;
     let slideNumber = -1;
     const questionCount = Object.keys(questions).length;
 
@@ -63,10 +100,10 @@ document.getElementById('start-presentation-btn').onclick = () => {
             slide.innerHTML = `<span class="title">${topic}</span>`;
         } else if (questions[slideNumber]) {
             slide.innerHTML = `<div class="questionItem"><span class="number">${slideNumber + 1}</span><span class="question">${questions[slideNumber]}</span></div>`;
-        } else {
-            slide.innerHTML = `<span class="endSlideMessage">Fim da apresentação</span>`;
-        }
+        } else {}
     }
+
+    updatedSlideContent()
 
     function nextSlide() {
         if (slideNumber < questionCount) slideNumber += 1;
@@ -97,6 +134,21 @@ document.getElementById('start-presentation-btn').onclick = () => {
 };
 
 
+const backToSelection = document.querySelector('.back-to-selection')
+
+backToSelection.onclick = () =>{
+    slideContent.classList.add('hidden')
+    selectContent.classList.remove('hidden')
+
+}
+
+
+
+
+
+
+
+
 async function traduzirTexto(texto, config) {
     const deIdioma = config === 'pt' ? 'pt' : 'en';
     const paraIdioma = config === 'pt' ? 'en' : 'pt';
@@ -122,7 +174,6 @@ const selectMeeting = document.getElementById('select-meeting');
 const saveFlashcardBtn = document.getElementById('save-flashcard-btn');
 const translationModal = document.getElementById('translator-modal');
 const translationButton = document.querySelector('.translation-button');
-const alertElement = document.querySelector('.alert');
 const closeTranslationBtn = document.querySelector('.close-translation-btn');
 const translateBtn = document.getElementById('translate-btn');
 
