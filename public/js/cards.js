@@ -1,8 +1,9 @@
 import { meetingsRef } from "./firebase.js";
 import { get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-const flashCardsGrid = document.querySelector('.flash-cards-grid');
 const flashCardsFull = document.querySelector('.flash-cards-full');
+const flashCardsSetupContent = document.querySelector('.flash-cards-setup-content')
+const flashCardsStudyContent = document.querySelector('.flash-cards-study-content')
 const classesGrid = document.querySelector('.classes-grid');
 const loadingGif = document.querySelector('.loading-gif');
 const meetingsContent = document.querySelector('#meetings-content');
@@ -52,29 +53,21 @@ function createMeetingCards(meetingsObject) {
             <span class="meeting-card-number">${Number(key) + 1}</span>
             <span class="meeting-card-topic">${meetingsObject[key].topic}</span>
             <span class="meeting-card-count">${cardCount} cards</span>`;
-        meetingCard.addEventListener('click', () => loadFlashCards(meetingsObject, key));
+        meetingCard.addEventListener('click', () => openMeetingCardsPage(meetingsObject, key));
         classesGrid.append(meetingCard);
     });
 }
 
-function loadFlashCards(meetingsObject, key) {
+function openMeetingCardsPage(meetingsObject, key) {
     const flashCardsObj = meetingsObject[key].cards || {};
     const flashCardsKeys = Object.keys(flashCardsObj);
 
-    flashCardsGrid.innerHTML = '';
+    flashCardsSetupContent.classList.remove('hidden')
+            flashCardsStudyContent.classList.add('hidden');
     meetingsContent.classList.add('hidden');
     flashCardsContent.classList.remove('hidden');
-    flashCardsContent.querySelector('h1').textContent = meetingsObject[key].topic;
-
-    const play = document.querySelector('#play-cards-btn');
-    play.style.pointerEvents = flashCardsKeys.length === 0 ? 'none' : '';
-    play.style.opacity = flashCardsKeys.length === 0 ? '0.5' : '1';
-
-    if (flashCardsKeys.length === 0) {
-        flashCardsGrid.innerHTML = '<div class="emptyCardsMessage">Nenhum flash card nesta reunião ainda.</div>';
-    } else {
-        flashCardsKeys.forEach(cardKey => createFlashCard(flashCardsObj[cardKey]));
-    }
+    flashCardsContent.querySelector('h2').textContent = meetingsObject[key].topic;
+    flashCardsContent.querySelector('p').textContent = 'Revise as dúvidas que você teve durante as aulas e fortaleça o seu vocabulário';
 
     setPlay(meetingsObject, key);
 }
@@ -94,34 +87,13 @@ function setPlay(meetingsObject, key) {
 
     play.classList.remove('playOn');
     play.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
-    flashCardsGrid.classList.remove('hidden');
-    flashCardsFull.classList.add('hidden');
 
     const cards = meetingsObject[key].cards
     const cardsContainer = document.getElementById('flash-cards-container')
     const previousCardBtn = document.getElementById('previousCard')
-
-
+    const restartCardsBtn = document.getElementById('restart-cards-btn')
+    const progressBar = document.getElementById('progress-bar')
     
-  
-
-
-    function updateCardPositions(cardNodes, backward){
-
-        cardNodes.forEach(card =>{
-            
-                    if(backward == true){
-            card.dataset.position = parseInt(card.dataset.position) + 1
-        }else{
-card.dataset.position = parseInt(card.dataset.position) - 1
-        }
-
-        adjustCardStyle(card, card.dataset.position)
-
-
-        })
-
-    }
 
     function adjustCardStyle(card, number){
         const questionnumber = card.dataset.questionnumber
@@ -136,58 +108,102 @@ card.dataset.position = parseInt(card.dataset.position) - 1
 
         if(number != 0){card.style.pointerEvents = 'none'}else{card.style.pointerEvents = 'all'}
     }
+    
+
+    function updateCardPositions(cardNodes, backward){
+
+        cardNodes.forEach(card =>{
+
+            
+                    if(backward == true){
+            card.dataset.position = parseInt(card.dataset.position) + 1
+        }else{
+card.dataset.position = parseInt(card.dataset.position) - 1
+        }
+
+        adjustCardStyle(card, card.dataset.position)
+
+
+        })
+
+    }
+
+
+    function loadCards(){
+        cardsContainer.innerHTML = ''
+        progressBar.innerHTML = ''
+        let cardCount = 0
+    cards.forEach(card =>{
+
+        const number = cardCount
+        
+        const backContent = card.back
+        const frontContent = card.front
+        const cardElement = document.createElement('div')
+        cardElement.id = cardCount+1 ; cardElement.dataset.position = cardCount ; cardElement.dataset.questionnumber = cardCount+1
+        cardElement.classList.add('card')
+        cardElement.innerHTML = `<div class="card-shadow"></div> <div class="card-front"><p>Vocabulário ${cardCount+1}</p><span>
+        ${card.front}</span>
+    </div>
+    <div class="card-back">
+        <button class="btn-next"><i class="fa-solid fa-circle-check"></i></button>
+        <p>Resposta ${cardCount+1}</p>
+        <span>${card.back}</span>
+    </div>`
+
+  progressBar.innerHTML += `<div class="progress-item" data-question="${cardCount+1}"><div class="fill"></div></div>`
+    
+    const signal = Math.random() < 0.5 ? 1 : -1;
+    const value = Math.floor(Math.random() * 12)
+
+    if(cardCount !='0'){cardElement.style.marginLeft = (value * signal) + 'px';cardElement.style.rotate = value*signal +'deg';cardElement.style.marginBottom = (value * signal) + 'px'}
+
+        cardElement.style.opacity = (1 - cardCount/10)
+        cardElement.style.zIndex = 100-number
+    
+        if(number != 0){cardElement.style.pointerEvents = 'none'}else{cardElement.style.pointerEvents = 'all'}
+
+        
+
+        cardElement.onclick = (e) =>{
+
+                      cardElement.classList.toggle('flipped')
+       
+            
+            
+        }
+
+        cardCount++
+        cardsContainer.append(cardElement)
+    })
+    }
+    
+
+  
+
+
+ 
+    
 
     play.onclick = () => {
 
         play.classList.toggle('playOn');
 
         if (play.classList.contains('playOn')) {
-            cardsContainer.innerHTML = ''
+            
             play.innerHTML = '<i class="fa-solid fa-grip"></i>';
-            flashCardsGrid.classList.add('hidden');
-            flashCardsFull.classList.remove('hidden');
+
+
+            flashCardsSetupContent.classList.add('hidden')
+            flashCardsStudyContent.classList.remove('hidden');
+            flashCardsContent.querySelector('p').textContent = 'Clique no cartão para ver a resposta';
 
             
+    
 
-            let cardCount = 0
-            cards.forEach(card =>{
 
-                const number = cardCount
-
-                const backContent = card.back
-                const frontContent = card.front
-                const cardElement = document.createElement('div')
-                cardElement.id = cardCount+1 ; cardElement.dataset.position = cardCount ; cardElement.dataset.questionnumber = cardCount+1
-                cardElement.classList.add('card')
-                cardElement.innerHTML = `<div class="card-shadow"></div> <div class="card-front">
-                ${card.front}
-            </div>
-            <div class="card-back">
-                <button class="btn-next">Próximo</button>
-                ${card.back}
-            </div>`
-            
-            const signal = Math.random() < 0.5 ? 1 : -1;
-            const value = Math.floor(Math.random() * 12)
-
-            if(cardCount !='0'){cardElement.style.marginLeft = (value * signal) + 'px';cardElement.style.rotate = value*signal +'deg';cardElement.style.marginBottom = (value * signal) + 'px'}
-
-                cardElement.style.opacity = (1 - cardCount/10)
-                cardElement.style.zIndex = 100-number
-            
-                if(number != 0){cardElement.style.pointerEvents = 'none'}else{cardElement.style.pointerEvents = 'all'}
-
-                
-
-                cardElement.onclick = () =>{
-                    cardElement.classList.toggle('flipped')
-                }
-
-                cardCount++
-                cardsContainer.append(cardElement)
-            })
-
-            const cardNodes = Array.from(cardsContainer.children)
+            function addNextEvent(){
+                const cardNodes = Array.from(cardsContainer.children)
             
             cardNodes.forEach(cardElement =>{
                 cardElement.querySelector('.btn-next').onclick = () =>{
@@ -195,15 +211,55 @@ card.dataset.position = parseInt(card.dataset.position) - 1
                     cardElement.classList.add('removed-card')
                     setTimeout(()=>{
                         updateCardPositions(cardNodes, false)
-                    adjustCardStyle(cardElement, cardCount )
-                    }, 800)
+                    adjustCardStyle(cardElement, cardElement.dataset.position )
+                    updateBars()
+                 
+                    }, 100)   
                     
-
+                
                 }
             })
+            }
+            
+            loadCards()
+            addNextEvent()
+            updateBars()
 
+
+            function updateBars(){
+                const miniBars = Array.from(progressBar.children)
+                const cardNodes = Array.from(cardsContainer.children)
+                cardNodes.forEach(card=>{
+                    const question = parseInt(card.dataset.questionnumber)
+                    console.log(question)
+                    const position = card.dataset.position 
+                    if(position == '0'){console.log('updateBars')
+                        miniBars.forEach(bar=>{
+                   
+                            const barNumber = parseInt(bar.dataset.question) ;console.log(barNumber, question)
+                            if(barNumber<=question ){
+                                
+                    
+                                bar.classList.add('check')
+                            }else{
+                                bar.classList.remove('check')
+                            }
+                })
+                    }
+                })
+                
+            }
+
+
+
+            restartCardsBtn.onclick = ( e => {
+                loadCards()
+                addNextEvent()
+                updateBars()
+            })
 
             previousCardBtn.onclick = () =>{
+                const cardNodes = Array.from(cardsContainer.children)
                 const isFirst =  cardNodes.reduce((acc, cardElement) =>{
                      const position = cardElement.dataset.position;
                      const questionNumber = cardElement.dataset.questionnumber;
@@ -215,7 +271,7 @@ card.dataset.position = parseInt(card.dataset.position) - 1
                      return acc; 
                  }, false);
                 
-                 if (isFirst){return}
+                 if (isFirst){ ; return}
 
                  cardNodes.forEach(cardElement=>{
 
@@ -236,8 +292,11 @@ card.dataset.position = parseInt(card.dataset.position) - 1
                         cardElement.style.pointerEvents = 'all'
                      }
 
+              
+        
                  })
                  updateCardPositions(cardNodes, true)
+                 updateBars()
              
              }
 

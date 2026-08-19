@@ -67,8 +67,9 @@
                 <i class="fa-solid fa-circle-chevron-left"></i>
                 <span>Voltar às reuniões</span>
             </div>
-            <div class="title">
-                <h1>Meeting Title</h1>
+            <div class="page-header">
+                <h2>Meeting Title</h2>
+                <p>Clique no cartão para ver a resposta</p>
                                 
                 
             </div>
@@ -78,13 +79,20 @@
                 </button>
             </div>
             <div class="flash-cards-study-content hidden">
-                <button id="previousCard" title="Cartão Anterior">
+                <div class="flash-card-actions">
+<button id="previousCard" class="cards-action-btn">
+    <i class="fa-solid fa-reply"></i>
+                </button>
+
+                <button id="restart-cards-btn" class="cards-action-btn" >
                     <i class="fa-solid fa-arrow-rotate-left"></i>
                 </button>
-                <div id="flash-cards-container">
-
                 </div>
-            </div>
+                
+             
+            </div>   <div id="flash-cards-container">
+                   
+                </div> <div id="progress-bar"></div>
         </div>
     </main>
 

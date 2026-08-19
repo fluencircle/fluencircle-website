@@ -704,11 +704,11 @@ font-weight: normal;
 
 @keyframes cardReturn{
     0%{
-         transform: rotate(45deg) translateX(100px) translateY(100px);
+         transform: rotate(45deg) translateX(100px) translateY(100px) rotateY(0deg);
         opacity: 0; 
     }
     100%{
-       transform: none;opacity: 1;
+        transform: rotate(0deg) translateX(0px) translateY(0px) rotateY(180deg) ;opacity: 1;
     }
 }
 
@@ -750,30 +750,6 @@ display: grid;
 }
 
 
-.flash-card-front,
-.flash-card-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    backface-visibility: hidden; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flash-card-front {
-    background-color: #ff5757;
-
-}
-
-.flash-card-back {
-    color: var(--primary-color);
-    background-color: #2bfd78;
-    transform: rotateY(180deg); 
-}
 
 #full-card{
     width: 800px;
@@ -804,15 +780,16 @@ display: grid;
 }
 
 .card{
-    height: 400px;        
-    width: 300px;
-    margin-top: 500px;
+    height: 450px;        
+    width: 400px;
+    margin-top: 550px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 1.3rem;
-    color: #686767;
+
+    color: #3f3f3f;
     border-radius: 30px;
     border: 1px solid rgba(141, 140, 140, 0.432);
     position: absolute;
@@ -823,17 +800,44 @@ transform-style: preserve-3d;
 }
 
 
+.card p{
+    position: absolute;
+    top: 100px;
+    font-weight: 400;
+    
+    border-radius: 50px;
+    padding: 0px 10px;
+    font-size: 1rem;
+
+}
+
+
+.card-front p{
+    background-color: #02b7e03b;
+}
+
+.card-back p{
+    background-color: #6ef18f9d;
+}
+
+.card span{
+
+    max-width: 80%;
+}
+
+
 .btn-next {
     position: absolute;
     bottom: 12px;
     right: 12px;
     padding: 6px 14px;
-    font-size: 13px;
+    font-size: 2rem;
     font-weight: 600;
-    color: #7bdb87;
-    background-color: #fcfcfc;
-    border: 1px solid #c7d2fe;
-    border-radius: 8px;
+    color: var(--primary-color);
+
+    background-color:#71df89;
+    border: none;
+    border-radius: 500px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -865,18 +869,19 @@ transform: rotateY(180deg);
 }
 
     .card.flipped{
+        transition: .5s ease;
         transform: rotateY(180deg);
     }
 
 
     
     .removed-card{
-        animation: removeCard 1s forwards;
+        animation: removeCard .5s forwards;
         
      }
 
      .removed-card .card-back, .removed-card .card-front{
-        background-color: rgb(204, 204, 204);
+        background-color: var(--third-color)
         
      }
  
@@ -884,7 +889,8 @@ transform: rotateY(180deg);
      @keyframes removeCard{
          0%{
             display: flex;
-             transform: translateZ(180deg);
+       
+             transform: rotateY(180deg) ;
     
    
              
@@ -892,7 +898,7 @@ transform: rotateY(180deg);
    
          100%{
             display: none;
-             transform: rotate(30deg) translateX(100px) translateY(100px) ;
+             transform: rotate(30deg) translateX(100px) translateY(-100px) ;
 
 
              
@@ -902,11 +908,16 @@ transform: rotateY(180deg);
 
 
 
-#play-cards-btn{
+.flash-card-actions{
+    display: flex;
+    gap: 10px;
+}
+
+.cards-action-btn{
     background-color:var(--primary-color);
     border: 1px solid white;
-    height: 60px;
-    width: 300px;
+    height: 40px;
+    width: 40px;
     border-radius: 50px;
     display: flex;
     align-items: center;
@@ -914,28 +925,58 @@ transform: rotateY(180deg);
     color: white;
 
     padding: 20px;
-    font-size: 2rem;
-
+    font-size: 1rem;
 
 }
 
 
+#progress-bar{
+    width: 500px;
 
-#previousCard{
-    background-color:var(--primary-color);
-    border: 1px solid white;
-    height: 60px;
-    width: 300px;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    color: white;
-
-    padding: 20px;
-    font-size: 2rem;
-
+    display: grid;
+    grid-auto-flow: column; 
+    grid-auto-columns: 1fr;
+    position: absolute;
+    bottom: 30px;
+    gap: 5px;
 }
+
+.progress-item{
+    border-radius: 50px;
+    height: 5px;
+    position: relative;
+    background-color: #224e52;
+    min-width: 20px;
+    height: 10px;
+    overflow: hidden;
+}
+
+
+.progress-item .fill{
+    background-color: var(--third-color);
+    position: absolute;
+    height: 100%;
+    width: 0%;
+}
+
+.progress-item.check .fill{
+    animation: fill-progress-item .1s forwards;
+}
+
+
+
+
+@keyframes fill-progress-item{
+    from{
+        width: 0%;
+    }
+    to{
+        width: 100%;
+    }
+}
+
+
 
 #left-arrow{
     position: absolute;
