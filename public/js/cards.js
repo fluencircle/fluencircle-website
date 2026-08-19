@@ -90,9 +90,6 @@ function createFlashCard(currentCard) {
 }
 
 function setPlay(meetingsObject, key) {
-    const leftArrow = document.getElementById('left-arrow');
-    const rightArrow = document.getElementById('right-arrow');
-    const fullCard = document.getElementById('full-card');
     const play = document.querySelector('#play-cards-btn');
 
     play.classList.remove('playOn');
@@ -100,54 +97,150 @@ function setPlay(meetingsObject, key) {
     flashCardsGrid.classList.remove('hidden');
     flashCardsFull.classList.add('hidden');
 
+    const cards = meetingsObject[key].cards
+    const cardsContainer = document.getElementById('flash-cards-container')
+    const previousCardBtn = document.getElementById('previousCard')
+
+
+    
+  
+
+
+    function updateCardPositions(cardNodes, backward){
+
+        cardNodes.forEach(card =>{
+            
+                    if(backward == true){
+            card.dataset.position = parseInt(card.dataset.position) + 1
+        }else{
+card.dataset.position = parseInt(card.dataset.position) - 1
+        }
+
+        adjustCardStyle(card, card.dataset.position)
+
+
+        })
+
+    }
+
+    function adjustCardStyle(card, number){
+        const questionnumber = card.dataset.questionnumber
+
+        if (number == 0){
+            console.log('card 0: ', card)
+            card.style.marginLeft = '0px';
+         card.style.rotate = '0deg'
+        card.style.opacity = 1
+        }else{card.style.opacity = 1 - number/10}
+        
+
+        if(number != 0){card.style.pointerEvents = 'none'}else{card.style.pointerEvents = 'all'}
+    }
+
     play.onclick = () => {
-        const flashCardsObj = meetingsObject[key].cards || {};
-        const cardMax = Object.keys(flashCardsObj).length;
-        let cardNumber = 0;
 
-        function updateCard() {
-            if (fullCard.classList.contains('active')) {
-                fullCard.classList.remove('active');
-                setTimeout(() => {
-                    fullCard.innerHTML = `
-                        <span class="flash-card-front">${flashCardsObj[cardNumber].front}</span>
-                        <span class="flash-card-back">${flashCardsObj[cardNumber].back}</span>`;
-                }, 200);
-            } else {
-                fullCard.innerHTML = `
-                    <span class="flash-card-front">${flashCardsObj[cardNumber].front}</span>
-                    <span class="flash-card-back">${flashCardsObj[cardNumber].back}</span>`;
-            }
-            updateArrowState();
-        }
-
-        function updateArrowState() {
-            rightArrow.style.opacity = cardNumber < cardMax - 1 ? '1' : '0.3';
-            leftArrow.style.opacity = cardNumber > 0 ? '1' : '0.3';
-        }
-
-        function switchCard(direction) {
-            if (direction === 'left' && cardNumber > 0) cardNumber -= 1;
-            else if (direction === 'right' && cardNumber < cardMax - 1) cardNumber += 1;
-            updateCard();
-        }
-
-        updateCard();
         play.classList.toggle('playOn');
 
         if (play.classList.contains('playOn')) {
+            cardsContainer.innerHTML = ''
             play.innerHTML = '<i class="fa-solid fa-grip"></i>';
             flashCardsGrid.classList.add('hidden');
             flashCardsFull.classList.remove('hidden');
-            leftArrow.style.opacity = '0.3';
 
-            fullCard.onclick = () => fullCard.classList.toggle('active');
-            window.onkeydown = (event) => {
-                if (event.key === 'ArrowRight') switchCard('right');
-                else if (event.key === 'ArrowLeft') switchCard('left');
-            };
-            leftArrow.onclick = () => switchCard('left');
-            rightArrow.onclick = () => switchCard('right');
+            
+
+            let cardCount = 0
+            cards.forEach(card =>{
+
+                const number = cardCount
+
+                const backContent = card.back
+                const frontContent = card.front
+                const cardElement = document.createElement('div')
+                cardElement.id = cardCount+1 ; cardElement.dataset.position = cardCount ; cardElement.dataset.questionnumber = cardCount+1
+                cardElement.classList.add('card')
+                cardElement.innerHTML = `<div class="card-shadow"></div> <div class="card-front">
+                ${card.front}
+            </div>
+            <div class="card-back">
+                <button class="btn-next">Próximo</button>
+                ${card.back}
+            </div>`
+            
+            const signal = Math.random() < 0.5 ? 1 : -1;
+            const value = Math.floor(Math.random() * 12)
+
+            if(cardCount !='0'){cardElement.style.marginLeft = (value * signal) + 'px';cardElement.style.rotate = value*signal +'deg';cardElement.style.marginBottom = (value * signal) + 'px'}
+
+                cardElement.style.opacity = (1 - cardCount/10)
+                cardElement.style.zIndex = 100-number
+            
+                if(number != 0){cardElement.style.pointerEvents = 'none'}else{cardElement.style.pointerEvents = 'all'}
+
+                
+
+                cardElement.onclick = () =>{
+                    cardElement.classList.toggle('flipped')
+                }
+
+                cardCount++
+                cardsContainer.append(cardElement)
+            })
+
+            const cardNodes = Array.from(cardsContainer.children)
+            
+            cardNodes.forEach(cardElement =>{
+                cardElement.querySelector('.btn-next').onclick = () =>{
+
+                    cardElement.classList.add('removed-card')
+                    setTimeout(()=>{
+                        updateCardPositions(cardNodes, false)
+                    adjustCardStyle(cardElement, cardCount )
+                    }, 800)
+                    
+
+                }
+            })
+
+
+            previousCardBtn.onclick = () =>{
+                const isFirst =  cardNodes.reduce((acc, cardElement) =>{
+                     const position = cardElement.dataset.position;
+                     const questionNumber = cardElement.dataset.questionnumber;
+             
+             
+             if (position === '0' && questionNumber === '1') {
+                         return true;
+                     }
+                     return acc; 
+                 }, false);
+                
+                 if (isFirst){return}
+
+                 cardNodes.forEach(cardElement=>{
+
+                    const position = cardElement.dataset.position;
+                    const questionNumber = cardElement.dataset.questionnumber;
+                    
+                const signal = Math.random() < 0.5 ? 1 : -1;
+                const value = Math.floor(Math.random() * 12)
+
+                         if(position == '0' ){    
+                            cardElement.style.marginLeft = (value * signal) + 'px';cardElement.style.rotate = value*signal +'deg';cardElement.style.marginBottom = (value * signal) + 'px'
+                         }
+
+                     if (cardElement.dataset.position == '-1'){
+                         cardElement.classList.remove('removed-card')
+                         cardElement.style.opacity = 1
+                         cardElement.style.marginLeft = '0px';cardElement.style.rotate = '0deg';cardElement.style.marginBottom ='0px'
+                        cardElement.style.pointerEvents = 'all'
+                     }
+
+                 })
+                 updateCardPositions(cardNodes, true)
+             
+             }
+
         } else {
             play.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
             flashCardsGrid.classList.remove('hidden');

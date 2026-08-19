@@ -24,17 +24,13 @@
     text-align: center;
     align-items: center;
     cursor: pointer;
-    display: flex; 
-    background-color:#081a2e;
+    display: flex;
+    background-color: transparent; 
+ 
  
     justify-content: center;
     
- html, body{
-   margin: 0px;
-   background-color:#081a2e;
-   padding: 0px;
- }
-   
+
 
 
         
@@ -107,26 +103,6 @@
 
 
 
-    .removed-card{
-       animation: removeCard 1s forwards;
-    }
-
-
-
-
-
-    @keyframes removeCard{
-        0%{
-            transform: none;
-            opacity: 1;
-        }
-  
-        100%{
-            transform: rotate(45deg) translateX(100px) translateY(100px);
-            opacity: 0;
-        }
-        
-    }
 
     @keyframes cardReturn{
         0%{
@@ -175,74 +151,230 @@
     transform: translateY(-1px);
 }
 
+
+#progress-bar{
+    position: absolute;
+    height: 60px;
+    max-height: fit-content;
+    left: calc(50% - 350px);
+    display: flex;
+    justify-content: center;
+    width: 700px;
+    gap: 5px;
+
+    top: 30px;
+}
+
+.progress-bar-part{
+    width: 100px;
+    border-radius: 50px;
+    height: 10px;
+    background-color: white;
+}
+
+.progress-bar-part.filled{
+    background-color: #4f46e5;
+    transform-origin: left;
+    transition: 1s ease;
+}
+
     
 
 
 </style>
-<body>
-
+<body style="background-color: #081a2e;">
+     <div id="progress-bar">
+        </div>
     <button id="previousCard" style="position: absolute; z-index: 1000; width: 200px; height: 50px;";></button>
  
-        <!-- Card 1 -->
-        <div id="flashcard-container">
-            <!-- Card 1 -->
-            <div id="card-one" data-position="1" class="card" data-questionNumber = "1">
-                <div class="card-front">
-                    Frente 1 (Pergunta)
-                </div>
-                <div class="card-back">
-                    <button class="btn-next">Next</button>
-                    Verso 1 (Resposta)
-                </div>
-            </div>
-        
-            <!-- Card 2 -->
-            <div id="card-two" data-position="2" class="card">
-                <div class="card-front">
-                    Frente 2 (Pergunta)
-                </div>
-                <div class="card-back">
-                    <button class="btn-next">Next</button>
-                    Verso 2 (Resposta)
-                </div>
-            </div>
-        
-            <!-- Card 3 -->
-            <div id="card-three" data-position="3" class="card">
-                <div class="card-front">
-    
-                    Frente 3 (Pergunta)
-                </div>
-                <div class="card-back">
-                    <button class="btn-next">Next</button>
-                    Verso 3 (Resposta)
-                </div>
-            </div>
-        
-            <!-- Card 4 -->
-            <div id="card-four" data-position="4" class="card">
-                <div class="card-front">
-                    Frente 4 (Pergunta)
-                </div>
-                <div class="card-back">
-                    <button class="btn-next">Next</button>
-                    Verso 4 (Resposta)
-                </div>
-            </div>
-        
-            <!-- Card 5 -->
-            <div id="card-five" data-position="5" class="card">
-                <div class="card-front">
 
-                    
-    
-                    Frente 5 (Pergunta)
+   
+        <!-- Card 1 -->
+       
+            <!-- Card 1 -->
+            <div id="flashcard-container">
+
+                <!-- Card 1 -->
+                <div id="card-1" data-position="1" data-questionnumber="1" class="card">
+                    <div class="card-front">
+                        Overwhelmed
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Sobrecarregado(a) / Sobrecarregado de emoção ou tarefas
+                    </div>
                 </div>
-                <div class="card-back">
-                    <button class="btn-next">Next</button>
-                    Verso 5 (Resposta)
+            
+                <!-- Card 2 -->
+                <div id="card-2" data-position="2" data-questionnumber="2" class="card">
+                    <div class="card-front">
+                        To figure out
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Compreender / Descobrir / Encontrar uma solução
+                    </div>
                 </div>
-            </div>
+            
+                <!-- Card 3 -->
+                <div id="card-3" data-position="3" data-questionnumber="3" class="card">
+                    <div class="card-front">
+                        Actually
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Na verdade / Em estado real (Falso cognato de 'atualmente')
+                    </div>
+                </div>
+            
+                <!-- Card 4 -->
+                <div id="card-4" data-position="4" data-questionnumber="4" class="card">
+                    <div class="card-front">
+                        Catch up
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Colocar a conversa em dia / Alcance (alguém à frente)
+                    </div>
+                </div>
+            
+                <!-- Card 5 -->
+                <div id="card-5" data-position="5" data-questionnumber="5" class="card">
+                    <div class="card-front">
+                        Reluctant
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Relutante / Hesitante em fazer algo
+                    </div>
+                </div>
+            
+                <!-- Card 6 -->
+                <div id="card-6" data-position="6" data-questionnumber="6" class="card">
+                    <div class="card-front">
+                        Give up
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Desistir / Abandonar um hábito ou tentativa
+                    </div>
+                </div>
+            
+                <!-- Card 7 -->
+                <div id="card-7" data-position="7" data-questionnumber="7" class="card">
+                    <div class="card-front">
+                        Pretend
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Fingir (Falso cognato de 'pretender')
+                    </div>
+                </div>
+            
+                <!-- Card 8 -->
+                <div id="card-8" data-position="8" data-questionnumber="8" class="card">
+                    <div class="card-front">
+                        By the way
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Por falar nisso / A propósito (usado como BTW)
+                    </div>
+                </div>
+            
+                <!-- Card 9 -->
+                <div id="card-9" data-position="9" data-questionnumber="9" class="card">
+                    <div class="card-front">
+                        Look forward to
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Estar ansioso(a) por algo / Aguardar muito por algo
+                    </div>
+                </div>
+            
+                <!-- Card 10 -->
+                <div id="card-10" data-position="10" data-questionnumber="10" class="card">
+                    <div class="card-front">
+                        Thorough
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Minucioso / Detalhado / Completo
+                    </div>
+                </div>
+            
+                <!-- Card 11 -->
+                <div id="card-11" data-position="11" data-questionnumber="11" class="card">
+                    <div class="card-front">
+                        Comprehensive
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Abrangente / Amplo (Falso cognato de 'compreensivo')
+                    </div>
+                </div>
+            
+                <!-- Card 12 -->
+                <div id="card-12" data-position="12" data-questionnumber="12" class="card">
+                    <div class="card-front">
+                        Turn out
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Resultar em / Revelar-se (Ex: "It turned out great")
+                    </div>
+                </div>
+            
+                <!-- Card 13 -->
+                <div id="card-13" data-position="13" data-questionnumber="13" class="card">
+                    <div class="card-front">
+                        Out of the blue
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Do nada / Inesperadamente
+                    </div>
+                </div>
+            
+                <!-- Card 14 -->
+                <div id="card-14" data-position="14" data-questionnumber="14" class="card">
+                    <div class="card-front">
+                        Notice
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Notar / Perceber (ou Aviso prévio)
+                    </div>
+                </div>
+            
+                <!-- Card 15 -->
+             >
+                <div id="card-17" data-position="17" data-questionnumber="17" class="card">
+                    <div class="card-front">
+                        Run into
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Esbarrar com alguém por acaso / Encontrar sem querer
+                    </div>
+                </div>
+            
+                <!-- Card 18 -->
+                <div id="card-18" data-position="18" data-questionnumber="18" class="card">
+                    <div class="card-front">
+                        Insight
+                    </div>
+                    <div class="card-back">
+                        <button class="btn-next">Next</button>
+                        Compreensão profunda / Discernimento / Ideia valiosa
+                    </div>
+                </div>
+            
+                <!-- Card 19 -->
+     
+            
+         
         </div>
     
 
@@ -257,7 +389,7 @@ const flashcards = Array.from(document.getElementById('flashcard-container').chi
 
 
 
-updateCardPositions()
+updateCardPositions(false)
 
 
 function updateCardPositions(backward){
@@ -283,6 +415,7 @@ card.dataset.position = parseInt(card.dataset.position) - 1
 
     card.classList.add('removed-card')
     updateCardPositions(false)
+    updateProgressBar()
 }
 
 
@@ -302,7 +435,6 @@ card.onanimationend = (e) =>{
 const previousCardBtn = document.getElementById('previousCard')
 
 previousCardBtn.onclick = () =>{
-
 
    const isFirst =  flashcards.reduce((acc, card) =>{
         const position = card.dataset.position;
@@ -331,9 +463,46 @@ if (position === '0' && questionNumber === '1') {
         }
     })
     updateCardPositions(true)
+    updateProgressBar()
 }
 })
 }
+
+let count = 0
+let progressBar = document.getElementById('progress-bar')
+let innerBars = Array.from(progressBar.children)
+flashcards.forEach(card =>{
+    count++
+    progressBar.innerHTML += `<div data-index ="${count}" class="progress-bar-part"></div>`
+
+})
+
+
+
+
+function updateProgressBar(){
+    progressBar = document.getElementById('progress-bar')
+innerBars = Array.from(progressBar.children)
+
+flashcards.forEach(card =>{
+    const position = card.dataset.position
+    const number = card.dataset.questionnumber
+
+    if(position == '0'){
+        innerBars.forEach(bar =>{
+
+            const barNumber = bar.dataset.index
+            console.log(number, barNumber)
+
+            if(number >= barNumber){bar.classList.add('filled')}else{bar.classList.remove('filled')}
+        })
+    }
+})
+}
+
+updateProgressBar()
+
+
 
 
 
