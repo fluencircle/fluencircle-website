@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="home">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Fluency</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">
+          
+           <div class="logo-icon">
+            <div class="logo-circle-left"></div>
+            <div class="logo-circle-center"></div>
+            <div class="logo-circle-right"></div>    
+           <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+            <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+          </svg> 
+     
+           </div>     <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);"" >Tech</span>
+           </div>        
+       
+        </div>
+        <div class="header-actions">
+            <span class="user-email" id="user-email"></span>
+            <button id="logout-btn" class="logout-btn" title="Sair">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Gestão de Perfis</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="participants">
+
+    </main>
+
+   
+
+   
+ 
+
+    <div class="alert hidden">
+        <div class="alert-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <p></p>
+    </div>
+
+    <div class="loading-gif hidden">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
+    </div>
+    <script type="module" src="js/menu.js"> </script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>

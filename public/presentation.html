@@ -5,16 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <title>Fluency</title>
+    <title>FluenTech — Sessão de Conversação</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
-            <span>&lt;</span><span class="innerLogo">Fluency</span><span>/&gt;</span>
+            <div class="logo-icon">
+                <div class="logo-circle-left"></div>
+                <div class="logo-circle-center"></div>
+                <div class="logo-circle-right"></div>    
+                <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+                    <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+                </svg> 
+            </div>
+            <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Tech</span>
+            </div>        
         </div>
         <div class="header-actions">
+            <span class="user-role-badge" id="user-role-badge"></span>
             <span class="user-email" id="user-email"></span>
             <button id="logout-btn" class="logout-btn" title="Sair">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -22,124 +32,174 @@
             </button>
         </div>
     </header>
- 
 
     <aside class="sidebar" id="sidebar">
         <nav class="sidebar-nav">
-            <ul>
-                <li  data-page="home" data-file="index.html">
-                    <a href="#" onclick="backToHome(); return false;">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Home</span>
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+            
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Gestão de Perfis</span>
                     </a>
-                </li>
-                <li data-page="set-meeting" data-file="set-meeting.html">
-                    <a href="#" id="open-set-meeting-button">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        <span>Criar reunião</span>
-                    </a>
-                </li>
-                <li data-page="slide-show" data-file="presentation.html">
-                    <a href="#" id="open-slide-show-button">
-                        <i class="fa-solid fa-play"></i>
-                        <span>Iniciar reunião</span>
-                    </a>
-                </li>
-                <li data-page="flash-cards" data-file="flash-cards.html">
-                    <a href="#" id="open-flash-cards-button">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Flash Cards</span>
+                </li>   
+                 
+
+                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                    <a href="manage-meetings.html">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Gestão de Reuniões</span>
                     </a>
                 </li>
             </ul>
         </nav>
     </aside>
 
+    <main id="slide-show-page">
+        <!-- TELA 1: SELEÇÃO E CRIAÇÃO DO EVENTO DA REUNIÃO -->
+        <div class="content select-content">
+            <div class="page-header">
+                <h2>Iniciar Sessão de Conversação</h2>
+                <p>Escolha o tema base para abrir um novo evento de reunião</p>
+            </div>
 
-
-<main id="slide-show-page" >
-    <div class="content select-content">
-        <div class="page-header">
-            <h2>Iniciar reunião</h2>
-            <p>Selecione uma apresentação para começar</p>
+            <div id="presentation-select">   
+                <div class="loading-gif hidden">
+                    <div class="circle one"></div>
+                    <div class="circle two"></div>
+                    <div class="circle three"></div>
+                </div>
+                <p id="value">Selecione um tema</p>
+                <div id="option-list" class="hidden"></div>
+                <i class="fa-solid fa-caret-down"></i>
+            </div>
+            
+            <button id="start-presentation-btn" class="unclickable">Iniciar Reunião Oficial</button>
         </div>
 
-        <div id="presentation-select">   
-            <div class="loading-gif presentation-gif hidden">
-        <div class="circle one"></div>
-        <div class="circle two"></div>
-        <div class="circle three"></div>
+        <!-- TELA 2: SLIDES DA REUNIÃO EM ANDAMENTO -->
+        <div class="content slide-content hidden">
+            <div class="meeting-status-bar">
+                <div class="back-to-selection back-button" id="end-meeting-btn">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    <span>Encerrar Sessão</span>
+                </div>
+            </div>
+
+            <div class="slide"></div>
+        </div>
+    </main>
+
+    <!-- BOTÃO FLUTUANTE DO TRADUTOR -->
+    <div class="translation-button hidden" id="open-translator-btn">
+        <i class="fa-solid fa-language"></i>
+        <span>Tradutor & Card</span>
     </div>
-            <p id="value">Selecione uma reunião</p>
-          <div id="option-list" class="hidden">
-                <div class="meeting-option"></div>
-            </div><i class="fa-solid fa-caret-down"></i>
-        </div>
-        
-        <button id="start-presentation-btn" class="unclickable">Iniciar</button>
-    </div>
-    <div class="content slide-content hidden">
-        <div class="back-to-selection back-button">
-            <i class="fa-solid fa-circle-chevron-left"></i>
-            <span>Voltar</span>
-        </div>
-        <div class="slide">
 
-        </div>
-    </div>
-</main>
-
-<div class="translation-button">
-    <i class="fa-solid fa-language"></i>
-    <span>Tradutor</span>
-</div>
-
-<div class="modal-container hidden" id="translator-modal">
-    <div class="modal">
-        <button class="close-translation-btn"><i class="fa-solid fa-x"></i></button>
-        <div class="modal-content" id="translation-content">
-            <h3>Tradutor rápido</h3>
-            <p>Selecione o idioma e traduza em tempo real</p>
-            <div class="select-container">
-                <select id="translation-options">
-                    <option value="pt">Português → Inglês</option>
-                    <option value="en">Inglês → Português</option>
-                </select>
-            </div>
-            <div class="translation-container">
-                <input type="text" id="normal-text" placeholder="Digite um texto" autocomplete="off">
-                <input type="text" id="translated-text" placeholder="Tradução aparecerá aqui" readonly>
-            </div>
-            <div class="flexbox">
-                <button id="translate-btn">Traduzir</button>
-                <button id="add-flashcards-btn" class="unactive">Adicionar ao Flash Card</button>
-            </div>
-        </div>
-        <div class="modal-content hidden" id="add-flashcard-content">
-            <h3>Adicionar Flash Card</h3>
-            <p>Selecione a reunião para salvar o card</p>
-            <div class="select-container">
-                <select id="select-meeting"></select>
-            </div>
-            <div class="flexbox">
-                <button id="save-flashcard-btn">Salvar</button>
+    <!-- MODAL DO TRADUTOR SÍNCRONO -->
+    <div class="modal-container hidden" id="translator-modal">
+        <div class="modal">
+            <button class="close-translation-btn" id="close-translator-btn"><i class="fa-solid fa-x"></i></button>
+            
+            <div class="modal-content" id="translation-content">
+                <h3>Tradutor da Sessão</h3>
+                <p>Traduza dúvidas dos participantes e gere flashcards instantaneamente</p>
+                
+                <div class="select-container">
+                    <select id="translation-options">
+                        <option value="pt">Português → Inglês</option>
+                        <option value="en">Inglês → Português</option>
+                    </select>
+                </div>
+                
+                <div class="translation-container">
+                    <input type="text" id="normal-text" placeholder="Digite a palavra ou expressão..." autocomplete="off">
+                    <input type="text" id="translated-text" placeholder="A tradução aparecerá aqui..." readonly>
+                </div>
+                
+                <div class="flexbox">
+                    <button id="translate-btn">Traduzir</button>
+                    <button id="add-flashcards-btn" class="unactive">Salvar Flashcard</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="alert hidden">
-    <div class="alert-icon">
-        <i class="fa-solid fa-circle-check"></i>
+    <div class="modal-container hidden" id="end-meeting-modal">
+        <div class="modal">
+            <button class="close-end-meeting-btn" id="close-end-meeting-btn">
+                <i class="fa-solid fa-x"></i>
+            </button>
+            <div class="modal-content" id="end-meeting-content">
+                <h3>Encerrar Reunião</h3>
+                <p>Tem certeza de que deseja finalizar esta sessão de conversação?</p>
+                <p class="modal-sub-info">Todos os flashcards criados durante a reunião já estão salvos para os participantes.</p>
+                <div class="flexbox" style="margin-top: 20px;">
+                    <button id="cancel-end-meeting-btn" class="secondary-btn">Continuar Reunião</button>
+                    <button id="confirm-end-meeting-btn" class="danger-btn">Sim, Encerrar</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <p></p>
-</div>
 
+    <div class="attendance-toggle-btn hidden" id="open-attendance-btn">
+        <i class="fa-solid fa-clipboard-user"></i>
+        <span>Presença</span>
+        <span class="attendance-count-badge" id="attendance-count-badge">0</span>
+    </div>
+    
+    <!-- PAINEL LATERAL DIREITO: LISTA DE PRESENÇA -->
+    <aside class="attendance-drawer hidden" id="attendance-drawer">
+        <div class="attendance-drawer-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-clipboard-user" style="color: var(--third-color);"></i>
+                <h3>Lista de Presença</h3>
+            </div>
+            <button class="close-drawer-btn" id="close-attendance-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    
+        <p class="drawer-subtitle">Selecione os alunos que estão participando desta sessão.</p>
+    
+        <!-- DROPDOWN CUSTOMIZADO DE SELEÇÃO DE ALUNOS (SEM ELEMENTO SELECT) -->
+        <div class="custom-student-select-container">
+            <div class="custom-select-trigger" id="student-select-trigger">
+                <span id="student-select-label">Adicionar aluno...</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="custom-select-options-list hidden" id="student-options-list">
+                <!-- As opções de alunos carregam aqui via JS -->
+            </div>
+        </div>
+    
+        <!-- LISTAGEM DE ALUNOS PRESENTES NA SESSÃO -->
+        <div class="attendees-list-section">
+            <h4>Alunos Presentes (<span id="present-counter">0</span>)</h4>
+            <div class="attendees-list" id="attendees-list">
+                <p class="empty-state" style="padding: 20px 0; font-size: 0.85rem;">Nenhum aluno adicionado ainda.</p>
+            </div>
+        </div>
+    </aside>
 
-<script type="module" src="js/menu.js"></script>
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/auth.js"></script>
-<script type="module" src="js/app.js"></script>
-<script type="module" src="js/presentation.js"></script>
+    <!-- TOAST DE FEEDBACK -->
+    <div id="auth-toast" class="toast"></div>
 
+    <!-- SCRIPTS -->
+     <script type="module" src="js/menu.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/presentation.js"></script>
 </body>
+</html>

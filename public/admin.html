@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="admin">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>FluenTech — Gestão de Perfis</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">
+           <div class="logo-icon">
+            <div class="logo-circle-left"></div>
+            <div class="logo-circle-center"></div>
+            <div class="logo-circle-right"></div>    
+            <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+              <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+            </svg> 
+           </div>
+           <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Tech</span>
+           </div>        
+        </div>
+        <div class="header-actions">
+            <span class="user-role-badge" id="user-role-badge"></span>
+            <span class="user-email" id="user-email"></span>
+            <button id="logout-btn" class="logout-btn" title="Sair">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+            
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Gestão de Perfis</span>
+                    </a>
+                </li>   
+                 
+
+                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                    <a href="manage-meetings.html">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Gestão de Reuniões</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <main id="admin-page">
+        <div class="content" style="flex-direction: column; width: 90%; max-width: 1100px;">
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 25px;">
+                <div style="text-align: left;">
+                    <h2>Gestão de Perfis e Permissões</h2>
+                    <p>Cadastre, modifique papéis e gerencie as contas de acesso da plataforma</p>
+                </div>
+                <button id="open-create-user-modal-btn" class="home-btn" style="width: auto; padding: 0 24px;">
+                    <i class="fa-solid fa-user-plus"></i> Novo Perfil
+                </button>
+            </div>
+
+            <!-- Tabela / Grade de Perfis -->
+            <div class="users-table-container">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Nome Completo</th>
+                            <th>E-mail</th>
+                            <th>ID do Usuário</th>
+                            <th>Função (Role)</th>
+                            <th style="text-align: right;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Renderizado via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE CADASTRO / EDIÇÃO DE PERFIL -->
+    <div class="modal-container hidden" id="user-form-modal">
+        <div class="modal" style="max-width: 520px; padding: 30px;">
+            <button class="close-end-meeting-btn" id="close-user-modal-btn">
+                <i class="fa-solid fa-x"></i>
+            </button>
+            <div class="modal-content" style="gap: 16px;">
+                <h3 id="user-modal-title">Novo Perfil</h3>
+                <p class="modal-sub-info">Preencha as informações do usuário e defina o nível de acesso.</p>
+
+                <form id="user-form" style="display: flex; flex-direction: column; gap: 14px; text-align: left;">
+                    <input type="hidden" id="edit-user-uid">
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <div class="form-item" style="flex: 1;">
+                            <label for="user-firstname">Nome</label>
+                            <input type="text" id="user-firstname" placeholder="Ex: Lucas" required autocomplete="off">
+                        </div>
+                        <div class="form-item" style="flex: 1;">
+                            <label for="user-lastname">Sobrenome</label>
+                            <input type="text" id="user-lastname" placeholder="Ex: Ferreira" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="user-email-input">E-mail</label>
+                        <input type="email" id="user-email-input" placeholder="usuario@email.com" required autocomplete="off">
+                    </div>
+
+                    <div class="form-item" id="password-field-container">
+                        <label for="user-password-input">Senha Inicial</label>
+                        <input type="password" id="user-password-input" placeholder="Mínimo 6 caracteres" minlength="6">
+                    </div>
+
+                    <div class="form-item">
+                        <label for="user-role-select">Função no Sistema</label>
+                        <select id="user-role-select" style="height: 44px; border-radius: 50px; background: #181832; color: white; border: 1px solid rgba(255,255,255,0.15); padding: 0 16px; font-size: 0.95rem;">
+                            <option value="student">Aluno (Apenas Flashcards)</option>
+                            <option value="mediator">Mediador (Reuniões + Flashcards)</option>
+                            <option value="admin">Administrador (Acesso Total)</option>
+                        </select>
+                    </div>
+
+                    <div class="flexbox" style="margin-top: 15px;">
+                        <button type="button" id="cancel-user-modal-btn" class="secondary-btn">Cancelar</button>
+                        <button type="submit" id="save-user-btn" class="home-btn" style="width: auto; padding: 0 28px;">Salvar Perfil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EXCLUSÃO -->
+    <div class="modal-container hidden" id="delete-user-modal">
+        <div class="modal" style="max-width: 480px; padding: 30px;">
+            <div class="modal-content" style="gap: 15px;">
+                <h3>Excluir Perfil</h3>
+                <p id="delete-user-msg">Tem certeza de que deseja excluir este usuário?</p>
+                <div class="flexbox" style="margin-top: 15px;">
+                    <button id="cancel-delete-user-btn" class="secondary-btn">Cancelar</button>
+                    <button id="confirm-delete-user-btn" class="danger-btn">Sim, Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-toast" class="toast"></div>
+
+    <div class="loading-gif hidden">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
+    </div>
+
+    <script type="module" src="js/menu.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

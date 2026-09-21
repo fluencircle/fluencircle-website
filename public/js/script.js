@@ -1,67 +1,43 @@
-import { meetingsRef, updateMeetingsDatabase } from "./firebase.js";
-import { get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-import {
-    meetingsObj,
-    setMeetingsObj,
-    callAlert,
-    alertElement
-} from "./app.js";
+import { initAuthGuard } from "./auth.js";
 
-const homePage = document.getElementById('home-page');
-const logo = document.getElementById('logo');
-
+// Elementos da barra de navegação
 const openSetMeetingButton = document.getElementById('open-set-meeting-button');
 const openSlideShowButton = document.getElementById('open-slide-show-button');
 const openFlashCardsButton = document.getElementById('open-flash-cards-button');
 
+// Botões da Home
+const homeSetMeeting = document.getElementById('home-set-meeting');
+const homeStartMeeting = document.getElementById('home-start-meeting');
+const homeFlashCards = document.getElementById('home-flash-cards');
 
-
-
-document.getElementById('home-set-meeting')?.addEventListener('click', () => openSetMeetingButton.click());
-document.getElementById('home-start-meeting')?.addEventListener('click', () => openSlideShowButton.click());
-document.getElementById('home-flash-cards')?.addEventListener('click', () => openFlashCardsButton.click());
-
-openSetMeetingButton.onclick = () => {
-    
-};
-
-function renderQuestionCards(questionsArray) {
-    questionListElement.innerHTML = '';
-    questionsArray.forEach((question, count) => {
-        const questionCard = document.createElement('div');
-        questionCard.classList.add('question-card');
-        questionCard.setAttribute('data-number', String(count));
-        questionCard.innerHTML = `
-            <span class="questionNumber">${count + 1}</span>
-            <input type="text" class="new-question-input" placeholder="Digite sua pergunta aqui..." value="${question}">
-            <button type="button" class="delete-question-btn"><i class="fa-solid fa-trash"></i></button>`;
-
-        questionCard.querySelector('.delete-question-btn').onclick = () => {
-            questionsArray.splice(Number(questionCard.dataset.number), 1);
-            renderQuestionCards([...questionsArray]);
-        };
-        questionListElement.append(questionCard);
-    });
+// Redirecionamentos funcionais
+if (openSetMeetingButton) {
+    openSetMeetingButton.onclick = (e) => {
+        e.preventDefault();
+        window.location.href = 'set-meeting.html';
+    };
 }
 
-openSlideShowButton.onclick = () => {
-   window.location.href = 'presentation.html';
-};
-
-openFlashCardsButton.onclick = () => {
-    window.location.href = 'flash-cards.html';
-};
-
-
-
-
-
-function backToHome() { window.location.href = 'index.html' }
-
-function backToSelection() {
-    slideShowPage.querySelector('.select-content').classList.remove('hidden');
-    slideShowPage.querySelector('.slide-content').classList.add('hidden');
+if (openSlideShowButton) {
+    openSlideShowButton.onclick = (e) => {
+        e.preventDefault();
+        window.location.href = 'presentation.html';
+    };
 }
 
-window.backToSelection = backToSelection;
-window.backToHome = backToHome;
+if (openFlashCardsButton) {
+    openFlashCardsButton.onclick = (e) => {
+        e.preventDefault();
+        window.location.href = 'flash-cards.html';
+    };
+}
+
+// Conecta os botões da Home aos handlers correspondentes
+homeSetMeeting?.addEventListener('click', () => openSetMeetingButton?.click());
+homeStartMeeting?.addEventListener('click', () => openSlideShowButton?.click());
+homeFlashCards?.addEventListener('click', () => openFlashCardsButton?.click());
+
+// Funções globais de navegação
+window.backToHome = function() {
+    window.location.href = 'index.html';
+};

@@ -1,21 +1,30 @@
-
 <!DOCTYPE html>
-<html lang="pt-BR" id="set-meeting">
+<html lang="pt-BR" id="set-meeting-page">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <title>Fluency</title>
+    <title>FluenTech — Gestão de Temas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
-            <span>&lt;</span><span class="innerLogo">Fluency</span><span>/&gt;</span>
+           <div class="logo-icon">
+            <div class="logo-circle-left"></div>
+            <div class="logo-circle-center"></div>
+            <div class="logo-circle-right"></div>    
+            <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+              <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+            </svg> 
+           </div>
+           <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Tech</span>
+           </div>        
         </div>
         <div class="header-actions">
+            <span class="user-role-badge" id="user-role-badge"></span>
             <span class="user-email" id="user-email"></span>
             <button id="logout-btn" class="logout-btn" title="Sair">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -26,74 +35,125 @@
 
     <aside class="sidebar" id="sidebar">
         <nav class="sidebar-nav">
-            <ul>
-                <li data-page="home" data-file="index.html">
-                    <a href="#" onclick="backToHome(); return false;">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Home</span>
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+            
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Gestão de Perfis</span>
                     </a>
-                </li>
-                <li data-page="set-meeting" data-file="set-meeting.html">
-                    <a href="#" id="open-set-meeting-button">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        <span>Criar reunião</span>
-                    </a>
-                </li>
-                <li data-page="slide-show" data-file="presentation.html">
-                    <a href="#" id="open-slide-show-button">
-                        <i class="fa-solid fa-play"></i>
-                        <span>Iniciar reunião</span>
-                    </a>
-                </li>
-                <li data-page="flash-cards" data-file="flash-cards.html">
-                    <a href="#" id="open-flash-cards-button">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Flash Cards</span>
+                </li>   
+                 
+
+                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                    <a href="manage-meetings.html">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Gestão de Reuniões</span>
                     </a>
                 </li>
             </ul>
         </nav>
     </aside>
 
-
-
-<main id="set-meeting-page">
-    <div class="content">
-        <div class="page-header">
-            <h2>Nova reunião</h2>
-            <p>Defina o tema e adicione as perguntas de conversação</p>
-        </div>
-        <div class="theme-container">
-            <label for="topic-input">Tema da reunião</label>
-            <input type="text" placeholder="Tema da reunião..." id="topic-input" autocomplete="off">
-        </div>
-
-       
-        <div class="questions-container">
-            <p>Perguntas de conversação</p>
-            <div class="questions-list"></div> <div id="add-question-button">
-                <i class="fa-solid fa-plus"></i> 
+    <main>
+        <!-- SEÇÃO 1: LISTAGEM DE TEMAS EXISTENTES -->
+        <div class="content" id="themes-list-view" style="width: 90%; max-width: 1100px; flex-direction: column;">
+            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 25px;">
+                <div style="text-align: left;">
+                    <h2>Banco de Temas de Conversação</h2>
+                    <p>Crie, edite ou exclua os tópicos e perguntas utilizados nas reuniões.</p>
+                </div>
+                <button id="open-create-theme-btn" class="home-btn" style="width: auto; padding: 0 24px;">
+                    <i class="fa-solid fa-plus"></i> Novo Tema
+                </button>
             </div>
 
-<div id="set-button">Salvar reunião</div>
-    
-           
-            
+            <!-- Grade com os temas cadastrados -->
+            <div class="classes-grid" id="themes-grid" style="width: 100%; margin-top: 10px;">
+                <!-- Renderizado via JS -->
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: FORMULÁRIO DE CRIAÇÃO / EDIÇÃO DO TEMA -->
+        <div class="content hidden" id="theme-editor-view" style="width: 60%; min-width: 320px; max-width: 800px; flex-direction: column; align-items: stretch; gap: 30px;">
+            <div class="back-button" id="back-to-themes-btn" style="position: static; padding: 0; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-circle-chevron-left"></i>
+                <span>Voltar aos Temas</span>
+            </div>
+
+            <div class="page-header" style="text-align: left; margin: 0;">
+                <h2 id="editor-title">Novo Tema</h2>
+                <p id="editor-subtitle">Defina o título do tópico e insira as perguntas condutoras.</p>
+            </div>
+
+            <!-- Campo do Tópico -->
+            <div class="theme-container" style="height: auto; width: 100%;">
+                <label for="topic-input">Título do Tema</label>
+                <input type="text" id="topic-input" placeholder="Ex: Technology & Daily Life" autocomplete="off">
+            </div>
+
+            <!-- Lista de Perguntas -->
+            <div class="questions-container" style="width: 100%;">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <p style="margin: 0; font-weight: 600; color: white;">Perguntas de Apoio</p>
+                    <button type="button" id="add-question-button">
+                        <i class="fa-solid fa-plus" style="margin-right: 6px;"></i> Adicionar
+                    </button>
+                </div>
+
+                <div class="questions-list" id="questions-list" style="max-height: 380px; width: 100%;">
+                    <!-- Cards de perguntas inseridos dinamicamente -->
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 15px;">
+                <button type="button" id="cancel-theme-btn" class="home-btn-secondary home-btn" style="width: 140px;">Cancelar</button>
+                <button type="button" id="set-button" class="home-btn" style="width: 180px; position: static;">
+                    <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i> Salvar Tema
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL DE EXCLUSÃO DE TEMA -->
+    <div class="modal-container hidden" id="delete-theme-modal">
+        <div class="modal" style="max-width: 480px; padding: 30px;">
+            <div class="modal-content" style="gap: 15px;">
+                <h3>Excluir Tema</h3>
+                <p id="delete-theme-msg">Tem certeza de que deseja excluir este tema?</p>
+                <div class="flexbox" style="margin-top: 15px;">
+                    <button id="cancel-delete-theme-btn" class="home-btn-secondary home-btn" style="width: 120px;">Cancelar</button>
+                    <button id="confirm-delete-theme-btn" class="home-btn" style="background-color: #ff5252; color: white; width: 140px;">Excluir</button>
+                </div>
+            </div>
         </div>
     </div>
-</main>
 
-<div class="alert hidden">
-    <div class="alert-icon">
-        <i class="fa-solid fa-circle-check"></i>
+    <div class="alert hidden">
+        <span class="alert-icon"></span>
+        <p></p>
     </div>
-    <p></p>
-</div>
 
-<script type="module" src="js/menu.js"></script>
-<script type="module" src="js/firebase.js"></script>
-<script type="module" src="js/auth.js"></script>
-<script type="module" src="js/app.js"></script>
-<script type="module" src="js/set-meeting.js"></script>
+    <div class="loading-gif hidden">
+        <div class="circle one"></div>
+        <div class="circle two"></div>
+        <div class="circle three"></div>
+    </div>
+
+    <script type="module" src="js/menu.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/set-meeting.js"></script>
 </body>
-
+</html>

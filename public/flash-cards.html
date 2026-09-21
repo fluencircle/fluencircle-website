@@ -5,15 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>Fluency — Flash Cards</title>
+    <title>FluenTech — Flash Cards</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
-            <span>&lt;</span><span class="innerLogo">Fluency</span><span>/&gt;</span>
+            <div class="logo-icon">
+                <div class="logo-circle-left"></div>
+                <div class="logo-circle-center"></div>
+                <div class="logo-circle-right"></div>    
+                <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+                    <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+                </svg> 
+            </div>
+            <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Tech</span>
+            </div>        
         </div>
         <div class="header-actions">
+            <span class="user-role-badge" id="user-role-badge"></span>
             <span class="user-email" id="user-email"></span>
             <button id="logout-btn" class="logout-btn" title="Sair">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -24,29 +35,31 @@
 
     <aside class="sidebar" id="sidebar">
         <nav class="sidebar-nav">
-            <ul>
-                <li data-page="home" data-file="index.html">
-                    <a href="#" onclick="backToHome(); return false;">
-                        <i class="fa-solid fa-house"></i>
-                        <span>Home</span>
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+            
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Gestão de Perfis</span>
                     </a>
-                </li>
-                <li data-page="set-meeting" data-file="set-meeting.html">
-                    <a href="#" id="open-set-meeting-button">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        <span>Criar reunião</span>
-                    </a>
-                </li>
-                <li data-page="slide-show" data-file="presentation.html">
-                    <a href="#" id="open-slide-show-button">
-                        <i class="fa-solid fa-play"></i>
-                        <span>Iniciar reunião</span>
-                    </a>
-                </li>
-                <li data-page="flash-cards" data-file="flash-cards.html">
-                    <a href="#" id="open-flash-cards-button">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Flash Cards</span>
+                </li>   
+                 
+
+                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                    <a href="manage-meetings.html">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Gestão de Reuniões</span>
                     </a>
                 </li>
             </ul>
@@ -54,45 +67,59 @@
     </aside>
 
     <main>
-        <div id="meetings-content" class="content">
+        <!-- TELA 1: LISTAGEM DE REUNIÕES DISPONÍVEIS -->
+        <div id="meetings-content" class="content" style="max-width: 1200px; width: 90%;">
             <div class="page-header">
-                <h2>Flash Cards</h2>
-                <p>Selecione uma reunião para estudar</p>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+              
+                    <h2>Decks de Vocabulário</h2>
+                </div>
+                <p id="flashcards-subtitle">
+                    Revise os flashcards das suas sessões e fortaleça seu vocabulário
+                </p>
             </div>
-            <div class="classes-grid"></div>
+        
+            <!-- GRADE DE SESSÕES COM GAMIFICAÇÃO -->
+            <div class="classes-grid" id="sessions-grid">
+                <!-- Renderizado dinamicamente com cards gamificados -->
+            </div>
         </div>
 
+        <!-- TELA 2: MODO DE ESTUDO DO FLASHCARD 3D -->
         <div id="flash-cards-content" class="content hidden">
-            <div class="back-to-meetings back-button">
+            <div class="back-to-meetings back-button" id="back-to-meetings-btn">
                 <i class="fa-solid fa-circle-chevron-left"></i>
-                <span>Voltar às reuniões</span>
+                <span>Voltar às sessões</span>
             </div>
+            
             <div class="page-header">
-                <h2>Meeting Title</h2>
-                <p>Clique no cartão para ver a resposta</p>
-                                
-                
+                <h2 id="current-meeting-title">Tema da Sessão</h2>
+                <p id="study-instruction-text">Clique no cartão para virar e ver a resposta</p>
             </div>
+
+            <!-- Controles de Modo de Estudo -->
             <div class="flash-cards-setup-content">
                 <button id="play-cards-btn" title="Modo estudo">
-                    <span>Iniciar</span><i class="fa-solid fa-circle-play"></i>
+                    <span>Iniciar Estudo</span><i class="fa-solid fa-circle-play"></i>
                 </button>
             </div>
+
             <div class="flash-cards-study-content hidden">
                 <div class="flash-card-actions">
-<button id="previousCard" class="cards-action-btn">
-    <i class="fa-solid fa-reply"></i>
-                </button>
-
-                <button id="restart-cards-btn" class="cards-action-btn" >
-                    <i class="fa-solid fa-arrow-rotate-left"></i>
-                </button>
+                    <button id="previousCard" class="cards-action-btn" title="Voltar cartão anterior">
+                        <i class="fa-solid fa-reply"></i>
+                    </button>
+                    <button id="restart-cards-btn" class="cards-action-btn" title="Reiniciar pilha">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                    </button>
                 </div>
-                
-             
-            </div>   <div id="flash-cards-container">
-                   
-                </div> <div id="progress-bar"></div>
+            </div>
+
+            <!-- Container da Pilha 3D de Cartões -->
+            <div id="flash-cards-container"></div>
+            
+            <!-- Barra de Progresso das Perguntas Respondidas -->
+            <div id="progress-bar"></div>
         </div>
     </main>
 
@@ -102,19 +129,12 @@
         <div class="circle three"></div>
     </div>
 
+    <!-- TOAST DE FEEDBACK -->
+    <div id="auth-toast" class="toast"></div>
 
-    <div class="alert hidden">
-        <div class="alert-icon">
-            <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <p></p>
-    </div>
-
-
-    <script type="module", src="js/menu.js"></script>
+    <script type="module" src="js/menu.js"></script>
     <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/app.js"></script>
     <script type="module" src="js/cards.js"></script>
 </body>
 </html>

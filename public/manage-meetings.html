@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR" id="home">
+<html lang="pt-BR" id="manage-meetings">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>FluenTech</title>
+    <title>FluenTech — Gestão de Reuniões & Flashcards</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,7 +24,7 @@
            </div>        
         </div>
         <div class="header-actions">
-            <span class="user-role-badge hidden" id="user-role-badge"></span>
+            <span class="user-role-badge" id="user-role-badge"></span>
             <span class="user-email" id="user-email"></span>
             <button id="logout-btn" class="logout-btn" title="Sair">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -66,38 +66,66 @@
         </nav>
     </aside>
 
-    <main id="home-page">
-        <div class="content home-content">
-            <div class="welcome-section">
-                <h1>Bem-vindo ao <span class="highlight">FluenTech</span></h1>
-                <p class="welcome-subtitle">Você aprendeu inglês falando.</p>
-                
-                <div class="home-page-options">
-                    <!-- Flash Cards: Todos os perfis -->
-                    <button class="home-btn" id="home-flash-cards">
-                        <i class="fa-solid fa-layer-group"></i>
-                        Flash Cards
-                    </button>
+    <main id="manage-meetings-page">
+      
+     <div class="content management-content" id="meetings-list-view">
+            <div class="page-header">
+                <h2>Gestão de Reuniões & Conteúdos</h2>
+                <p>Selecione uma reunião para editar o tema, perguntas ou revisar e ajustar os flashcards gerados.</p>
+            </div>
+            
+            <div class="classes-grid" id="manage-meetings-grid">
+                <!-- Preenchido via JavaScript -->
+            </div>
+        </div>
+   
+        <!-- SEÇÃO 1: LISTAGEM DE REUNIÕES CADASTRADAS -->
+   
 
-                    <!-- Reuniões: Mediador e Admin -->
-                    <button class="home-btn home-btn-secondary mediator-access hidden" id="home-set-meeting">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        Criar reunião
-                    </button>
-                    <button class="home-btn home-btn-secondary mediator-access hidden" id="home-start-meeting">
-                        <i class="fa-solid fa-play"></i>
-                        Iniciar reunião
-                    </button>
+        <!-- SEÇÃO 2: EDITOR DE FLASHCARDS DA REUNIÃO SELECIONADA -->
+        <div class="content management-content hidden" id="flashcards-editor-view">
+            <div class="back-button" id="back-to-meetings-list-btn">
+                <i class="fa-solid fa-circle-chevron-left"></i>
+                <span>Voltar às Reuniões</span>
+            </div>
 
-                    <!-- Gestão de Perfis: Apenas Admin -->
-                    <button class="home-btn home-btn-secondary admin-access hidden" id="home-admin-btn">
-                        <i class="fa-solid fa-user-gear"></i>
-                        Gestão de Perfis
-                    </button>
-                </div>
+            <div class="page-header">
+                <h2 id="selected-meeting-title">Tema da Reunião</h2>
+                <p>Edite os termos em inglês, as traduções ou remova cartões com erros.</p>
+            </div>
+
+            <!-- Adicionar Novo Flashcard Manualmente -->
+            <div class="add-card-manual-bar">
+                <input type="text" id="new-card-front" placeholder="Frente (Inglês, ex: Breakdown)" autocomplete="off">
+                <input type="text" id="new-card-back" placeholder="Verso (Português, ex: Falha / Análise detalhada)" autocomplete="off">
+                <button id="add-new-card-btn" class="home-btn" style="width: auto; padding: 0 24px;">
+                    <i class="fa-solid fa-plus"></i> Adicionar Card
+                </button>
+            </div>
+
+            <!-- Lista de Cartões da Reunião -->
+            <div class="cards-editor-container" id="cards-editor-container">
+                <!-- Cards renderizados dinamicamente aqui -->
             </div>
         </div>
     </main>
+
+    <!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO (SEM ALERT/CONFIRM NATIVO) -->
+    <div class="modal-container hidden" id="delete-confirm-modal">
+        <div class="modal" style="max-width: 480px; padding: 30px;">
+            <div class="modal-content" style="gap: 15px;">
+                <h3 id="delete-modal-title">Confirmar Exclusão</h3>
+                <p id="delete-modal-msg">Tem certeza de que deseja excluir este item?</p>
+                <div class="flexbox" style="margin-top: 15px;">
+                    <button id="cancel-delete-btn" class="secondary-btn">Cancelar</button>
+                    <button id="confirm-delete-btn" class="danger-btn">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEEDBACK TOAST -->
+    <div id="auth-toast" class="toast"></div>
 
     <div class="loading-gif hidden">
         <div class="circle one"></div>
@@ -108,6 +136,6 @@
     <script type="module" src="js/menu.js"></script>
     <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/auth.js"></script>
-    <script type="module" src="js/script.js"></script>
+    <script type="module" src="js/manage-meetings.js"></script>
 </body>
 </html>
