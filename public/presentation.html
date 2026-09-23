@@ -85,15 +85,14 @@
                 <i class="fa-solid fa-caret-down"></i>
             </div>
             
-            <button id="start-presentation-btn" class="unclickable">Iniciar Reunião Oficial</button>
+            <button id="start-presentation-btn" class="unclickable">Iniciar</button>
         </div>
 
         <!-- TELA 2: SLIDES DA REUNIÃO EM ANDAMENTO -->
         <div class="content slide-content hidden">
             <div class="meeting-status-bar">
                 <div class="back-to-selection back-button" id="end-meeting-btn">
-                    <i class="fa-solid fa-flag-checkered"></i>
-                    <span>Encerrar Sessão</span>
+                    <span>Encerrar</span>
                 </div>
             </div>
 
@@ -104,17 +103,16 @@
     <!-- BOTÃO FLUTUANTE DO TRADUTOR -->
     <div class="translation-button hidden" id="open-translator-btn">
         <i class="fa-solid fa-language"></i>
-        <span>Tradutor & Card</span>
+        <span>Tradutor</span>
     </div>
 
-    <!-- MODAL DO TRADUTOR SÍNCRONO -->
+    <!-- MODAL DO TRADUTOR -->
     <div class="modal-container hidden" id="translator-modal">
         <div class="modal">
             <button class="close-translation-btn" id="close-translator-btn"><i class="fa-solid fa-x"></i></button>
             
             <div class="modal-content" id="translation-content">
-                <h3>Tradutor da Sessão</h3>
-                <p>Traduza dúvidas dos participantes e gere flashcards instantaneamente</p>
+                <h3>Tradutor</h3>
                 
                 <div class="select-container">
                     <select id="translation-options">
@@ -154,8 +152,8 @@
     </div>
 
     <div class="attendance-toggle-btn hidden" id="open-attendance-btn">
-        <i class="fa-solid fa-clipboard-user"></i>
-        <span>Presença</span>
+        <i class="fa-solid fa-people-group"></i>
+        <span>Participantes</span>
         <span class="attendance-count-badge" id="attendance-count-badge">0</span>
     </div>
     
@@ -163,20 +161,19 @@
     <aside class="attendance-drawer hidden" id="attendance-drawer">
         <div class="attendance-drawer-header">
             <div style="display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-clipboard-user" style="color: var(--third-color);"></i>
-                <h3>Lista de Presença</h3>
+                <i class="fa-solid fa-people-group" style="color: var(--third-color);"></i>
+                <h3>Participantes</h3>
             </div>
             <button class="close-drawer-btn" id="close-attendance-btn">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
     
-        <p class="drawer-subtitle">Selecione os alunos que estão participando desta sessão.</p>
     
         <!-- DROPDOWN CUSTOMIZADO DE SELEÇÃO DE ALUNOS (SEM ELEMENTO SELECT) -->
         <div class="custom-student-select-container">
             <div class="custom-select-trigger" id="student-select-trigger">
-                <span id="student-select-label">Adicionar aluno...</span>
+                <span id="student-select-label">Adicionar participante...</span>
                 <i class="fa-solid fa-chevron-down"></i>
             </div>
             <div class="custom-select-options-list hidden" id="student-options-list">
@@ -186,9 +183,9 @@
     
         <!-- LISTAGEM DE ALUNOS PRESENTES NA SESSÃO -->
         <div class="attendees-list-section">
-            <h4>Alunos Presentes (<span id="present-counter">0</span>)</h4>
+       
             <div class="attendees-list" id="attendees-list">
-                <p class="empty-state" style="padding: 20px 0; font-size: 0.85rem;">Nenhum aluno adicionado ainda.</p>
+                <p class="empty-state" style="padding: 20px 0; font-size: 0.85rem;">Ninguém foi adicionado.</p>
             </div>
         </div>
     </aside>

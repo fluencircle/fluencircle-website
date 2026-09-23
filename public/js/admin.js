@@ -112,7 +112,7 @@ import {
             ${uid.length > 14 ? uid.substring(0, 14) + '...' : uid}
           </td>
           <td>
-            <span class="user-role-badge badge-${user.role || 'student'}">
+            <span  badge-${user.role || 'student'}">
               ${roleLabels[user.role] || 'Aluno'}
             </span>
           </td>

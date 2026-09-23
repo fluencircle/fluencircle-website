@@ -4,7 +4,7 @@
     --surface-hover: #142233;
     --surface-card: #121e2c;
     --border-color: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(43, 253, 120, 0.4);
+    --border-hover: rgba(136, 152, 187, 0.4);
     --second-color: #d35f5f;
     --third-color: #2bfd78;
     --accent-blue: #00d2ff;
@@ -74,7 +74,7 @@ header {
     top: 0;
     left: var(--sidebar-collapsed-width);
     right: 0;
-    z-index: 200;
+    z-index: 100000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -158,25 +158,14 @@ header {
     border-radius: 12px;
     text-transform: uppercase;
     letter-spacing: 0.4px;
+    color: rgb(60, 71, 85) ;
 }
 
 .badge-admin {
-    background: rgba(255, 82, 82, 0.15);
-    color: #ff5252;
-    border: 1px solid rgba(255, 82, 82, 0.4);
+    color: rgb(60, 71, 85) ;
+
 }
 
-.badge-mediator {
-    background: rgba(43, 253, 120, 0.15);
-    color: var(--third-color);
-    border: 1px solid rgba(43, 253, 120, 0.4);
-}
-
-.badge-student {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-}
 
 .logout-btn {
     display: inline-flex;
@@ -206,7 +195,7 @@ header {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 210;
+    z-index: 100000;
     background-color: var(--primary-color);
     width: var(--sidebar-collapsed-width);
     border-right: 1px solid var(--border-color);
@@ -260,7 +249,7 @@ header {
 }
 
 .sidebar-nav li.active {
-    background-color: var(--third-color);
+    background-color: var(--third-color)!important;
 }
 
 .sidebar-nav li.active a {
@@ -295,6 +284,8 @@ header {
     transition: opacity 0.2s ease;
     pointer-events: none;
 }
+
+
 
 .sidebar:hover .sidebar-nav li a span {
     opacity: 1;
@@ -424,7 +415,7 @@ button:active {
     height: 40px;
     padding: 0 20px;
     font-size: 0.85rem;
-    font-weight: 700;
+    
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -446,6 +437,9 @@ button:active {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-color);
     align-self: flex-start;
+    position: fixed!important  ;
+    top: 100px;
+    left: 100px;
     transition: all 0.2s ease;
 }
 
@@ -499,6 +493,10 @@ button:active {
     margin-top: 10px;
 }
 
+
+#themes-grid{
+    grid-template-columns: 1fr 1fr!important;
+}
 /* Flashcard Session Card with Leitner / Ebbinghaus Gamification */
 .srs-meeting-card {
     background: var(--surface-card);
@@ -719,11 +717,11 @@ button:active {
 
 .card {
     height: 380px;
-    width: 380px;
+    width: 420px;
     position: absolute;
     top: 0;
     left: 0;
-    border-radius: 50%;
+    border-radius: 18px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     cursor: pointer;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -737,7 +735,7 @@ button:active {
 .card-front, .card-back {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
+    border-radius: 18px;
     backface-visibility: hidden;
     display: flex;
     flex-direction: column;
@@ -793,14 +791,20 @@ button:active {
 
 @keyframes removeCard {
     0% { transform: rotateY(180deg); opacity: 1; }
-    100% { transform: rotate(15deg) translate(80px, -60px); opacity: 0; pointer-events: none; }
+    100% { transform: rotate(15deg) translate(80px, -60px); opacity: 0; pointer-events: none; display: none;}
 }
 
 #progress-bar {
     width: 380px;
     display: flex;
     gap: 4px;
-    margin-top: 24px;
+    
+    position: relative;
+    justify-content: center;
+
+    bottom: -200px;
+    right: -30px;
+    
 }
 
 .progress-item {
@@ -826,6 +830,18 @@ button:active {
 /* ==========================================================================
    TEMAS (SET-MEETING) & GESTÃO DE REUNIÕES
    ========================================================================== */
+.manage-theme-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    padding: 10px 18px;
+    display: flex;
+    cursor: pointer;
+  
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
 .manage-meeting-card {
     background: var(--surface-card);
     border: 1px solid var(--border-color);
@@ -837,6 +853,7 @@ button:active {
     gap: 12px;
     transition: all 0.25s ease;
 }
+
 
 .manage-meeting-card:hover {
    
@@ -865,7 +882,7 @@ button:active {
 
 .manage-meeting-topic {
     font-size: 0.95rem;
-    font-weight: 700;
+   
     color: var(--text-primary);
 }
 
@@ -877,6 +894,8 @@ button:active {
 .manage-meeting-actions {
     display: flex;
     gap: 8px;
+    align-items: end;
+    width: 50px;
     margin-top: auto;
     padding-top: 8px;
 }
@@ -898,6 +917,8 @@ button:active {
     flex: 1;
     justify-content: center;
 }
+
+
 
 .delete-meeting-btn {
     background: transparent;
@@ -945,14 +966,60 @@ button:active {
     gap: 12px;
 }
 
+
+.questionItem{
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.questionItem .number{
+    background-color: var(--third-color);
+    width: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    height: 50px;
+    font-size: 2rem!important;
+    border-radius: 50%;
+}
+
+.cursor-left{
+    cursor: url(../assets/cursor-left.png), auto;
+}
+.cursor-right{
+    cursor: url(../assets/cursor-right.png), auto;
+}
+
+.slide{
+    width: 100%;
+}
+
+.slide-content{
+    width: 90vw!important;
+ 
+}
+
+
+.questionItem .question{
+    font-weight: 400!important;
+    font-size: 2rem!important;
+}
+
 #add-question-button {
     background-color: var(--second-color);
     color: white;
     border: none;
     border-radius: 50px;
-    padding: 6px 14px;
+    padding: 14px;
     font-size: 0.78rem;
-    font-weight: 600;
+    height: 40px;
+    width: 40px;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -1032,7 +1099,7 @@ button:active {
     height: 40px;
     background: var(--surface-color);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 20px;
     padding: 0 14px;
     color: var(--text-primary);
     font-size: 0.85rem;
@@ -1093,6 +1160,8 @@ button:active {
     border-color: var(--third-color);
 }
 
+
+
 .save-single-card-btn {
     background: var(--third-color);
     color: var(--primary-color);
@@ -1122,10 +1191,11 @@ button:active {
 #slide-show-page .content,
 .select-content {
     display: flex;
+    padding-top: 100px ;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    max-width: 500px;
+    max-width: 1600px;
 }
 
 #presentation-select {
@@ -1138,7 +1208,7 @@ button:active {
     align-items: center;
     justify-content: center;
     padding: 0 20px;
-    font-weight: 700;
+    font-weight: 300;
     font-size: 0.9rem;
     cursor: pointer;
    
@@ -1146,9 +1216,9 @@ button:active {
 
 
 #presentation-select i{
-position: absolute;
-
-right: 10px;
+justify-self: end;
+position: relative;
+left: 90px;
 }
 
 
@@ -1162,9 +1232,9 @@ right: 10px;
 #option-list {
     position: absolute;
     width: 100%;
-    min-width: 360px;
+    max-width: 360px;
     background: #101c29;
-    border: 1px solid rgba(43, 253, 120, 0.3);
+    border: 1px solid rgba(89, 90, 90, 0.3);
     border-radius: 14px;
     padding: 6px 0;
     color: var(--text-primary);
@@ -1193,7 +1263,7 @@ right: 10px;
     border-radius: 50px;
     padding: 10px 28px;
     font-size: 0.9rem;
-    font-weight: 700;
+
 }
 
 #start-presentation-btn.unclickable {
@@ -1205,7 +1275,7 @@ right: 10px;
     position: relative;
     width: 100%;
     max-width: 900px;
-    min-height: 420px;
+    min-height: 750px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1220,10 +1290,10 @@ right: 10px;
 }
 
 .slide .title {
-    font-size: 1.1rem;
-    color: var(--third-color);
+    font-size: 2.2rem;
+    color: white;
     margin-bottom: 20px;
-    font-weight: 700;
+    font-weight: 300;
 }
 
 .slide .question {
@@ -1244,7 +1314,7 @@ right: 10px;
     padding: 9px 18px;
     border-radius: 50px;
     font-size: 0.82rem;
-    font-weight: 600;
+
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1254,18 +1324,42 @@ right: 10px;
     transition: all 0.2s ease;
 }
 
+
+#translation-options{
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding:10px 20px;
+}
+
+
+#translate-btn{
+    background-color: var(--third-color) ;
+    border: none;
+    padding: 5px 25px;
+    border-radius: 20px;
+}
+
+#add-flashcards-btn{
+    background-color: var(--third-color);
+    border: none;
+    padding: 5px 25px;
+    border-radius: 20px;
+}
+
 .translation-button {
     right: 30px;
 }
 
 .attendance-toggle-btn {
-    right: 210px;
+    right: 160px;
 }
 
 .translation-button:hover,
 .attendance-toggle-btn:hover {
-    border-color: var(--third-color);
-    transform: translateY(-2px);
+    
+    background-color: #2a4969;
 }
 
 .attendance-count-badge {
@@ -1288,7 +1382,7 @@ right: 10px;
     background: var(--surface-color);
     border-left: 1px solid var(--border-color);
     box-shadow: -8px 0 24px rgba(0, 0, 0, 0.5);
-    z-index: 300;
+    z-index: 3000000;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -1296,7 +1390,7 @@ right: 10px;
 
 .attendance-drawer-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 12px;
@@ -1305,11 +1399,15 @@ right: 10px;
 .attendance-drawer-header h3 {
     margin: 0;
     font-size: 1rem;
+    text-align: center;
+
 }
 
 .close-drawer-btn {
     background: transparent;
     border: none;
+    position: absolute;
+    right: 10px;
     color: var(--text-muted);
     font-size: 1.1rem;
 }
@@ -1332,11 +1430,12 @@ right: 10px;
 .custom-select-trigger {
     background: rgba(0, 0, 0, 0.25);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 20px;
     padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 20px;
     font-size: 0.82rem;
     color: var(--text-secondary);
     cursor: pointer;
@@ -1468,6 +1567,19 @@ right: 10px;
     color: #ff5252;
 }
 
+.user-avatar{
+    background-color: var(--third-color);
+    padding: 10px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+
+}
+
 /* ==========================================================================
    MODALS (STANDARDIZED)
    ========================================================================== */
@@ -1545,7 +1657,7 @@ right: 10px;
 .form-item label {
     font-size: 0.8rem;
     color: var(--text-secondary);
-    font-weight: 600;
+
 }
 
 .form-item input,
@@ -1553,7 +1665,7 @@ right: 10px;
     height: 40px;
     background: var(--surface-color);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 30px;
     padding: 0 12px;
     color: var(--text-primary);
     font-size: 0.85rem;
@@ -1562,7 +1674,8 @@ right: 10px;
 
 .form-item input:focus,
 .modal input:focus {
-    border-color: var(--third-color);
+    transition: .3s ease;
+    border-color: rgb(140, 137, 150);
 }
 
 .flexbox {
@@ -1579,6 +1692,11 @@ right: 10px;
     gap: 10px;
 }
 
+
+#translation-content{
+    gap: 30px;
+}
+
 .translation-container input {
     height: 48px;
     font-size: 0.95rem;
@@ -1587,7 +1705,7 @@ right: 10px;
 #translated-text {
     background: rgba(0, 0, 0, 0.3);
     color: var(--third-color);
-    font-weight: 600;
+    pointer-events: none;
 }
 
 /* ==========================================================================
@@ -1664,7 +1782,7 @@ right: 10px;
 /* ==========================================================================
    AUTH PAGE (LOGIN)
    ========================================================================== */
-.auth-body {
+   .auth-body {
     overflow: auto;
 }
 
@@ -1679,92 +1797,165 @@ right: 10px;
     justify-content: center;
     border-bottom: 1px solid var(--border-color);
     background: var(--primary-color);
+    z-index: 100;
 }
 
 .auth-layout {
     display: flex;
     min-height: 100vh;
+    flex-direction: row;
+    width: 100%;
     align-items: center;
     justify-content: center;
-    gap: 50px;
-    padding: 80px 20px 40px;
+    gap: 90px;
+    padding: 100px 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 #auth-elements {
-    max-width: 440px;
+    max-width: 700px;
+    flex: 1;
+    position: relative;
+    bottom: 100px;
+    
+    right: px;
+    z-index: 2;
 }
 
 #auth-elements h1 {
-    font-size: 1.8rem;
+    font-size: clamp(2.1rem, 3.2vw, 4.1rem);
     font-weight: 300;
-    line-height: 1.3;
-    margin-bottom: 12px;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    color: var(--text-primary);
 }
 
 #auth-elements h1 span {
     color: var(--third-color);
     font-weight: 700;
+    text-shadow: 0 0 20px rgba(43, 253, 120, 0.3);
 }
 
 #auth-elements p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 480px;
 }
 
+/* Balão saindo pela diagonal atrás do modal de login */
 .auth-illustration {
-    width: 180px;
-    height: 110px;
+    position: absolute;
+    top: 299px;
+    right: -45px;
+    width: 190px;
+    height: 145px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(43, 253, 120, 0.08);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    margin-top: 20px;
+    background-color: #179244;
+    border-radius: 26px;
+    border: 1px solid rgba(43, 253, 120, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 
+                0 0 30px rgba(43, 253, 120, 0.15);
+    transform: rotate(14deg);
+    z-index: 1; /* Fica atrás do modal */
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    margin-top: 0;
+}
+
+.auth-illustration2 {
+    position: absolute;
+    top: 200px;
+    right: -45px;
+    width: 190px;
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--third-color);
+    border-radius: 26px;
+    border: 1px solid rgba(43, 253, 120, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 
+                0 0 30px rgba(43, 253, 120, 0.15);
+    transform: rotate(20deg);
+    z-index: 1; /* Fica atrás do modal */
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    margin-top: 0;
 }
 
 .auth-illustration i {
-    font-size: 3rem;
-    color: var(--third-color);
+    font-size: 4.2rem;
+    color: var(--primary-color);
+
+    transform: rotate(-6deg);
+}
+
+.auth-illustration2 i {
+    font-size: 4.2rem;
+    color: var(--primary-color);
+
+    transform: rotate(-6deg);
 }
 
 .auth-modal {
     width: 100%;
-    max-width: 380px;
+    max-width: 450px;
     background: var(--surface-card);
     border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 30px 26px;
+    border-radius: 22px;
+    padding: 40px 34px;
+    position: relative;
+    bottom: 100px;
+    z-index: 2; /* Fica sobreposto na frente do balão */
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(14px);
 }
 
 .auth-modal h2 {
-    font-size: 1.35rem;
-    margin: 0 0 4px;
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--text-primary);
 }
 
 .auth-subtitle {
-    font-size: 0.82rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    margin: 0 0 20px;
+    margin: 0 0 24px;
 }
 
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .auth-form button {
-    height: 42px;
+    height: 48px;
     background: var(--third-color);
     color: var(--primary-color);
     border: none;
     border-radius: 50px;
     font-weight: 700;
-    font-size: 0.88rem;
-    margin-top: 6px;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(43, 253, 120, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
+
+.auth-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(43, 253, 120, 0.35);
+    opacity: 0.95;
+}
+
+
 
 /* ==========================================================================
    RESPONSIVE DESIGN (MOBILE & TABLETS)
@@ -1823,7 +2014,7 @@ right: 10px;
     .sidebar,
     .sidebar.retratil,
     .sidebar:hover {
-        position: fixed;
+        position: fixed!important;
         height: 60px !important;
         width: 100vw !important;
         left: 0 !important;
@@ -1897,15 +2088,7 @@ right: 10px;
     .sidebar-nav li a span,
     .sidebar:not(.retratil) .sidebar-nav li a span,
     .sidebar:hover .sidebar-nav li a span {
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        font-size: 0.62rem;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 65px;
-        text-align: center;
+        display: none;
     }
 
     /* 5. Página de Apresentação e Seleção de Reunião */
@@ -1960,29 +2143,129 @@ right: 10px;
     }
 
     /* 6. Flashcards e Prática */
-    #flash-cards-container,
-    .card,
-    #progress-bar,
-    .flashcard-wrapper {
-        width: 100%;
-        max-width: 92vw;
+    #flash-cards-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        position: relative !important;
+        gap: 0 !important;
+    }
+
+    /* 2. CORREÇÃO CRÍTICA DO BOTÃO VOLTAR (Remove o fixed de 100px) */
+    .back-button,
+    #back-to-meetings-btn {
+        position: static !important; /* Volta para o fluxo normal do topo */
+        top: auto !important;
+        left: auto !important;
+        margin: 0 0 12px 0 !important;
+        align-self: center !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-secondary) !important;
+        padding: 6px 16px !important;
+        font-size: 0.8rem !important;
+        border-radius: 50px !important;
+        z-index: 10 !important;
+    }
+
+    /* 3. Cabeçalho da Sessão (Tema e Instrução) */
+    #flash-cards-content .page-header {
+        margin-bottom: 10px !important;
+        text-align: center !important;
+    }
+
+    #current-meeting-title {
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+        margin: 0 0 6px 0 !important;
+        color: #ffffff !important;
+    }
+
+    #study-instruction-text {
+        font-size: 0.85rem !important;
+        color: var(--text-secondary) !important;
+        margin: 0 !important;
+    }
+
+    /* 4. Ações de Reiniciar e Voltar Cartão */
+    .flash-cards-study-content {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin: 10px 0 !important;
+    }
+
+    .flash-card-actions {
+        display: flex !important;
+        gap: 16px !important;
+        margin-bottom: 0 !important;
+        justify-content: center !important;
+    }
+
+    .cards-action-btn {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+        border-radius: 50% !important;
+        background-color: var(--surface-card) !important;
+        border: 1px solid var(--border-color) !important;
+    }
+
+    /* 5. CORREÇÃO DO CARD E CONTAINER 3D */
+    #flash-cards-container {
+        position: relative !important;
+        width: calc(100vw - 36px) !important;
+        max-width: 350px !important;
+        height: 290px !important; /* Altura proporcional do card */
+        margin: 15px auto 0 auto !important;
+        perspective: 1000px !important;
     }
 
     .card {
-        height: 230px;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important; /* Ocupa 100% dos 350px max */
+        height: 100% !important;
+        border-radius: 20px !important;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
     }
 
-    .card-actions {
-        width: 100%;
-        max-width: 92vw;
-        display: flex;
-        justify-content: space-between;
-        gap: 12px;
+    .card-front, .card-back {
+        border-radius: 20px !important;
+        padding: 24px 18px !important;
     }
 
-    .card-actions button {
-        flex: 1;
-        height: 44px;
+    .card p {
+        font-size: 0.72rem !important;
+        margin-bottom: 18px !important;
+    }
+
+    .card span {
+        font-size: 1.35rem !important;
+        line-height: 1.4 !important;
+        font-weight: 600 !important;
+        word-break: break-word !important;
+    }
+
+    /* 6. CORREÇÃO CRÍTICA DO PROGRESS-BAR (Zera o bottom: -200px e right: -30px) */
+    #progress-bar {
+        position: static !important; /* Fica logo abaixo do card naturalmente */
+        bottom: auto !important;
+        right: auto !important;
+        width: calc(100vw - 36px) !important;
+        max-width: 350px !important;
+        margin: 20px auto 0 auto !important;
+        gap: 6px !important;
+        justify-content: center !important;
+    }
+
+    .progress-item {
+        height: 6px !important;
+        border-radius: 6px !important;
     }
 
     /* 7. Grids e Listagens (Aulas / Reuniões) */
@@ -2043,33 +2326,169 @@ right: 10px;
 
     /* 11. Página de Login / Autenticação */
     .auth-layout {
-        flex-direction: column;
-        gap: 20px;
-        padding: 65px 16px 30px;
-        justify-content: flex-start;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 24px !important;
+        padding: 85px 16px 40px 16px !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
     }
 
+    /* 2. Zera deslocamentos manuais de desktop no texto */
     #auth-elements {
-        text-align: center;
-        max-width: 100%;
+        position: static !important;
+        bottom: auto !important;
+        right: auto !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 35px !important; /* Espaço para respirar antes dos balões */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
     #auth-elements h1 {
-        font-size: 1.5rem;
+        font-size: 1.85rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 10px !important;
     }
 
-    .auth-illustration {
-        margin: 12px auto;
-        width: 120px;
-        height: 80px;
+    #auth-elements p {
+        font-size: 0.92rem !important;
+        line-height: 1.5 !important;
+        max-width: 90% !important;
     }
 
-    .auth-illustration i {
-        font-size: 2.2rem;
-    }
-
+    /* 3. Modal de Login - Cria espaço superior real para os balões */
     .auth-modal {
-        max-width: 100%;
-        padding: 22px 18px;
+        position: relative !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-width: 390px !important;
+        margin-bottom: 120px;
+        padding: 34px 22px 28px 22px !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
     }
+
+    /* 4. Balão 1 (Verde Escuro - Base de trás) */
+    .auth-layout {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 24px !important;
+        padding: 85px 16px 40px 16px !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. Zera deslocamentos manuais de desktop no texto */
+    #auth-elements {
+        position: static !important;
+        bottom: auto !important;
+        right: auto !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 35px !important; /* Espaço para respirar antes dos balões */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    #auth-elements h1 {
+        font-size: 1.85rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 10px !important;
+    }
+
+    #auth-elements p {
+        font-size: 0.92rem !important;
+        line-height: 1.5 !important;
+        max-width: 90% !important;
+    }
+
+    /* 3. Modal de Login - Cria espaço superior real para os balões */
+    .auth-modal {
+        position: relative !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-width: 390px !important;
+        margin-top: 55px !important; /* CRUCIAL: Abre espaço exato para os balões sem empurrar o formulário */
+        padding: 34px 22px 28px 22px !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Balão 1 (Verde Escuro - Base de trás) */
+
+    /* 5. Balão 2 (Verde Claro - Sobreposto à frente) */
+    .auth-illustration2 {
+        position: absolute !important;
+        top: 250px !important;
+        left: calc(50%-1px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 96px !important;
+        height: 72px !important;
+     
+    }
+    .auth-illustration {
+        position: absolute !important;
+        top: 269px !important;
+        left: calc(50%-20px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 96px !important;
+        height: 72px !important;
+     
+    }
+
+    /* 6. Ícones proporcionais dentro dos balões */
+    .auth-illustration i,
+    .auth-illustration2 i {
+        font-size: 2.1rem !important;
+        transform: rotate(0deg) !important;
+    }
+
+    /* 7. Ajuste interno do formulário para toque mobile */
+    .auth-modal h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .auth-form .form-item input {
+        height: 46px !important;
+        font-size: 16px !important; /* Evita que o iOS dê zoom automático ao focar */
+    }
+
+    .auth-form button {
+        height: 46px !important;
+        font-size: 1rem !important;
+    }
+    /* 7. Ajuste interno do formulário para toque mobile */
+    .auth-modal h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .auth-form .form-item input {
+        height: 46px !important;
+        font-size: 16px !important; /* Evita que o iOS dê zoom automático ao focar */
+    }
+
+    .auth-form button {
+        height: 46px !important;
+        font-size: 1rem !important;
+    }
+    
+    
+    
+    .hideOnMobile{
+    display: hidden !important;
 }
+
+}
+

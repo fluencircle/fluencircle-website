@@ -328,7 +328,7 @@ import {
     } else {
       slide.innerHTML = `
         <div class="questionItem">
-          <span class="question">🎉 Fim das perguntas do tema!</span>
+          <span class="question">Fim da sessão</span>
         </div>
       `;
     }
@@ -381,14 +381,14 @@ import {
   
       slideNumber = -1;
       updateSlideContent();
-      showToast('Reunião iniciada! Você já pode marcar a presença.', 'success');
+      showToast('Reunião iniciada', 'success');
   
     } catch (err) {
       console.error("Erro ao registrar sessão:", err);
       showToast('Falha ao iniciar evento no banco.', 'error');
     } finally {
       startBtn.classList.remove('unclickable');
-      startBtn.textContent = 'Iniciar Reunião Oficial';
+      startBtn.textContent = 'Iniciar';
     }
   });
   
@@ -466,7 +466,7 @@ import {
     if (attendanceDrawer) attendanceDrawer.classList.add('hidden');
     if (translationModal) translationModal.classList.add('hidden');
   
-    showToast('Sessão encerrada com sucesso. Presenças e flashcards gravados!', 'success');
+    showToast('Sessão encerrada', 'success');
   });
   
   /**

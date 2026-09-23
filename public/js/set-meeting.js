@@ -25,6 +25,20 @@ const questionListElement = document.getElementById('questions-list');
 const addQuestionBtn = document.getElementById('add-question-button');
 const saveThemeBtn = document.getElementById('set-button');
 
+// Botão de Excluir dentro do Editor (obtém se existir ou cria dinamicamente)
+let editorDeleteBtn = document.getElementById('editor-delete-theme-btn');
+if (!editorDeleteBtn && saveThemeBtn && saveThemeBtn.parentElement) {
+    editorDeleteBtn = document.createElement('button');
+    editorDeleteBtn.id = 'editor-delete-theme-btn';
+    editorDeleteBtn.type = 'button';
+    editorDeleteBtn.className = 'home-btn danger-btn';
+    editorDeleteBtn.innerHTML = 'Excluir';
+    
+    editorDeleteBtn.style.display = 'none';
+    editorDeleteBtn.style.width = '140px';
+    saveThemeBtn.parentElement.insertBefore(editorDeleteBtn, saveThemeBtn);
+}
+
 // Modal de Exclusão
 const deleteModal = document.getElementById('delete-theme-modal');
 const deleteMsg = document.getElementById('delete-theme-msg');
@@ -32,6 +46,7 @@ const cancelDeleteBtn = document.getElementById('cancel-delete-theme-btn');
 const confirmDeleteBtn = document.getElementById('confirm-delete-theme-btn');
 
 let currentEditingKey = null; // null = novo tema | string = id do tema sendo editado
+let currentEditingTopic = '';
 let themeToDeleteKey = null;
 
 /**
@@ -65,41 +80,20 @@ async function loadThemes() {
             const meeting = themesObj[key];
             if (!meeting) return;
 
-            let questionsCount = 0;
-            if (Array.isArray(meeting.questions)) {
-                questionsCount = meeting.questions.length;
-            } else if (meeting.questions && typeof meeting.questions === 'object') {
-                questionsCount = Object.keys(meeting.questions).length;
-            }
-
+            // Cartão minimalista: apenas número e título, totalmente clicável
             const card = document.createElement('div');
-            card.className = 'manage-meeting-card';
+            card.className = 'manage-theme-card';
+            card.style.cursor = 'pointer';
             card.innerHTML = `
                 <div class="manage-meeting-header">
                     <span class="meeting-badge">${index + 1}</span>
                     <span class="manage-meeting-topic">${meeting.topic || 'Sem tema'}</span>
                 </div>
-                <div class="manage-meeting-info">
-                    <span><i class="fa-solid fa-circle-question"></i> ${questionsCount} pergunta(s)</span>
-                </div>
-                <div class="manage-meeting-actions">
-                    <button class="action-btn edit-theme-btn" title="Editar Tópico e Perguntas">
-                        <i class="fa-solid fa-pen-to-square"></i> Editar
-                    </button>
-                    <button class="action-btn delete-meeting-btn" title="Excluir este tema">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
             `;
 
-            // Botão Editar
-            card.querySelector('.edit-theme-btn').addEventListener('click', () => {
+            // Clique direto no cartão abre a edição
+            card.addEventListener('click', () => {
                 openEditor(key, meeting);
-            });
-
-            // Botão Excluir
-            card.querySelector('.delete-meeting-btn').addEventListener('click', () => {
-                openDeleteModal(key, meeting.topic || 'este tema');
             });
 
             themesGrid.appendChild(card);
@@ -124,9 +118,15 @@ function openEditor(key = null, data = null) {
 
     if (key && data) {
         // MODO EDIÇÃO
+        currentEditingTopic = data.topic || 'este tema';
         editorTitle.textContent = 'Editar Tema';
         editorSubtitle.textContent = 'Modifique o título ou adicione/remova perguntas de apoio.';
         topicInput.value = data.topic || '';
+
+        // Exibe o botão de exclusão dentro do editor
+        if (editorDeleteBtn) {
+            editorDeleteBtn.style.display = 'inline-flex';
+        }
 
         // Carrega perguntas existentes
         let questions = [];
@@ -139,9 +139,16 @@ function openEditor(key = null, data = null) {
         questions.forEach(q => addQuestionCard(q));
     } else {
         // MODO NOVO TEMA
+        currentEditingTopic = '';
         editorTitle.textContent = 'Novo Tema';
         editorSubtitle.textContent = 'Defina o título do tópico e insira as perguntas condutoras.';
         topicInput.value = '';
+
+        // Oculta o botão de exclusão ao criar um novo tema
+        if (editorDeleteBtn) {
+            editorDeleteBtn.style.display = 'none';
+        }
+
         // Inicia com um campo de pergunta vazio pronto para digitar
         addQuestionCard();
     }
@@ -159,6 +166,15 @@ function closeEditor() {
 
 backToThemesBtn.addEventListener('click', closeEditor);
 cancelThemeBtn.addEventListener('click', closeEditor);
+
+// Ação do Botão de Excluir dentro do Editor
+if (editorDeleteBtn) {
+    editorDeleteBtn.addEventListener('click', () => {
+        if (currentEditingKey) {
+            openDeleteModal(currentEditingKey, currentEditingTopic || topicInput.value.trim() || 'este tema');
+        }
+    });
+}
 
 /**
  * 4. Manipulação de Cards de Pergunta Dinâmicos
@@ -274,7 +290,7 @@ confirmDeleteBtn.addEventListener('click', async () => {
     try {
         await remove(ref(database, `meetings/${themeToDeleteKey}`));
         showToast('Tema excluído com sucesso.', 'success');
-        loadThemes();
+        closeEditor();
     } catch (err) {
         console.error("Erro ao excluir tema:", err);
         showToast('Erro ao remover tema.', 'error');

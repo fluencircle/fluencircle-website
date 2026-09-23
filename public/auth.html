@@ -10,8 +10,18 @@
 </head>
 <body class="auth-body">
     <header class="auth-header">
-        <div class="logo">
-            <span>&lt;</span><span class="innerLogo">Fluency</span><span>/&gt;</span>
+        <div class="logo" id="logo">
+            <div class="logo-icon">
+                <div class="logo-circle-left"></div>
+                <div class="logo-circle-center"></div>
+                <div class="logo-circle-right"></div>    
+                <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
+                    <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
+                </svg> 
+            </div>
+            <div class="logo-text">
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Table</span>
+            </div>        
         </div>
     </header>
 
@@ -20,10 +30,14 @@
             <div class="ball ball1"></div>
             <div class="ball ball2"></div>
             <div class="ball ball3"></div>
-            <h1>Você aprendeu português <span>falando</span></h1>
-            <p>Participe de sessões de conversação semanais e fique mais perto da fluência.</p>
+            <h1>Sua mesa de conversação em <span>inglês</span></h1>
+            <p>Revise o vocabulário das suas sessões de conversação e acelere seu aprendizado.</p>
             <div class="auth-illustration">
                 <i class="fa-solid fa-comments"></i>
+            </div>
+
+            <div class="auth-illustration2">
+                <i class="fa-solid fa-layer-group"></i>
             </div>
         </section>
 
@@ -34,11 +48,11 @@
                 <form id="login-form" class="auth-form">
                     <div class="form-item">
                         <label for="email">E-mail</label>
-                        <input type="email" name="email" id="email" placeholder="seu@email.com" autocomplete="email" required>
+                        <input type="email" name="email" id="email" placeholder="seu@email.com" autocomplete="off" required>
                     </div>
                     <div class="form-item">
                         <label for="password">Senha</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+                        <input type="password" name="password" id="password" placeholder="••••••••" autocomplete="off" required>
                     </div>
                     <button type="submit" id="login-btn">Entrar</button>
                 </form>

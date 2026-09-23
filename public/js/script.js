@@ -1,43 +1,52 @@
 import { initAuthGuard } from "./auth.js";
 
-// Elementos da barra de navegação
+// Inicializa a proteção de autenticação
+if (typeof initAuthGuard === 'function') {
+    initAuthGuard();
+}
+
+// 1. Botões da Barra Lateral (se existirem na página)
 const openSetMeetingButton = document.getElementById('open-set-meeting-button');
 const openSlideShowButton = document.getElementById('open-slide-show-button');
 const openFlashCardsButton = document.getElementById('open-flash-cards-button');
 
-// Botões da Home
+openSetMeetingButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'set-meeting.html'; // ou 'manage-meetings.html'
+});
+
+openSlideShowButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'presentation.html';
+});
+
+openFlashCardsButton?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'flash-cards.html';
+});
+
+// 2. Botões da Tela Inicial (Home) - Redirecionamento Direto
 const homeSetMeeting = document.getElementById('home-set-meeting');
 const homeStartMeeting = document.getElementById('home-start-meeting');
 const homeFlashCards = document.getElementById('home-flash-cards');
 
-// Redirecionamentos funcionais
-if (openSetMeetingButton) {
-    openSetMeetingButton.onclick = (e) => {
-        e.preventDefault();
-        window.location.href = 'set-meeting.html';
-    };
-}
+// Redirecionam diretamente sem depender de botões auxiliares
+homeSetMeeting?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'set-meeting.html'; // ajuste para 'manage-meetings.html' se usar a lista gerenciável
+});
 
-if (openSlideShowButton) {
-    openSlideShowButton.onclick = (e) => {
-        e.preventDefault();
-        window.location.href = 'presentation.html';
-    };
-}
+homeStartMeeting?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'presentation.html';
+});
 
-if (openFlashCardsButton) {
-    openFlashCardsButton.onclick = (e) => {
-        e.preventDefault();
-        window.location.href = 'flash-cards.html';
-    };
-}
+homeFlashCards?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'flash-cards.html';
+});
 
-// Conecta os botões da Home aos handlers correspondentes
-homeSetMeeting?.addEventListener('click', () => openSetMeetingButton?.click());
-homeStartMeeting?.addEventListener('click', () => openSlideShowButton?.click());
-homeFlashCards?.addEventListener('click', () => openFlashCardsButton?.click());
-
-// Funções globais de navegação
+// 3. Função Global de Retorno
 window.backToHome = function() {
     window.location.href = 'index.html';
 };

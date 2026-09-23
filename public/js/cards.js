@@ -90,7 +90,7 @@ function calculateSRSStatus(session, reviewData) {
         } else {
             isDue = false;
             const hoursLeft = Math.ceil((ONE_DAY_MS - elapsed) / (60 * 60 * 1000));
-            timeRemainingText = `Revise em ${hoursLeft}h`;
+            timeRemainingText = `${hoursLeft}h`;
         }
     } else if (stage === 1) {
         // Marco 2: 7 Dias a partir da data da sessão
@@ -103,7 +103,7 @@ function calculateSRSStatus(session, reviewData) {
         } else {
             isDue = false;
             const daysLeft = Math.ceil((SEVEN_DAYS_MS - elapsed) / ONE_DAY_MS);
-            timeRemainingText = `Revise em ${daysLeft} dia(s)`;
+            timeRemainingText = `${daysLeft} dia(s)`;
         }
     } else if (stage === 2) {
         // Marco 3: 30 Dias a partir da data da sessão
@@ -116,7 +116,7 @@ function calculateSRSStatus(session, reviewData) {
         } else {
             isDue = false;
             const daysLeft = Math.ceil((THIRTY_DAYS_MS - elapsed) / ONE_DAY_MS);
-            timeRemainingText = `Revise em ${daysLeft} dia(s)`;
+            timeRemainingText = `${daysLeft} dia(s)`;
         }
     } else {
         // Todas as 3 etapas concluídas
@@ -237,7 +237,7 @@ function renderSessionsGrid() {
         cardEl.innerHTML = `
             <div class="srs-card-top">
                 <span class="srs-card-topic">${session.topic || 'Sessão de Conversação'}</span>
-                <span class="srs-mastery-badge ${badgeClass}">${badgeText}</span>
+                <span class="srs-mastery-badge ${badgeClass}"><i class="fa-solid fa-clock-rotate-left"></i>&nbsp;${badgeText}</span>
             </div>
 
             <!-- TIMELINE DOS ESTÁGIOS DA CURVA -->
@@ -260,7 +260,7 @@ function renderSessionsGrid() {
 
 
             <div class="srs-card-footer">
-                <span><i class="fa-solid fa-layer-group"></i> ${cardCount} flashcard(s)</span>
+                <span><i class="fa-solid fa-layer-group"></i> ${cardCount}</span>
                 <span><i class="fa-regular fa-clock"></i> ${formatDate(session.startedAt)}</span>
             </div>
         `;
@@ -289,7 +289,7 @@ function openMeetingStudyMode(session) {
     meetingsContent.classList.add('hidden');
     flashCardsContent.classList.remove('hidden');
 
-    currentMeetingTitle.textContent = `${session.topic || 'Sessão'} (Estágio: ${session.srs.nextReviewName})`;
+    currentMeetingTitle.textContent = `${session.topic || 'Sessão'}         `;
 
     if (cardsArray.length === 0) {
         flashCardsSetupContent.classList.add('hidden');
@@ -330,12 +330,12 @@ function loadCardStack(cards) {
         cardElement.innerHTML = `
             <div class="card-shadow"></div>
             <div class="card-front">
-                <p>Termo em Inglês (${cardCount + 1}/${cards.length})</p>
+                <p>Dúvida (${cardCount + 1}/${cards.length})</p>
                 <span>${card.front}</span>
             </div>
             <div class="card-back">
                 <button class="btn-next" title="Acertei / Concluído"><i class="fa-solid fa-circle-check"></i></button>
-                <p>Significado (${cardCount + 1}/${cards.length})</p>
+                <p>Tradução (${cardCount + 1}/${cards.length})</p>
                 <span>${card.back}</span>
             </div>
         `;
@@ -463,9 +463,9 @@ async function checkSessionCompletion(totalCards) {
                 console.error("Erro ao registrar avanço na curva de esquecimento:", err);
             }
         } else if (srs.stage >= 3) {
-            showToast('🏆 Você já atingiu a maestria deste deck! Treino livre finalizado.', 'success');
+            showToast('Revisão finalizada!', 'success');
         } else {
-            showToast(`Treino concluído! ${srs.timeRemainingText} para validar o avanço na Curva do Esquecimento.`, 'info');
+            showToast(`Revisão finalizada! Volte em ${srs.timeRemainingText} para memorizar! `, 'info');
         }
     } else {
         updateProgressBarVisuals();

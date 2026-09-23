@@ -114,7 +114,7 @@ import {
           </div>
           <div class="manage-meeting-actions">
               <button class="action-btn edit-cards-btn" title="Editar os flashcards desta reunião">
-                  <i class="fa-solid fa-pen-to-square"></i> Gerenciar Cards (${cardCount})
+                  <i class="fa-solid fa-pen-to-square"></i> Visualizar
               </button>
               <button class="action-btn delete-meeting-btn" title="Excluir histórico desta sessão">
                   <i class="fa-solid fa-trash"></i>
@@ -271,7 +271,7 @@ import {
     const back = newCardBack.value.trim();
   
     if (!front || !back) {
-      showToast('Informe o termo em inglês e a tradução.', 'error');
+      showToast('Informe os dados de frente e verso.', 'error');
       return;
     }
   

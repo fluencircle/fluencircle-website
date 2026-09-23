@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>FluenTech — Gestão de Temas</title>
+    <title>FluenTable — Gestão de Temas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
             </svg> 
            </div>
            <div class="logo-text">
-                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Tech</span>
+                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Table</span>
            </div>        
         </div>
         <div class="header-actions">
@@ -40,8 +40,8 @@
                 <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
             
-                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
-                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+                <li data-page="slide-show" class=" mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="set-meeting-page" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
             </ul>
     
             <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
@@ -71,7 +71,7 @@
         <div class="content" id="themes-list-view" style="width: 90%; max-width: 1100px; flex-direction: column;">
             <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 25px;">
                 <div style="text-align: left;">
-                    <h2>Banco de Temas de Conversação</h2>
+                    <h2>Temas</h2>
                     <p>Crie, edite ou exclua os tópicos e perguntas utilizados nas reuniões.</p>
                 </div>
                 <button id="open-create-theme-btn" class="home-btn" style="width: auto; padding: 0 24px;">
@@ -87,7 +87,7 @@
 
         <!-- SEÇÃO 2: FORMULÁRIO DE CRIAÇÃO / EDIÇÃO DO TEMA -->
         <div class="content hidden" id="theme-editor-view" style="width: 60%; min-width: 320px; max-width: 800px; flex-direction: column; align-items: stretch; gap: 30px;">
-            <div class="back-button" id="back-to-themes-btn" style="position: static; padding: 0; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px;">
+            <div class="back-button" id="back-to-themes-btn" >
                 <i class="fa-solid fa-circle-chevron-left"></i>
                 <span>Voltar aos Temas</span>
             </div>
@@ -108,7 +108,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                     <p style="margin: 0; font-weight: 600; color: white;">Perguntas de Apoio</p>
                     <button type="button" id="add-question-button">
-                        <i class="fa-solid fa-plus" style="margin-right: 6px;"></i> Adicionar
+                        <i class="fa-solid fa-plus" ></i>
                     </button>
                 </div>
 
@@ -119,8 +119,8 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 15px;">
                 <button type="button" id="cancel-theme-btn" class="home-btn-secondary home-btn" style="width: 140px;">Cancelar</button>
-                <button type="button" id="set-button" class="home-btn" style="width: 180px; position: static;">
-                    <i class="fa-solid fa-floppy-disk" style="margin-right: 8px;"></i> Salvar Tema
+                <button type="button" id="set-button" class="home-btn" style="width: 140px;">
+                    Salvar
                 </button>
             </div>
         </div>
