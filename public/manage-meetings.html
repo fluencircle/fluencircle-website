@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>FluenTable — Gestão de Reuniões</title>
+        <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>FluenTech | Sessões</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
            <div class="logo-icon">
-            <div class="logo-circle-left"></div>
-            <div class="logo-circle-center"></div>
-            <div class="logo-circle-right"></div>    
-            <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
-              <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
-            </svg> 
+           
+            <div class="logo-circle-center"> 
+                <div class="logo-circle-left"></div>
+                <div class="logo-inner-circle"></div>
+            </div> 
            </div>
-           <div class="logo-text">
-                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Table</span>
-           </div>        
+        
         </div>
         <div class="header-actions">
             <span class="user-role-badge" id="user-role-badge"></span>
@@ -40,7 +38,7 @@
                 <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
             
-                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar sessão</span></a></li>
                 <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
             </ul>
     
@@ -51,7 +49,7 @@
                 <li data-page="admin" class="admin-access hidden">
                     <a href="admin.html">
                         <i class="fa-solid fa-user-gear"></i>
-                        <span>Gestão de Perfis</span>
+                        <span>Acessos</span>
                     </a>
                 </li>   
                  
@@ -59,7 +57,7 @@
                  <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
                     <a href="manage-meetings.html">
                         <i class="fa-solid fa-pen-to-square"></i>
-                        <span>Gestão de Reuniões</span>
+                        <span>Sessões</span>
                     </a>
                 </li>
             </ul>
@@ -70,8 +68,8 @@
       
      <div class="content management-content" id="meetings-list-view">
             <div class="page-header">
-                <h2>Gestão de Reuniões</h2>
-                <p>Selecione uma reunião para editar o tema, perguntas ou revisar e ajustar os flashcards gerados.</p>
+                <h2>Sessões</h2>
+                <p>Selecione uma sessão para editar o tema, perguntas ou revisar e ajustar os flashcards gerados.</p>
             </div>
             
             <div class="classes-grid" id="manage-meetings-grid">
@@ -86,11 +84,11 @@
         <div class="content management-content hidden" id="flashcards-editor-view">
             <div class="back-button" id="back-to-meetings-list-btn">
                 <i class="fa-solid fa-circle-chevron-left"></i>
-                <span>Voltar às Reuniões</span>
+                <span>Voltar às Sessões</span>
             </div>
 
             <div class="page-header">
-                <h2 id="selected-meeting-title">Tema da Reunião</h2>
+                <h2 id="selected-meeting-title">Tema da Sessão</h2>
                 <p>Edite os termos em inglês, as traduções ou remova cartões com erros.</p>
             </div>
 
@@ -123,6 +121,11 @@
             </div>
         </div>
     </div>
+
+        <div class="non-avaiable-message "  >
+            <h2>Não disponível</h2>
+            <p>Acesse o site pelo computador para gerenciar as sessões.</p>
+        </div>
 
     <!-- FEEDBACK TOAST -->
     <div id="auth-toast" class="toast"></div>

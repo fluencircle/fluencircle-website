@@ -26,6 +26,9 @@ import {
   const slide = document.querySelector('.slide');
   const slideContent = document.querySelector('.slide-content');
   const selectContent = document.querySelector('.select-content');
+  const sidebar = document.querySelector('.sidebar')
+  const slideshowMain = document.getElementById('slide-show-page')
+  const header = document.querySelector('header')
   
   const presentationSelect = document.getElementById('presentation-select');
   const optionList = document.getElementById('option-list');
@@ -58,6 +61,7 @@ import {
   const attendeesListContainer = document.getElementById('attendees-list');
   const presentCounter = document.getElementById('present-counter');
   const attendanceBadge = document.getElementById('attendance-count-badge');
+
 
   /**
    * 1. GUARD: Proteção de acesso da página
@@ -96,7 +100,7 @@ import {
         const opt = document.createElement('div');
         opt.className = 'meeting-option';
         opt.dataset.value = key;
-        const topicText = meeting.topic || `Reunião ${index + 1}`;
+        const topicText = meeting.topic || `Sessão ${index + 1}`;
         opt.textContent = `${index + 1} — ${topicText.length > 40 ? topicText.substring(0, 40) + '...' : topicText}`;
   
         opt.addEventListener('click', (e) => {
@@ -121,8 +125,8 @@ import {
       });
   
     } catch (err) {
-      console.error("Erro ao buscar reuniões:", err);
-      if (selectedValueText) selectedValueText.textContent = "Erro ao carregar reuniões.";
+      console.error("Erro ao buscar sessões:", err);
+      if (selectedValueText) selectedValueText.textContent = "Erro ao carregar sessões.";
     }
   }
 
@@ -356,11 +360,15 @@ import {
   
     startBtn.classList.add('unclickable');
     startBtn.textContent = 'Iniciando...';
+
+ 
   
     try {
       const sessionRef = push(ref(database, 'meeting_sessions'));
       activeSessionId = sessionRef.key;
       currentAttendees = {};
+
+      
   
       await set(sessionRef, {
         templateId: baseTemplateId,
@@ -369,9 +377,20 @@ import {
         mediatorEmail: auth.currentUser?.email || 'mediador',
         attendees: {}
       });
+
+          await set(ref(database, 'current_session'), {
+        sessionId: activeSessionId,
+        topic: currentTopic,
+        startedAt: new Date().toISOString()
+      });
+
   
       selectContent.classList.add('hidden');
       slideContent.classList.remove('hidden');
+
+    sidebar.classList.add('hidden')
+    slideshowMain.classList.add('no-sidebar-main')
+    header.style.left = 0;
       
       // Exibe botões flutuantes durante a sessão
       if (openTranslatorBtn) openTranslatorBtn.classList.remove('hidden');
@@ -381,7 +400,7 @@ import {
   
       slideNumber = -1;
       updateSlideContent();
-      showToast('Reunião iniciada', 'success');
+      showToast('Sessão iniciada', 'success');
   
     } catch (err) {
       console.error("Erro ao registrar sessão:", err);
@@ -454,9 +473,20 @@ import {
     if (!e.target.closest('.modal')) closeEndMeetingModal();
   });
   
-  confirmEndMeetingBtn?.addEventListener('click', (e) => {
+  confirmEndMeetingBtn?.addEventListener('click', async (e) => {
     e.stopPropagation();
     closeEndMeetingModal();
+
+    
+  try {
+      await remove(ref(database, 'current_session'));
+    } catch (err) {
+      console.error("Erro ao limpar current_session:", err);
+    }
+    
+     activeSessionId = ''; // Limpa o ID ativo
+    slideContent.classList.add('hidden');
+    selectContent.classList.remove('hidden');
   
     slideContent.classList.add('hidden');
     selectContent.classList.remove('hidden');
@@ -467,6 +497,19 @@ import {
     if (translationModal) translationModal.classList.add('hidden');
   
     showToast('Sessão encerrada', 'success');
+
+
+    sidebar.classList.remove('hidden')
+    slideshowMain.classList.remove('no-sidebar-main')
+    header.style.left = 'var(--sidebar-collapsed-width);';
+
+  });     
+  
+  
+  window.addEventListener('beforeunload', () => {
+    if (activeSessionId) {
+      remove(ref(database, 'current_session'));
+    }
   });
   
   /**
@@ -536,7 +579,7 @@ import {
   addFlashCardsBtn.addEventListener('click', async (e) => {
     e.stopPropagation();
     if (!activeSessionId) {
-      showToast('Nenhuma reunião ativa.', 'error');
+      showToast('Nenhuma sessão ativa.', 'error');
       return;
     }
   

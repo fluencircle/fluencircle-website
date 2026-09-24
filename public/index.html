@@ -5,23 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <title>FluenTable</title>
+        <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>FluenTech</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
            <div class="logo-icon">
-            <div class="logo-circle-left"></div>
-            <div class="logo-circle-center"></div>
-            <div class="logo-circle-right"></div>    
-            <svg class="wave" viewBox="0 0 500 100" preserveAspectRatio="none">
-              <path d="M 0,50 Q 62.5,10 125,50 T 250,50 T 375,50 T 500,50" />
-            </svg> 
+           
+            <div class="logo-circle-center"> 
+                <div class="logo-circle-left"></div>
+                <div class="logo-inner-circle"></div>
+            </div> 
            </div>
-           <div class="logo-text">
-                <span style="color: #2bfd78;">Fluen</span><span style="font-weight: bold; color: rgb(247, 244, 244);">Table</span>
-           </div>        
+        
         </div>
         <div class="header-actions">
             <span class="user-role-badge hidden" id="user-role-badge"></span>
@@ -40,7 +38,7 @@
                 <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
             
-                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar sessão</span></a></li>
                 <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
             </ul>
     
@@ -51,7 +49,7 @@
                 <li data-page="admin" class="admin-access hidden">
                     <a href="admin.html">
                         <i class="fa-solid fa-user-gear"></i>
-                        <span>Gestão de Perfis</span>
+                        <span>Acessos</span>
                     </a>
                 </li>   
                  
@@ -59,7 +57,7 @@
                  <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
                     <a href="manage-meetings.html">
                         <i class="fa-solid fa-pen-to-square"></i>
-                        <span>Gestão de Reuniões</span>
+                        <span>Sessões</span>
                     </a>
                 </li>
             </ul>
@@ -69,8 +67,8 @@
     <main id="home-page">
         <div class="content home-content">
             <div class="welcome-section">
-                <h1>Bem-vindo ao <span class="highlight">FluenTable</span></h1>
-                <p class="welcome-subtitle">Sua mesa de conversação em inglês</p>
+                <h1>Bem-vindo ao <span class="highlight">FluenTech</span></h1>
+                <p class="welcome-subtitle">Você aprendeu português falando</p>
                 
                 <div class="home-page-options">
                     <!-- Flash Cards: Todos os perfis -->
@@ -82,11 +80,11 @@
                     <!-- Reuniões: Mediador e Admin -->
                     <button class="home-btn home-btn-secondary mediator-access hidden" id="home-set-meeting">
                         <i class="fa-solid fa-calendar-plus"></i>
-                        Criar reunião
+                        Temas
                     </button>
                     <button class="home-btn home-btn-secondary mediator-access hidden" id="home-start-meeting">
                         <i class="fa-solid fa-play"></i>
-                        Iniciar reunião
+                        Iniciar sessão
                     </button>
 
 
