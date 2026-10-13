@@ -8,6 +8,8 @@ import {
   import { database, auth } from "./firebase.js";
   import { showToast } from "./auth.js";
   import { toggleDropdown } from "./app.js";
+  import {apiKey} from "./env.js";
+  import { askGemini } from "./gemini.js";
   
   // Estados Globais
   let baseTemplateId = '';
@@ -537,15 +539,12 @@ import {
     if (!e.target.closest('.modal')) translationModal.classList.add('hidden');
   });
   
-  async function fetchTranslation(text, direction) {
-    const langPair = direction === 'pt' ? 'pt|en' : 'en|pt';
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`;
-  
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Falha de conexão');
-    const json = await res.json();
-    return json.responseData?.translatedText || 'Erro na tradução';
-  }
+async function fetchTranslation(text, language) 
+{
+  const promptLanguage =language === 'pt'?'de português para inglês':'de inglês para português'
+  const prompt = `retorne a tradução da palavra, de en para pt ou pt para en. Caso haja mais de uma tradução RELEVANTE, separe as traduções por /, com no máximo 3. Retorne SOMENTE as traduções, sem nenhuma adição. Ex: car, resposta: 'carro/veículo' Palavra a ser traduzida: ${text}`
+  return askGemini(prompt)
+}
   
   translateBtn.addEventListener('click', async (e) => {
     e.stopPropagation();

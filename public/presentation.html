@@ -38,7 +38,7 @@
                 <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
             
-                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar reunião</span></a></li>
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar sessão</span></a></li>
                 <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
             </ul>
     
@@ -65,11 +65,11 @@
     </aside>
 
     <main id="slide-show-page">
-        <!-- TELA 1: SELEÇÃO E CRIAÇÃO DO EVENTO DA REUNIÃO -->
+        <!-- TELA 1: SELEÇÃO E CRIAÇÃO DO EVENTO DA sessão -->
         <div class="content select-content hideOnMobile">
             <div class="page-header">
                 <h2>Iniciar Sessão de Conversação</h2>
-                <p>Escolha o tema base para abrir um novo evento de reunião</p>
+                <p>Escolha o tema base para abrir um novo evento de sessão</p>
             </div>
 
             <div id="presentation-select">
@@ -89,7 +89,7 @@
             <button id="start-presentation-btn" class="unclickable">Iniciar</button>
         </div>
 
-        <!-- TELA 2: SLIDES DA REUNIÃO EM ANDAMENTO -->
+        <!-- TELA 2: SLIDES DA sessão EM ANDAMENTO -->
         <div class="content slide-content hidden">
             <div class="meeting-status-bar">
                 <div class="back-to-selection back-button" id="end-meeting-btn">
@@ -141,11 +141,11 @@
                 <i class="fa-solid fa-x"></i>
             </button>
             <div class="modal-content" id="end-meeting-content">
-                <h3>Encerrar Reunião</h3>
+                <h3>Encerrar sessão</h3>
                 <p>Tem certeza de que deseja finalizar esta sessão de conversação?</p>
-                <p class="modal-sub-info">Todos os flashcards criados durante a reunião já estão salvos para os participantes.</p>
+                <p class="modal-sub-info">Todos os flashcards criados durante a sessão já estão salvos para os participantes.</p>
                 <div class="flexbox" style="margin-top: 20px;">
-                    <button id="cancel-end-meeting-btn" class="secondary-btn">Continuar Reunião</button>
+                    <button id="cancel-end-meeting-btn" class="secondary-btn">Continuar sessão</button>
                     <button id="confirm-end-meeting-btn" class="danger-btn">Sim, Encerrar</button>
                 </div>
             </div>
@@ -207,5 +207,6 @@
     <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/presentation.js"></script>
+     <script type="module" src="js/notifications.js"></script>
 </body>
 </html>

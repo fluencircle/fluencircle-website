@@ -58,6 +58,119 @@ body {
     overflow-x: hidden;
 }
 
+/* Configurações Globais do Footer */
+.site-footer {
+  background-color: #202633; /* Tom escuro e elegante */
+  color: #cbd5e1;
+  padding: 40px 20px 20px 20px;
+  line-height: 1.6;
+
+}
+
+/* Layout em Grid Responsivo */
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #1e293b;
+}
+
+
+.footer-col h3 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-col h3 i {
+  color: var(--third-color); /
+}
+
+/* Coluna da Marca */
+.brand-name {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 5px 0;
+}
+
+.company-badge {
+  display: inline-block;
+  background-color: #1e293b;
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.cnpj-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.cnpj-info i {
+  color: #94a3b8;
+}
+
+/* Coluna do Endereço */
+.address-col p {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+}
+
+/* Link de Contato / WhatsApp */
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #22c55e; /* Verde estilo WhatsApp */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 12px;
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+/* Rodapé Inferior (Direitos Autorais) */
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .footer-container {
+    text-align: center;
+  }
+
+  .footer-col h3,
+  .cnpj-info {
+    justify-content: center;
+  }
+}
+
 input, select, textarea, button {
     font-family: 'Montserrat', sans-serif;
 }
@@ -124,16 +237,52 @@ header {
 }
 
 .logo-inner-circle{
-     width: 20px;
-    height: 20px;
+     width: 24px;
+    height: 24px;
     border-radius: 50%;
     background-color: var(--third-color);
     
 }
 
+
+.logo-complete{
+
+    align-items: center;
+    gap: 10px;
+    display: flex;
+}
+
+.logo-complete .logo-inner-circle{
+    background-color: var(--primary-color);
+}
+
+.logo-complete .logo-top-text{
+    font-size: 1.6rem;
+}
+
+.logo-complete .logo-bottom-text{
+    color: var(--third-color);
+}
+
+.logo-complete p{
+    margin: -5px;
+    padding: 0px;
+}
+
 .logo-text {
     font-size: 0.95rem;
     letter-spacing: 0.5px;
+}
+
+
+
+#logo-complete-footer{
+    transform: scale(1.3);
+    
+}
+
+#logo-complete-footer .logo-inner-circle{
+    background-color: #202633;
 }
 
 .header-actions {

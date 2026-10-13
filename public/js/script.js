@@ -1,5 +1,6 @@
 import { initAuthGuard } from "./auth.js";
 
+
 // Inicializa a proteção de autenticação
 if (typeof initAuthGuard === 'function') {
     initAuthGuard();
@@ -50,3 +51,5 @@ homeFlashCards?.addEventListener('click', (e) => {
 window.backToHome = function() {
     window.location.href = 'index.html';
 };
+
+

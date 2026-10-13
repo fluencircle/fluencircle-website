@@ -12,6 +12,7 @@ package-lock.json
 package.json
 public/.firebaserc
 public/js/firebase.js
+public/js/env.js
 
 node_modules/
 #Node js libraries
