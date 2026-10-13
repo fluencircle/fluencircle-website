@@ -8,7 +8,6 @@ import {
   import { database, auth } from "./firebase.js";
   import { showToast } from "./auth.js";
   import { toggleDropdown } from "./app.js";
-  import {apiKey} from "./env.js";
   import { askGemini } from "./gemini.js";
   
   // Estados Globais
