@@ -43,7 +43,6 @@ import {
   const closeTranslatorBtn = document.getElementById('close-translator-btn');
   const normalTextInput = document.getElementById('normal-text');
   const translatedTextInput = document.getElementById('translated-text');
-  const translationOptions = document.getElementById('translation-options');
   const translateBtn = document.getElementById('translate-btn');
   const addFlashCardsBtn = document.getElementById('add-flashcards-btn');
   
@@ -540,8 +539,7 @@ import {
   
 async function fetchTranslation(text, language) 
 {
-  const promptLanguage =language === 'pt'?'de português para inglês':'de inglês para português'
-  const prompt = `retorne a tradução da palavra, de en para pt ou pt para en. Caso haja mais de uma tradução RELEVANTE, separe as traduções por /, com no máximo 3. Retorne SOMENTE as traduções, sem nenhuma adição. Ex: car, resposta: 'carro/veículo' Palavra a ser traduzida: ${text}`
+  const prompt = `retorne a tradução da palavra, de en para pt ou pt para en. Caso seja uma palavra única e que tenha múltiplas traduções, separe as traduções por /, com no máximo 3. Caso seja uma frase, nunca repita a frase inteira mais de uma vez, retorne uma tradução única que fizer mais sentido pelo contexto. Retorne SOMENTE as traduções, sem nenhuma adição. Ex: annoying, resposta: 'estressante / irritante' Palavra a ser traduzida: ${text}`
   return askGemini(prompt)
 }
   
@@ -557,7 +555,7 @@ async function fetchTranslation(text, language)
     translateBtn.disabled = true;
   
     try {
-      const result = await fetchTranslation(text, translationOptions.value);
+      const result = await fetchTranslation(text);
       translatedTextInput.value = result;
       addFlashCardsBtn.classList.remove('unactive');
     } catch (err) {
@@ -585,9 +583,8 @@ async function fetchTranslation(text, language)
     const translated = translatedTextInput.value.trim();
     if (!original || !translated || addFlashCardsBtn.classList.contains('unactive')) return;
   
-    const isPT = translationOptions.value === 'pt';
-    const frontWord = isPT ? translated : original;
-    const backWord = isPT ? original : translated;
+    const frontWord =  original;
+    const backWord =  translated;
   
     addFlashCardsBtn.disabled = true;
     addFlashCardsBtn.textContent = 'Salvando...';
