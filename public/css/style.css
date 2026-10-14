@@ -1690,7 +1690,7 @@ right: -28px;
 }
 
 /* ==========================================================================
-   USERS TABLE (ADMIN)
+   USERS TABLE & SEARCH BAR (ADMIN) 
    ========================================================================== */
 .users-table-container {
     width: 100%;
@@ -1759,6 +1759,53 @@ right: -28px;
     color: var(--primary-color);
 
 }
+
+
+/* Container da barra de pesquisa */
+.admin-search-container {
+
+    width: 100%;
+    max-width: 400px; /* Ajuste a largura máxima conforme necessário */
+}
+
+/* Wrapper para posicionar o ícone e o input juntos */
+.admin-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Ícone de lupa dentro do input */
+.admin-search-wrapper .search-icon {
+    position: absolute;
+    left: 16px;
+    outline: none;
+    color: var( #94a3b8);
+    font-size: 0.95rem;
+    pointer-events: none; /* Garante que o clique vá para o input */
+    transition: color 0.2s ease;
+}
+
+/* Estilização do Input de Pesquisa */
+#admin-search-bar {
+    width: 100%;
+      outline: none;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 20px;
+    padding: 12px 16px 12px 44px; /* Espaço à esquerda para acomodar o ícone */
+    color: var(--text-main, #f8fafc);
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Placeholder */
+#admin-search-bar::placeholder {
+    color: var(--text-muted, #94a3b8);
+    font-size: .85rem;
+}
+
+
 
 /* ==========================================================================
    MODALS (STANDARDIZED)

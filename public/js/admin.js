@@ -46,6 +46,7 @@ import {
   const passwordInput = document.getElementById('user-password-input');
   const passwordContainer = document.getElementById('password-field-container');
   const roleSelect = document.getElementById('user-role-select');
+  const adminSearchBar = document.getElementById('admin-search-bar');
   
   // Modal Exclusão
   const deleteModal = document.getElementById('delete-user-modal');
@@ -70,6 +71,18 @@ import {
   /**
    * 2. Carrega todos os perfis do Realtime Database (/users)
    */
+  let currentAdminSearchTerm = '';
+
+
+
+  
+  if (adminSearchBar) {
+    adminSearchBar.addEventListener('input', (e) => {
+      currentAdminSearchTerm = e.target.value;
+      renderUsersTable(currentAdminSearchTerm);
+    });
+  }
+
   async function loadUsers() {
     usersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #8fa0b5;">Carregando perfis...</td></tr>`;
   
@@ -81,68 +94,104 @@ import {
       }
   
       allUsersCache = snapshot.val();
-      usersTableBody.innerHTML = '';
-  
-      const uids = Object.keys(allUsersCache);
-  
-      uids.forEach(uid => {
-        const user = allUsersCache[uid];
-        if (!user) return;
-  
-        const fullName = (user.firstName && user.lastName) 
-          ? `${user.firstName} ${user.lastName}` 
-          : (user.email ? user.email.split('@')[0] : 'Usuário Sem Nome');
-  
-        const roleLabels = {
-          'admin': 'Administrador',
-          'mediator': 'Mediador',
-          'student': 'Aluno'
-        };
-  
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td style="font-weight: 600;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div class="user-avatar">${fullName.charAt(0).toUpperCase()}</div>
-              <span>${fullName}</span>
-            </div>
-          </td>
-          <td>${user.email || '—'}</td>
-          <td style="font-family: monospace; font-size: 0.8rem; color: #8fa0b5;" title="${uid}">
-            ${uid.length > 14 ? uid.substring(0, 14) + '...' : uid}
-          </td>
-          <td>
-            <span  badge-${user.role || 'student'}">
-              ${roleLabels[user.role] || 'Aluno'}
-            </span>
-          </td>
-          <td style="text-align: right;">
-            <button class="action-table-btn edit-btn" title="Editar Perfil">
-              <i class="fa-solid fa-pen"></i>
-            </button>
-            <button class="action-table-btn delete-btn" title="Excluir Perfil">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        `;
-  
-        // Ação Editar
-        row.querySelector('.edit-btn').addEventListener('click', () => {
-          openEditModal(uid, user);
-        });
-  
-        // Ação Excluir
-        row.querySelector('.delete-btn').addEventListener('click', () => {
-          openDeleteModal(uid, fullName);
-        });
-  
-        usersTableBody.appendChild(row);
-      });
-  
+      renderUsersTable(currentAdminSearchTerm);
+
     } catch (err) {
       console.error("Erro ao carregar usuários:", err);
       usersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #ff5252;">Erro ao carregar banco de dados.</td></tr>`;
     }
+  }
+
+  // Função auxiliar para renderizar a tabela aplicando ordenação e filtro
+  function renderUsersTable(searchTerm = '') {
+    if (!allUsersCache) return;
+
+    usersTableBody.innerHTML = '';
+
+    // 1. Converte o objeto do Firebase em um array de objetos incluindo o UID
+    const usersArray = Object.keys(allUsersCache).map(uid => ({
+      uid,
+      ...allUsersCache[uid]
+    }));
+
+    // 2. Ordena o array em ordem alfabética pelo nome completo (ou e-mail)
+    usersArray.sort((a, b) => {
+      const nameA = (a.firstName && a.lastName) ? `${a.firstName} ${a.lastName}` : (a.email ? a.email.split('@')[0] : '');
+      const nameB = (b.firstName && b.lastName) ? `${b.firstName} ${b.lastName}` : (b.email ? b.email.split('@')[0] : '');
+      return nameA.localeCompare(nameB, 'pt-BR', { sensitivity: 'accent' });
+    });
+
+    // 3. Normaliza o termo de busca
+    const term = searchTerm.toLowerCase().trim();
+
+    // 4. Filtra os usuários pelo nome ou e-mail
+    const filteredUsers = usersArray.filter(user => {
+      const fullName = (user.firstName && user.lastName) 
+        ? `${user.firstName} ${user.lastName}` 
+        : (user.email ? user.email.split('@')[0] : 'Usuário Sem Nome');
+      
+      const email = user.email || '';
+
+      return fullName.toLowerCase().includes(term) || email.toLowerCase().includes(term);
+    });
+
+    if (filteredUsers.length === 0) {
+      usersTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: #8fa0b5;">Nenhum usuário encontrado.</td></tr>`;
+      return;
+    }
+
+    // 5. Renderiza cada linha na tabela
+    filteredUsers.forEach(user => {
+      const uid = user.uid;
+      const fullName = (user.firstName && user.lastName) 
+        ? `${user.firstName} ${user.lastName}` 
+        : (user.email ? user.email.split('@')[0] : 'Usuário Sem Nome');
+  
+      const roleLabels = {
+        'admin': 'Administrador',
+        'mediator': 'Mediador',
+        'student': 'Aluno'
+      };
+  
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td style="font-weight: 600;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="user-avatar">${fullName.charAt(0).toUpperCase()}</div>
+            <span>${fullName}</span>
+          </div>
+        </td>
+        <td>${user.email || '—'}</td>
+        <td style="font-family: monospace; font-size: 0.8rem; color: #8fa0b5;" title="${uid}">
+          ${uid.length > 14 ? uid.substring(0, 14) + '...' : uid}
+        </td>
+        <td>
+          <span class="badge-${user.role || 'student'}">
+            ${roleLabels[user.role] || 'Aluno'}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <button class="action-table-btn edit-btn" title="Editar Perfil">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button class="action-table-btn delete-btn" title="Excluir Perfil">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </td>
+      `;
+  
+      // Ação Editar
+      row.querySelector('.edit-btn').addEventListener('click', () => {
+        openEditModal(uid, user);
+      });
+  
+      // Ação Excluir
+      row.querySelector('.delete-btn').addEventListener('click', () => {
+        openDeleteModal(uid, fullName);
+      });
+  
+      usersTableBody.appendChild(row);
+    });
   }
   
   /**
