@@ -61,6 +61,7 @@ import {
   const attendeesListContainer = document.getElementById('attendees-list');
   const presentCounter = document.getElementById('present-counter');
   const attendanceBadge = document.getElementById('attendance-count-badge');
+  const searchBar = document.getElementById('attendance-search-bar');
 
 
   /**
@@ -147,7 +148,7 @@ import {
     }
   }
 
-  function renderStudentDropdownOptions() {
+  function renderStudentDropdownOptions(searchTerm = '') {
     studentOptionsList.innerHTML = '';
     
     if (allStudents.length === 0) {
@@ -155,7 +156,33 @@ import {
       return;
     }
 
-    allStudents.forEach(student => {
+    // 1. Cria uma cópia e ordena os alunos em ordem alfabética pelo nome de exibição
+    const sortedStudents = [...allStudents].sort((a, b) => {
+      const nameA = (a.firstName && a.lastName) ? `${a.firstName} ${a.lastName}` : (a.email || '');
+      const nameB = (b.firstName && b.lastName) ? `${b.firstName} ${b.lastName}` : (b.email || '');
+      return nameA.localeCompare(nameB, 'pt-BR', { sensitivity: 'accent' });
+    });
+
+    // 2. Normaliza o termo de busca
+    const term = searchTerm.toLowerCase().trim();
+
+    // 3. Filtra a lista já ordenada
+    const filteredStudents = sortedStudents.filter(student => {
+      const displayName = (student.firstName && student.lastName)
+        ? `${student.firstName} ${student.lastName}`
+        : (student.email || 'Aluno');
+      
+      const email = student.email || '';
+
+      return displayName.toLowerCase().includes(term) || email.toLowerCase().includes(term);
+    });
+
+    if (filteredStudents.length === 0) {
+      studentOptionsList.innerHTML = '<div class="custom-select-option" style="color: #8fa0b5;">Nenhum aluno encontrado.</div>';
+      return;
+    }
+
+    filteredStudents.forEach(student => {
       const isAlreadyAdded = !!currentAttendees[student.uid];
       const opt = document.createElement('div');
       opt.className = `custom-select-option ${isAlreadyAdded ? 'already-added' : ''}`;
@@ -174,12 +201,18 @@ import {
         if (!isAlreadyAdded) {
           addStudentAttendance(student.uid, displayName, student.email || '');
           studentOptionsList.classList.add('hidden');
+          document.getElementById('attendance-search-bar').value = '';
+          renderStudentDropdownOptions();
         }
       });
 
       studentOptionsList.appendChild(opt);
     });
   }
+
+
+
+  
 
   // Adiciona presença no banco e na interface
   async function addStudentAttendance(uid, name, email) {
@@ -273,6 +306,23 @@ import {
   studentSelectTrigger?.addEventListener('click', (e) => {
     e.stopPropagation();
     studentOptionsList.classList.toggle('hidden');
+  });
+
+ 
+  searchBar.addEventListener('input', (e) => {
+    renderStudentDropdownOptions(e.target.value);
+    
+    // Garante que a lista esteja visível ao digitar
+    if (studentOptionsList.classList.contains('hidden')) {
+      studentOptionsList.classList.remove('hidden');
+    }
+  });
+
+  // Opcional: Garante que a lista abra quando o usuário clicar no input
+  searchBar.addEventListener('click', (e) => {
+    e.stopPropagation();
+    studentOptionsList.classList.remove('hidden');
+    renderStudentDropdownOptions(searchBar.value);
   });
 
   // Fecha dropdown e drawer se clicar fora
