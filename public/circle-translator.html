@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Tradutor</title>
+     <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        #translator-fields{
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+            align-items: center;
+        }
+
+        input{
+            height: 100px;
+            background-color: var(--surface-color);
+            border: var(--border-color);
+            border-radius: 10px;
+            width: 90vw;
+            max-width: 600px;
+            text-indent: 10px;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        input::placeholder{
+            letter-spacing: .8px;
+            font-family: 'Montserrat', sans-serif !important;
+            color: var(--text-muted);
+        }
+
+        input:focus {
+            border-color: var(--third-color);
+        }
+
+        footer{
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            width: 100vw;
+            background-color: var(--surface-color);
+            height: 100px;
+            font-size: .7rem;
+            border-top: var(--border-color);
+        }
+
+        /* Estilo para os avisos de status/feedback */
+        .status-message {
+            width: 90vw;
+            max-width: 600px;
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .status-message.info {
+            background-color: rgba(0, 210, 255, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            display: block;
+        }
+
+        .status-message.success {
+            background-color: rgba(43, 253, 120, 0.15);
+            color: var(--third-color);
+            border: 1px solid rgba(43, 253, 120, 0.3);
+            display: block;
+        }
+
+        .status-message.warning {
+            background-color: rgba(211, 95, 95, 0.15);
+            color: #ff8080;
+            border: 1px solid rgba(211, 95, 95, 0.3);
+            display: block;
+        }
+
+        .status-message.error {
+            background-color: rgba(211, 95, 95, 0.2);
+            color: var(--second-color);
+            border: 1px solid rgba(211, 95, 95, 0.4);
+            display: block;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header style="display: flex; justify-content: center;">
+        <div class="logo" id="logo">
+           <div class="logo-icon">
+             <div class="logo-circle-center"> 
+                 <div class="logo-circle-left"></div>
+                 <div class="logo-inner-circle"></div>
+             </div> 
+           </div>
+        </div>
+    </header>
+
+    <main id="translator" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        <div id="session-badge" style="margin-bottom: 10px; text-align: center;">
+            <p id="sessionName" style="color: var(--text-secondary); font-size: 0.85rem; font-family: 'Montserrat', sans-serif;"></p>
+        </div>
+        
+        <div id="translator-container">
+            <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--text-primary);">Circle Tradutor</h4>
+        </div>
+        
+        <div id="translator-fields">
+            <input type="text" id="sourceText" placeholder="Digite uma palavra">
+            <input type="text" id="targetText" placeholder="Sua tradução" readonly>
+
+            <button id="translateBtn" class="btn-primary" style="border-radius: 50px; cursor: pointer; padding: 12px 30px; font-weight: bold;">Traduzir</button>
+        </div>
+
+        <div id="statusMessage" class="status-message"></div>
+    </main>
+
+    <footer style="display: flex; justify-content: center; align-items: center;">
+        <div id="footer-message" style="display: flex; width: 90%; max-width: 600px; gap: 20px; align-items: center; justify-content: space-between;">
+            <p style="font-family: 'Montserrat', sans-serif; color: var(--text-secondary);">Entre no nosso grupo e participe de sessões de conversação gratuitas toda semana!</p>
+<a href="https://wa.me/556696939166?text=%F0%9F%9F%A2Eu%20quero%20participar%20do%20FluenCircle%21" target="_blank" style="text-decoration: none;">
+                <button class="btn-primary" style="font-size: .7rem; width: 140px; height: 35px; border-radius: 50px; cursor: pointer; font-weight: bold;">Faça parte!</button>
+            </a>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAG6PEwWQADPAs5RjwzqbrO0DRBXVIv7G0",
+            authDomain: "fluentech-1e18a.firebaseapp.com",
+            databaseURL: "https://fluentech-1e18a-default-rtdb.firebaseio.com",
+            projectId: "fluentech-1e18a",
+            storageBucket: "fluentech-1e18a.firebasestorage.app",
+            messagingSenderId: "429228883820",
+            appId: "1:429228883820:web:2c71b892fb57c23f05bd49"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const BACKEND_URL = "https://fluencircle-backend.onrender.com";
+
+        const sourceInput = document.getElementById("sourceText");
+        const targetOutput = document.getElementById("targetText");
+        const translateBtn = document.getElementById("translateBtn");
+        const statusMsg = document.getElementById("statusMessage");
+        const sessionNameEl = document.getElementById("sessionName");
+
+        // Variável local para armazenar o estado atual da sessão em tempo real
+        let activeSession = null;
+
+        function showStatus(text, type = "info") {
+            statusMsg.textContent = text;
+            statusMsg.className = `status-message ${type}`;
+        }
+
+        function clearStatus() {
+            statusMsg.textContent = "";
+            statusMsg.className = "status-message";
+        }
+
+        async function askGemini(promptText) {
+            const response = await fetch(`${BACKEND_URL}/api/gemini/generate`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: promptText })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro no servidor: ${response.statusText}`);
+            }
+            const data = await response.json();
+            return data.text;
+        }
+
+        async function fetchTranslation(text) {
+            const prompt = `retorne a tradução da palavra, de en para pt ou pt para en. Caso seja uma palavra única e que tenha múltiplas traduções, separe as traduções por /, com no máximo 3. Caso seja uma frase, nunca repita a frase inteira mais de uma vez, retorne uma tradução única que fizer mais sentido pelo contexto. Retorne SOMENTE as traduções, sem nenhuma adição. Ex: annoying, resposta: 'estressante / irritante' Palavra a ser traduzida: ${text}`;
+            return await askGemini(prompt);
+        }
+
+        async function saveFlashcard(sessionId, topic, word, translation) {
+            const cardData = {
+                front: word,
+                back: translation,
+                sessionId: sessionId,
+                topic: topic || "Circle Tradutor",
+                createdAt: new Date().toISOString()
+            };
+
+            const endpoint = `https://fluentech-1e18a-default-rtdb.firebaseio.com/flashcards/${sessionId}.json`;
+
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(cardData)
+            });
+
+            if (!res.ok) {
+                throw new Error("Falha ao salvar no Firebase Realtime Database");
+            }
+
+            return await res.json();
+        }
+
+        // Monitoramento em tempo real do nó current_session
+        const sessionRef = ref(database, 'current_session');
+        onValue(sessionRef, (snapshot) => {
+            const sessionData = snapshot.val();
+            if (sessionData && sessionData.sessionId) {
+                activeSession = sessionData;
+                sessionNameEl.textContent = `Sessão ativa: ${sessionData.topic}`;
+                sessionNameEl.style.color = "var(--third-color)";
+            } else {
+                activeSession = null;
+                sessionNameEl.textContent = "Nenhuma sessão ativa no momento";
+                sessionNameEl.style.color = "var(--text-muted)";
+            }
+        });
+
+        async function handleTranslate() {
+            const text = sourceInput.value.trim();
+            if (!text) {
+                showStatus("Por favor, digite uma palavra ou frase.", "warning");
+                return;
+            }
+
+            translateBtn.disabled = true;
+            translateBtn.textContent = "Traduzindo...";
+            clearStatus();
+
+            try {
+                const translation = await fetchTranslation(text);
+                targetOutput.value = translation;
+
+                // Utiliza a sessão capturada e atualizada em tempo real
+                if (!activeSession || !activeSession.sessionId) {
+                    return;
+                }
+
+                await saveFlashcard(
+                    activeSession.sessionId,
+                    activeSession.topic,
+                    text,
+                    translation
+                );
+
+            } catch (err) {
+                console.error("Erro no processo:", err);
+                showStatus("Ocorreu um erro ao processar. Tente novamente.", "error");
+            } finally {
+                translateBtn.disabled = false;
+                translateBtn.textContent = "Traduzir";
+            }
+        }
+
+        translateBtn.addEventListener("click", handleTranslate);
+
+        sourceInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                handleTranslate();
+            }
+        });
+    </script>
+</body>
+</html>
