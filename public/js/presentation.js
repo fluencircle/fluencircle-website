@@ -589,7 +589,27 @@ import {
   
 async function fetchTranslation(text, language) 
 {
-  const prompt = `retorne a tradução da palavra, de en para pt ou pt para en. Caso seja uma palavra única e que tenha múltiplas traduções, separe as traduções por /, com no máximo 3. Caso seja uma frase, nunca repita a frase inteira mais de uma vez, retorne uma tradução única que fizer mais sentido pelo contexto. Retorne SOMENTE as traduções, sem nenhuma adição. Ex: annoying, resposta: 'estressante / irritante' Palavra a ser traduzida: ${text}`
+       const prompt = `Você é um tradutor bidirecional bidirecional estrito (Inglês ⇄ Português). 
+Detecte o idioma do texto de entrada e traduza para o outro idioma.
+
+REGRAS OBRIGATÓRIAS:
+1. Se o texto estiver em INGLÊS, retorne SOMENTE a tradução em PORTUGUÊS.
+2. Se o texto estiver em PORTUGUÊS, retorne SOMENTE a tradução em INGLÊS.
+3. NUNCA misture os dois idiomas na resposta e NUNCA repita o texto original.
+4. Para palavras únicas com múltiplas traduções, forneça no máximo 3 opções separadas por barra (Ex: "estressante / irritante").
+5. Para frases, forneça uma única tradução natural que faça sentido no contexto, sem repetir a frase de entrada.
+6. Retorne APENAS o texto da tradução, absolutamente nenhuma palavra a mais, pontuação extra ou explicação.
+7. NUNCA retorna o mesmo idioma da entrada.
+
+Exemplo 1:
+Entrada: annoying
+Saída: estressante / irritante
+
+Exemplo 2:
+Entrada: cachorro
+Saída: dog
+
+Texto a ser traduzido: ${text}`;
   return askGemini(prompt)
 }
   
