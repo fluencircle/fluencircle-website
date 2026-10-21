@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR" id="plans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>FluenCircle | Sessões</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo" id="logo">
+           <div class="logo-icon">
+           
+            <div class="logo-circle-center"> 
+                <div class="logo-circle-left"></div>
+                <div class="logo-inner-circle"></div>
+            </div> 
+           </div>
+        
+        </div>
+        <div class="header-actions">
+            <span class="user-role-badge" id="user-role-badge"></span>
+            <span class="user-email" id="user-email"></span>
+            <button id="logout-btn" class="logout-btn" title="Sair">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sair</span>
+            </button>
+        </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar">
+        <nav class="sidebar-nav">
+            <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
+            <ul class="sidebar-menu-top">
+                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
+            
+                <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar sessão</span></a></li>
+                <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
+            </ul>
+    
+            <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
+            <ul class="sidebar-menu-bottom">
+                <li class="sidebar-divider admin-access hidden"></li>
+                
+                <li data-page="admin" class="admin-access hidden">
+                    <a href="admin.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Acessos</span>
+                    </a>
+                </li>   
+                 
+
+                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                    <a href="manage-meetings.html">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Sessões</span>
+                    </a>
+                </li>
+
+                      <li data-page="plans" class="admin-access hidden">
+                    <a href="plans.html">
+                        <i class="fa-solid fa-user-gear"></i>
+                        <span>Planos</span>
+                    </a>
+                </li> 
+            </ul>
+        </nav>
+    </aside>
+
+    <main id="plans-main">
+        <div id="plans-content">
+            <div class="page-header">
+                <h2>Planos de Assinatura</h2>
+            </div>
+        </div>
+        <div id="plans-nav">
+            <div id="plans-options">
+                <div id="plans-options-plan" class="plan-option">Planos</div>
+                <div id="plans-options-week" class="plan-option selected">Semana</div>
+            </div>
+        </div>
+
+        <div id="plans-grid" class="hidden">
+
+            <div class="plan-card" id="add-plan-btn">
+               <i class="fa-solid fa-circle-plus"></i>
+            </div>
+
+            <div class="plan-card">
+                <div class="hover-circle"></div>
+                <div class="open-plan-options"></div>
+                <div class="plan-card-content">
+                    <h3 class="plan-card-title">Double Circle</h3>
+                    <div class="plan-card-price">R$ 0 <span>\mês</span></div>
+                    <p class="plan-card-description">2 sessões semanais.</p>
+                </div>
+            </div>
+                        <div class="plan-card">
+                            <div class="hover-circle"></div>
+                <div class="open-plan-options"></div>
+                <div class="plan-card-content">
+                    <h3 class="plan-card-title">Double Circle</h3>
+                    <div class="plan-card-price">R$ 0 <span>\mês</span></div>
+                    <p class="plan-card-description">2 sessões semanais.</p>
+                </div>
+            </div>
+        
+        </div>
+
+        <div id="Week-grid">
+            <div class="weekdayCard" id="monday">
+                <div class="weekdayCard content">
+                    <h3>Segunda-feira</h3>
+                    <p  class="weekCardDate">23/05</p>
+                    <p class="weedCardTime">18:00</p>
+                    <p>Let's get to know each other!</p>
+                </div>
+            </div>
+  
+      
+
+        </div>
+
+
+
+    </main>
+
+    
+    <script type="module" src="js/menu.js"></script>
+    <script type="module" src="js/firebase.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/manage-meetings.js"></script>
+        
+    </body>
