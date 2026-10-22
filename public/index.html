@@ -3,23 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <title>FluenCircle</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* =========================================================
+           ESTILOS DA SEÇÃO "ESSA SEMANA" NA HOME
+        ========================================================= */
+        .student-week-container {
+            width: 100%;
+            max-width: 800px;
+
+            display: flex;
+        
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .student-week-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .student-week-header h2 {
+            font-size: 1.5rem;
+            margin: 0 0 6px 0;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .student-week-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        #week-grid {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+
+        .weekdayCard {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .weekdayCard .outside {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .weekdayCard .outside .weekday {
+            font-size: 0.72rem;
+            margin: 0;
+            padding: 0;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .weekdayCard .outside .monthday {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .weekdayCard .content {
+            display: flex;
+            position: relative;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            height: 64px;
+            overflow: hidden;
+            flex-direction: row;
+            flex: 1;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            transition: border-color 0.25s ease;
+        }
+
+        .weekdayCard:hover .content {
+            border-color: rgba(43, 253, 120, 0.5);
+        }
+
+        .weekdayCard .content .time {
+            position: absolute;
+            z-index: 2;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.88rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .weekdayCard .content .topic {
+            margin-left: 30px;
+            font-weight: 600;
+            color: #ffffff;
+            z-index: 2;
+            max-width: 45%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .weekcard-hover {
+            width: 10px;
+            height: 10px;
+            z-index: 1;
+            border-radius: 50px;
+            background-color: var(--third-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .weekdayCard:hover .weekcard-hover {
+            transition: transform 0.5s ease, opacity 0.3s ease;
+            transform: translate(-50%, -50%) scale(90);
+            opacity: 1;
+        }
+
+        .weekdayCard .showOnHover {
+            display: none;
+            z-index: 3;
+            position: absolute;
+            left: 30px;
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 0.95rem;
+        }
+
+        .weekdayCard:hover .showOnHover {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .weekdayCard:hover .topic {
+            opacity: 0;
+        }
+
+        .weekdayCard:hover .time {
+            color: var(--primary-color);
+        }
+
+        .weekdayCard:hover .plan-badge {
+            color: var(--primary-color);
+        }
+
+        .plan-badge {
+            color: var(--third-color);
+            margin-left: 10px;
+            font-weight: 600;
+        }
+
+        /* Botão direto de sala Meet no card */
+        .direct-meet-btn {
+            background: rgba(0, 210, 255, 0.2);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 5;
+            transition: all 0.2s;
+        }
+
+        .direct-meet-btn:hover {
+            background: var(--accent-blue);
+            color: #070d14;
+        }
+
+        /* =========================================================
+           MODAL DE PREPARAÇÃO DO TEMA
+        ========================================================= */
+        .prep-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(5px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prep-modal-backdrop.hidden {
+            display: none !important;
+        }
+
+        .prep-modal-box {
+            background: #0f1926;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            width: 90%;
+            max-width: 620px;
+            padding: 28px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+            color: var(--text-primary);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prep-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 14px;
+        }
+
+        .prep-modal-header h3 {
+            margin: 0 0 6px 0;
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .prep-session-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .prep-session-meta i {
+            color: var(--third-color);
+        }
+
+        .prep-modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .prep-meet-banner {
+            background: rgba(0, 210, 255, 0.08);
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .prep-meet-btn {
+            background: var(--third-color);
+            color: #070d14;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .prep-questions-container {
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .prep-question-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 18px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .prep-question-num {
+            background: rgba(43, 253, 120, 0.15);
+            color: var(--third-color);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .prep-question-text {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .prep-empty-msg {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 30px;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo" id="logo">
            <div class="logo-icon">
-           
             <div class="logo-circle-center"> 
                 <div class="logo-circle-left"></div>
                 <div class="logo-inner-circle"></div>
             </div> 
            </div>
-        
         </div>
         <div class="header-actions">
             <span class="user-role-badge hidden" id="user-role-badge"></span>
@@ -35,9 +373,8 @@
         <nav class="sidebar-nav">
             <!-- SEÇÃO SUPERIOR: NAVEGAÇÃO PRINCIPAL & MEDIAÇÃO -->
             <ul class="sidebar-menu-top">
-                <li data-page="home"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
+                <li data-page="home" class="active"><a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a></li>
                 <li data-page="flash-cards"><a href="flash-cards.html"><i class="fa-solid fa-layer-group"></i><span>Flash Cards</span></a></li>
-            
                 <li data-page="slide-show" class="mediator-access hidden"><a href="presentation.html"><i class="fa-solid fa-play"></i><span>Iniciar sessão</span></a></li>
                 <li data-page="set-meeting" class="mediator-access hidden"><a href="set-meeting.html"><i class="fa-solid fa-comments"></i><span>Temas</span></a></li>
             </ul>
@@ -45,19 +382,22 @@
             <!-- SEÇÃO INFERIOR: CONFIGURAÇÕES & ADMINISTRAÇÃO -->
             <ul class="sidebar-menu-bottom">
                 <li class="sidebar-divider admin-access hidden"></li>
-                
                 <li data-page="admin" class="admin-access hidden">
                     <a href="admin.html">
                         <i class="fa-solid fa-user-gear"></i>
                         <span>Acessos</span>
                     </a>
                 </li>   
-                 
-
-                 <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
+                <li data-page="manage-meetings" data-file="manage-meetings.html" class="mediator-access hidden">
                     <a href="manage-meetings.html">
                         <i class="fa-solid fa-pen-to-square"></i>
                         <span>Sessões</span>
+                    </a>
+                </li>
+                <li data-page="plans" class="admin-access hidden">
+                    <a href="plans.html">
+                        <i class="fa-solid fa-gem"></i>
+                        <span>Planos</span>
                     </a>
                 </li>
             </ul>
@@ -65,34 +405,61 @@
     </aside>
 
     <main id="home-page">
-        <div class="content home-content">
+        <div class="content home-content" style="flex-direction: column; align-items: center; width: 100%;">
             <div class="welcome-section">
-                <h1>Bem-vindo ao <span class="highlight">FluenCircle</span></h1>
-                <p class="welcome-subtitle">Você aprendeu português falando</p>
-                
-                <div class="home-page-options">
-                    <!-- Flash Cards: Todos os perfis -->
-                    <button class="home-btn" id="home-flash-cards">
-                        <i class="fa-solid fa-layer-group"></i>
-                        Flash Cards
-                    </button>
-            <button class="home-btn home-btn-secondary mediator-access hidden" id="home-start-meeting">
-                        <i class="fa-solid fa-play"></i>
-                        Iniciar sessão
-                    </button>
-                    <!-- Reuniões: Mediador e Admin -->
-                    <button class="home-btn home-btn-secondary mediator-access hidden" id="home-set-meeting">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                        Temas
-                    </button>
-        
+                <h1>Bem-vindo, <span class="highlight"></span>!</h1>
+            </div>
 
+            <!-- SEÇÃO: ESSA SEMANA DO PARTICIPANTE -->
+            <div class="student-week-container">
+                <div class="student-week-header">
+                    <h3>Essa Semana</h3>
+                    <p class="student-week-subtitle">Suas sessões de conversação. Clique em uma sessão para checar as perguntas!</p>
+                </div>
 
+                <div id="week-grid">
+                    <div style="color: var(--text-secondary); padding: 25px 0;">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Carregando suas sessões da semana...
+                    </div>
                 </div>
             </div>
         </div>
-
     </main>
+
+    <!-- MODAL DE PREPARAÇÃO DO TEMA (PERGUNTAS) -->
+    <div id="topic-preparation-modal" class="modal-cover hidden">
+        <div class="modal-box">
+            <div class="prep-modal-header">
+                <div>
+                    <h3 id="prep-topic-title">Tema da Sessão</h3>
+                    <div class="prep-session-meta">
+                        <span id="prep-session-time"><i class="fa-regular fa-clock"></i> Horário</span>
+                        <span id="prep-session-plan" style="color: var(--third-color); font-weight: 600;">Plano</span>
+                    </div>
+                </div>
+                <button class="prep-modal-close" id="close-prep-modal-btn">&times;</button>
+            </div>
+
+            <!-- Banner do Link da Chamada (se houver) -->
+            <div id="prep-meet-banner" class="prep-meet-banner hidden">
+                <div style="font-size: 0.88rem;">
+                    <strong style="color: #ffffff;">Sala de Videoconferência Pronta</strong><br>
+                    <span style="color: var(--text-secondary);">Acesse no horário da sessão</span>
+                </div>
+                <a href="#" target="_blank" id="prep-meet-link-btn" class="prep-meet-btn">
+                    <i class="fa-solid fa-video"></i> Entrar na sala
+                </a>
+            </div>
+
+            <!-- Lista de Perguntas do Tema -->
+            <div style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--third-color); margin-bottom: 10px; letter-spacing: 0.5px;">
+                Perguntas
+            </div>
+            <div class="prep-questions-container" id="prep-questions-list">
+                <!-- Populado dinamicamente -->
+            </div>
+        </div>
+    </div>
 
     <div class="loading-gif hidden">
         <div class="circle one"></div>
@@ -103,11 +470,7 @@
     <script type="module" src="js/menu.js"></script>
     <script type="module" src="js/firebase.js"></script>
     <script type="module" src="js/auth.js"></script>
-     <script type="module" src="js/notifications.js"></script>
+    <script type="module" src="js/notifications.js"></script>
     <script type="module" src="js/script.js"></script>
-    
 </body>
-
-
-
 </html>

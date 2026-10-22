@@ -274,8 +274,8 @@ function ensureModalsExist() {
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
         <!-- MODAL DE CRIAR / EDITAR PLANO -->
-        <div id="fc-plans-modal" class="fc-modal-backdrop hidden">
-            <div class="fc-modal-box">
+        <div id="fc-plans-modal" class="modal-cover hidden">
+            <div class="modal-box">
                 <div class="fc-modal-header">
                     <h3 id="fc-plan-modal-title">Configurar Plano</h3>
                     <button class="fc-close-btn" id="fc-close-plan-modal">&times;</button>
@@ -316,8 +316,8 @@ function ensureModalsExist() {
         </div>
 
         <!-- MODAL DE SELEÇÃO DE TEMA PARA A SESSÃO DA SEMANA -->
-        <div id="fc-topic-modal" class="fc-modal-backdrop hidden">
-            <div class="fc-modal-box">
+        <div id="fc-topic-modal" class="modal-cover hidden">
+            <div class="modal-box">
                 <div class="fc-modal-header">
                     <h3>Vincular Tema à Sessão</h3>
                     <button class="fc-close-btn" id="fc-close-topic-modal">&times;</button>

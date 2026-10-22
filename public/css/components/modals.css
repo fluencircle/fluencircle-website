@@ -1,0 +1,23 @@
+.modal-cover{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: var(--header-height);
+    left: var(--sidebar-collapsed-width);
+    background-color: var(--primary-color);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+
+}
+
+.modal-cover .modal-box{
+            border-radius: 18px;
+            width: 90%;
+            max-width: 800px;
+            padding: 28px;
+            color: var(--text-primary);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
