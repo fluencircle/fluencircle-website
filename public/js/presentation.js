@@ -32,6 +32,15 @@ function safePhotoUrl(url) {
     return typeof url === 'string' && /^https?:\/\//i.test(url) ? url : null;
 }
 
+// "14:32" se foi criada hoje; "17/11 14:32" se for de outro dia
+function formatSessionTime(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return '--:--';
+    const time = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    if (d.toDateString() === new Date().toDateString()) return time;
+    return `${d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })} ${time}`;
+}
+
 // ==========================================================================
 // 1. CONFIGURAÇÃO DO SOCKET.IO & WEBRTC (MALHA COMPLETA, ATÉ 6 PESSOAS)
 // ==========================================================================
@@ -161,69 +170,52 @@ function applyRemoteSlide(remoteSlideNumber) {
 
 // Um único listener cobre estado da sessão E troca de slide
 onValue(ref(database, `current_session`), (snapshot) => {
+    activeSideFlex.replaceChildren(); // limpa sempre (inclui o caso de a sessão ter sido encerrada)
 
-    if (snapshot.exists()) {
-        liveSessionSnapshot = snapshot.val();
-        activeSideFlex.replaceChildren()
+    if (!snapshot.exists()) {
+        liveSessionSnapshot = null;
+        return;
+    }
 
-        Object.keys(liveSessionSnapshot).forEach((session)=>{
-            
-            const attendeesCount = liveSessionSnapshot[session].attendees ? Object.keys(liveSessionSnapshot[session].attendees).length : 1;
-           const elemento = el('div', 'active-session-side-card', '');
-    activeSideFlex.append(elemento);
+    liveSessionSnapshot = snapshot.val();
 
-    const statusTag = el('div', 'session-status-tag', '');
+    Object.keys(liveSessionSnapshot).forEach((sessionKey) => {
+        const data = liveSessionSnapshot[sessionKey];
+        const attendeesCount = data.attendees ? Object.keys(data.attendees).length : 1;
 
+        const card = el('div', 'active-session-side-card');
+        const infoContainer = el('div');
+        infoContainer.append(el('h3', 'side-session-title', data.topic));
 
+        const metaDiv = el('div', 'side-session-meta');
 
-    const infoContainer = el('div', '', '');
-    const h3Title = el('h3', 'side-session-title', liveSessionSnapshot[session].topic);
-    infoContainer.append(h3Title);
+        // Mediador
+        const spanMediator = el('span', 'side-meta-item');
+        const iconMediator = el('i', 'fa-solid fa-user-tie');
+        iconMediator.style.color = 'var(--third-color)';
+        spanMediator.append(iconMediator, el('span', '', data.mediatorName || 'Mediador'));
 
-    const metaDiv = el('div', 'side-session-meta', '');
-    
-    const spanMediatorWrapper = el('span', '', '');
-    const iconMediator = el('i', 'fa-solid fa-user-tie', '');
-    iconMediator.style.color = 'var(--third-color)';
-    
+        // Horário de criação
+        const spanTime = el('span', 'side-meta-item');
+        const iconClock = el('i', 'fa-regular fa-clock');
+        spanTime.append(iconClock, el('span', '', formatSessionTime(data.startedAt)));
 
-    const spanUsersWrapper = el('span', 'spanUsers', '');
-    const iconUsers = el('i', 'fa-solid fa-users', '');
-    iconUsers.style.color = 'var(--accent-blue)';
-    const strongCount = el('strong', '', attendeesCount);
-    strongCount.id = 'side-active-count';
-    
-    
-    spanUsersWrapper.append(iconUsers, strongCount);
-    spanUsersWrapper.append(document.createTextNode(' participante (s)'));
+        // Participantes
+        const spanUsers = el('span', 'side-meta-item spanUsers');
+        const iconUsers = el('i', 'fa-solid fa-users');
+        iconUsers.style.color = 'var(--accent-blue)';
+        spanUsers.append(iconUsers, el('span', '', `${attendeesCount} participante(s)`));
 
-    metaDiv.append(spanMediatorWrapper, spanUsersWrapper);
-    infoContainer.append(metaDiv);
-    elemento.append(infoContainer);
+        metaDiv.append(spanMediator, spanTime, spanUsers);
+        infoContainer.append(metaDiv);
 
-    const btnJoin = el('button', 'btn-join-active-session', '');
-    btnJoin.id = 'join-side-active-session-btn';
-    
-    const iconDoor = el('i', 'fa-solid fa-door-open', '');
-    btnJoin.append(iconDoor, document.createTextNode('Participar'));
+        const btnJoin = el('button', 'btn-join-active-session');
+        btnJoin.append(el('i', 'fa-solid fa-door-open'), document.createTextNode(' Participar'));
+        btnJoin.addEventListener('click', () => joinActiveSession(data));
 
-    btnJoin.addEventListener('click', () => {
-        console.log("Entrando na sala:");
+        card.append(infoContainer, btnJoin);
+        activeSideFlex.append(card);
     });
-
-    elemento.append(btnJoin);
-
-
-elemento.querySelector('.btn-join-active-session')?.addEventListener('click', async () => {
-    if (!liveSessionSnapshot[session]) return;
-    await joinActiveSession(liveSessionSnapshot[session]);
-});
-    
-           
-        })
-
-    
-    } 
 });
 
 // Sincronização complementar via WebSocket (latência baixa)
@@ -524,26 +516,60 @@ function leaveSessionView() {
 // ==========================================================================
 // 6. RENDERIZAÇÃO E NAVEGAÇÃO DOS SLIDES
 // ==========================================================================
+// true = todos veem a próxima questão; false = só o mediador (evita "spoiler" para os alunos)
+const SHOW_NEXT_PEEK_FOR_ALL = false;
+
+function getNextPeek() {
+    const nextIndex = slideNumber + 1;
+    if (nextIndex < currentQuestions.length) {
+        return { label: `Próxima · ${nextIndex + 1}`, text: currentQuestions[nextIndex] };
+    }
+    if (nextIndex === currentQuestions.length) {
+        return { label: 'Próxima', text: 'Fim da sessão' };
+    }
+    return null; // já está no último slide
+}
+
 function updateSlideContent() {
     if (!slide) return;
 
+    const total = currentQuestions.length;
+    const parts = [];
+
     if (slideNumber === -1) {
-        slide.replaceChildren(el('span', 'title', currentTopic));
-        return;
-    }
-
-    const item = el('div', 'questionItem');
-    if (slideNumber < currentQuestions.length) {
-        item.append(
-            el('span', 'number', slideNumber + 1),
-            el('span', 'question', currentQuestions[slideNumber])
-        );
+        parts.push(el('span', 'title', currentTopic));
     } else {
-        item.append(el('span', 'question', 'Fim da sessão'));
-    }
-    slide.replaceChildren(item);
-}
+        const item = el('div', 'questionItem');
+        if (slideNumber < total) {
+            item.append(
+                el('span', 'number', slideNumber + 1),
+                el('span', 'question', currentQuestions[slideNumber])
+            );
+        } else {
+            item.append(el('span', 'question', 'Fim da sessão'));
+        }
+        parts.push(item);
 
+        // Indicador de slide (canto superior direito)
+        parts.push(el('span', 'slide-counter',
+            slideNumber < total ? `${slideNumber + 1} / ${total}` : 'Fim'));
+    }
+
+    // Mini quadro da próxima questão (canto inferior direito)
+    if (isSessionHost || SHOW_NEXT_PEEK_FOR_ALL) {
+        const next = getNextPeek();
+        if (next) {
+            const peek = el('div', 'next-peek');
+            peek.append(
+                el('span', 'next-peek-label', next.label),
+                el('span', 'next-peek-text', next.text)
+            );
+            parts.push(peek);
+        }
+    }
+
+    slide.replaceChildren(...parts);
+}
 async function broadcastSlideChange(newSlideNumber) {
     slideNumber = newSlideNumber;
     updateSlideContent();
