@@ -20,7 +20,7 @@ homeSetMeeting?.addEventListener('click', (e) => {
 
 homeStartMeeting?.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = 'presentation.html';
+    window.location.href = 'index.html';
 });
 
 homeFlashCards?.addEventListener('click', (e) => {

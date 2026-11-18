@@ -1,0 +1,34 @@
+:root {
+    --primary-color: #070d14;
+    --surface-color: #0f1926;
+    --surface-hover: #142233;
+    --surface-card: #121e2c;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(136, 152, 187, 0.4);
+    --second-color: #7a4fff;
+    --third-color: #2bfd78;
+    --accent-blue: #00d2ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --text-muted: rgba(255, 255, 255, 0.45);
+    --sidebar-width: 200px;
+    --sidebar-collapsed-width: 54px;
+    --header-height: 70px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
