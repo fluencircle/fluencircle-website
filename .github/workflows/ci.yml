@@ -71,6 +71,35 @@ jobs:
           npx firebase --version
       - name: Matriz de regras no Firebase Emulator
         run: npm run test:rules
+      - name: Carga sintética REAL no Emulator (Auth + RTDB, sem produção)
+        run: >
+          npx firebase emulators:exec
+          --config firebase.emulator.json
+          --project demo-fluencircle-audit
+          --only auth,database
+          "npm run emulators:seed && npm run emulators:verify"
+
+  seed-cli-windows:
+    name: Smoke do inicializador de dados no Windows (sem rede)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar invocação direta do script no Windows
+        shell: pwsh
+        run: |
+          $result = & node scripts/emulator/seed.mjs --check
+          Write-Host $result
+          if ($LASTEXITCODE -ne 0 -or $result -notmatch 'SEED_CLI_CHECK_OK') {
+            throw 'O script de seed não executou corretamente no Windows.'
+          }
 
   e2e:
     name: E2E de perfis e acessibilidade básica (Playwright, Firebase simulado)

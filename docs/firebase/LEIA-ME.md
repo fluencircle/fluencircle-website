@@ -74,7 +74,8 @@ RULES_DEBUG=1 npm run test:rules:sim   # mostra o motivo de cada negação
 
 ```bash
 npm run emulators           # terminal 1: Auth (9099), RTDB (9000), Hosting (5050) e UI (4000)
-npm run emulators:seed      # terminal 2: contas e dados sintéticos (tests/fixtures/synthetic-data.mjs)
+npm run emulators:seed      # terminal 2: imprime SEED_OK quando gravou e releu o banco demo
+npm run emulators:verify    # somente leitura: imprime SEED_VERIFY_OK e os totais
 # abra http://127.0.0.1:5050 — o selo amarelo no rodapé confirma o Emulator
 ```
 

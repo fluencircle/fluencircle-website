@@ -12,6 +12,7 @@
     "rules:check": "node scripts/build-rules.mjs --check",
     "emulators": "firebase emulators:start --config firebase.emulator.json --project demo-fluencircle-audit",
     "emulators:seed": "node scripts/emulator/seed.mjs",
+    "emulators:verify": "node scripts/emulator/seed.mjs --verify",
     "serve": "python3 -m http.server 5501 --directory public"
   },
   "devDependencies": {

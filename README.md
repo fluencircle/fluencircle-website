@@ -26,8 +26,14 @@ usa sempre o Firebase Emulator** com o projeto fictício `demo-fluencircle-audit
 ```bash
 npm ci                     # Node 20+ e Java 21+ (o Emulator do firebase-tools 15 exige Java 21)
 npm run emulators          # terminal 1: Auth, Realtime Database, Hosting (http://127.0.0.1:5050) e UI (4000)
-npm run emulators:seed     # terminal 2: contas e dados sintéticos (senha: fluencircle-demo)
+npm run emulators:seed     # terminal 2: dados sintéticos, imprime SEED_OK
+npm run emulators:verify   # somente leitura: confirma que dados chegaram ao RTDB demo
 ```
+
+**Importante para Windows/WSL:** aguarde Auth (9099) e RTDB (9000) ficarem prontos antes do seed;
+os dois terminais devem acessar o mesmo ambiente local. Uma execução correta exibe
+`SEED_OK` e `SEED_VERIFY_OK`; uma saída vazia **não é sucesso**.
+Use `npm run emulators:seed -- --check` para validar a invocação sem acessar o banco.
 
 Sem Java, ainda é possível abrir as páginas com `npm run serve` (http://localhost:5501), mas sem banco elas
 ficam sem dados. Detalhes e contas de demonstração: [`docs/firebase/LEIA-ME.md`](docs/firebase/LEIA-ME.md).

@@ -43,9 +43,18 @@ Use **dois terminais**:
 # terminal 1 — sobe Auth (9099), Realtime Database (9000), Hosting (5050) e a interface do Emulator (4000)
 npm run emulators
 
-# terminal 2 — cria as contas e carrega o banco sintético
+# terminal 2 — execute SOMENTE depois que todos os emuladores estiverem prontos
 npm run emulators:seed
+npm run emulators:verify  # SOMENTE LEITURA: verifica usuários, sessões, planos e flashcards
 ```
+
+A carga agora precisa imprimir **`SEED_OK`** e a verificação precisa imprimir **`SEED_VERIFY_OK`**,
+com pelo menos 5 perfis, 3 sessões e 2 planos no projeto `demo-fluencircle-audit`.
+Se os comandos terminarem silenciosamente, **não considere a carga concluída**:
+atualize o clone (`git pull --ff-only`) e execute `npm run emulators:seed -- --check`
+(precisa imprimir `SEED_CLI_CHECK_OK`, sem gravar nada). A carga substitui apenas
+o **banco demo local** e recria suas contas; não a execute para preservar modificações
+feitas anteriormente no Emulator.
 
 Abra **http://127.0.0.1:5050**. Uma faixa amarela no rodapé confirma: *"Ambiente de teste local — Firebase Emulator
 (demo-fluencircle-audit)"*. Se a faixa não aparecer, **pare**: você não está no ambiente de teste.
@@ -145,7 +154,9 @@ Para cada contribuição: Issue → branch própria → commits pequenos (`feat(
 | Sintoma | Causa provável | Solução |
 | --- | --- | --- |
 | `firebase-tools no longer supports Java version before 21` | Java antigo | instale JDK 21+ e confira `java -version` |
-| `npm run emulators:seed` falha com "fetch failed" | Emulator não está rodando | rode `npm run emulators` no outro terminal |
+| `npm run emulators:seed` termina sem mensagem nem contas | Versão anterior usava comparação `file://` incompatível com Windows/espaços | atualize o clone e confirme `npm run emulators:seed -- --check` exibindo `SEED_CLI_CHECK_OK` |
+| `npm run emulators:seed` falha com "fetch failed" | Auth/RTDB Emulator não iniciou ou está em outra máquina/porta | espere os serviços ficarem prontos no terminal 1; use o mesmo ambiente/WSL nos dois terminais |
+| `npm run emulators:verify` informa coleções ausentes | carga não executada ou interface está olhando outro projeto/namespace | confira `demo-fluencircle-audit-default-rtdb` e a porta 9000; rode `npm run emulators:seed` novamente |
 | porta 9000/9099/5050/4000 ocupada | outro processo usando a porta | feche o processo ou mude a porta em `firebase.emulator.json` **e** em `public/js/config/firebase.config.js` |
 | página em branco, erro de módulo | aberta via `file://` | sirva por HTTP (`npm run emulators` ou `npm run serve`) |
 | sem a faixa amarela | página aberta por IP de rede (ex.: `192.168…`) seleciona **produção** | use `127.0.0.1` ou `localhost` |
