@@ -8,7 +8,7 @@ import { initProtectedPage } from './shared/page-setup.js';
 import { listUsers, createUserAccount, updateUserProfile, revokeUser } from '../services/users.service.js';
 import { listPlans } from '../services/plans.service.js';
 import { displayName, sortUsersByName, filterUsers, avatarInitial } from '../domain/users.js';
-import { formatPlanPrice } from '../domain/plans.js';
+import { formatPlanPrice, profilePlanId } from '../domain/plans.js';
 import { ROLES, ROLE_LABELS, roleLabel, normalizeRole } from '../core/roles.js';
 import { sessionCache } from '../core/session-cache.js';
 import { MIN_PASSWORD_LENGTH } from '../config/app.config.js';
@@ -48,8 +48,9 @@ function messageRow(text, { error = false } = {}) {
 
 /** Nome do plano do usuário ('' sem plano; aviso se o plano foi apagado). */
 function planName(user) {
-  if (!user.planId) return '';
-  return plansById[user.planId]?.name ?? 'Plano removido';
+  const planId = profilePlanId(user);
+  if (!planId) return '';
+  return Object.hasOwn(plansById, planId) ? plansById[planId].name : 'Plano removido';
 }
 
 async function loadUsers() {
@@ -148,7 +149,8 @@ function openEditModal(user) {
   emailInput.disabled = true; // trocar e-mail no Firebase Auth exige reautenticação
   roleSelect.value = normalizeRole(user.role);
   // plano apagado depois de vinculado: o formulário volta a "sem plano"
-  planSelect.value = user.planId && plansById[user.planId] ? user.planId : '';
+  const planId = profilePlanId(user);
+  planSelect.value = Object.hasOwn(plansById, planId) ? planId : '';
   passwordField.classList.add('hidden');
   passwordInput.required = false;
   openModal();

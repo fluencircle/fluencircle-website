@@ -33,6 +33,7 @@ let currentUser = null;
 let currentRole = null;
 /** Deck aberto no modo de estudo. */
 let studiedDeck = null;
+const pendingReviews = new Set();
 
 const cardStack = new CardStack({
   container: byId('flash-cards-container'),
@@ -164,28 +165,33 @@ function openStudyMode(deck) {
 }
 
 function showList() {
+  studiedDeck = null;
   studyView.classList.add('hidden');
   listView.classList.remove('hidden');
-  byId('flash-cards-container').replaceChildren();
-  byId('progress-bar').replaceChildren();
+  cardStack.clear();
   renderDeckList(); // atualiza o progresso de cada deck
 }
 
 /** Fim da pilha: avança a etapa de revisão quando ela está liberada. */
 async function handleDeckFinished() {
-  if (!studiedDeck || !currentUser) return;
-  const { srs } = studiedDeck;
+  const deck = studiedDeck;
+  if (!deck || !currentUser || pendingReviews.has(deck.id)) return;
+  const { srs } = deck;
 
   if (canAdvanceStage(srs)) {
     const record = buildStageCompletion(srs.stage, nowIso());
+    pendingReviews.add(deck.id);
     try {
-      await saveReviewProgress(currentUser.uid, studiedDeck.id, record);
+      await saveReviewProgress(currentUser.uid, deck.id, record);
+      if (studiedDeck?.id !== deck.id) return;
       studiedDeck.review = { ...studiedDeck.review, ...record };
       studiedDeck.srs = calculateSRSStatus(studiedDeck, studiedDeck.review);
       showToast(STAGE_COMPLETION_MESSAGES[record.stage] || 'Etapa concluída com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao registrar avanço na curva de esquecimento:', error);
-      showToast('Não foi possível salvar seu progresso. Tente de novo.', 'error');
+      if (studiedDeck?.id === deck.id) showToast('Não foi possível salvar seu progresso. Tente de novo.', 'error');
+    } finally {
+      pendingReviews.delete(deck.id);
     }
   } else if (srs.invalidState) {
     showToast('Progresso com dados inválidos. Não foi alterado; contate o suporte.', 'error');

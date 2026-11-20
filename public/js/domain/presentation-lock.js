@@ -77,7 +77,7 @@ export function ownershipStatus(current, presenterId) {
  * Decide o que gravar ao publicar.
  * @param {CurrentSession|null} current valor atual do nó
  * @param {{ sessionId: string, topic: string, startedAt: string, presenterId: string }} intent
- * @param {{ takeover?: boolean }} [options] `true` só depois de a pessoa confirmar
+ * @param {{ takeover?: CurrentSession|false }} [options] publicação específica confirmada pela pessoa
  * @returns {{ outcome: 'write', value: CurrentSession } | { outcome: 'conflict', current: CurrentSession }}
  */
 export function planPublish(current, { sessionId, topic, startedAt, presenterId }, { takeover = false } = {}) {
@@ -88,7 +88,9 @@ export function planPublish(current, { sessionId, topic, startedAt, presenterId 
     return { outcome: 'write', value: { ...value, version: current.version } };
   }
   const live = isPresentationLive(current);
-  if (live && !takeover) return { outcome: 'conflict', current };
+  const confirmed = takeover && takeover.sessionId === current.sessionId
+    && takeover.presenterId === current.presenterId && takeover.version === current.version;
+  if (live && !confirmed) return { outcome: 'conflict', current };
   if (Number.isInteger(current.version)) value.version = current.version + 1;
   if (live && current.presenterId) value.takeoverOf = current.presenterId;
   return { outcome: 'write', value };

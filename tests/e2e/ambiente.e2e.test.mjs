@@ -55,4 +55,21 @@ describe('E2E [Firebase simulado] seleção de ambiente', () => {
     assert.deepEqual(unexpectedErrors(errors), []);
     await ctx.context.close();
   });
+
+  // Regressão: antes, qualquer endereço que não fosse localhost/127.0.0.1 usava a PRODUÇÃO.
+  for (const [label, origin] of [['IP da rede local', ORIGINS.lan], ['pré-visualização do Hosting', ORIGINS.preview]]) {
+    test(`origem não reconhecida (${label}): usa o Emulator, nunca a produção, e avisa no selo`, async () => {
+      const ctx = await newContext(browser, createFakeBackend(), { origin });
+      const { page, errors } = await openPage(ctx, 'auth.html');
+      await page.locator('#environment-badge').waitFor();
+      const info = await firebaseInfo(page);
+      assert.equal(info.projectId, 'demo-fluencircle-audit');
+      assert.ok(info.emulators.includes('database:127.0.0.1:9000'), JSON.stringify(info.emulators));
+      assert.ok(info.emulators.includes('auth:http://127.0.0.1:9099'), JSON.stringify(info.emulators));
+      assert.match(info.badge, /Endereço não reconhecido \(.+\).*nunca a produção/);
+      assert.deepEqual(ctx.network.blocked, []);
+      assert.deepEqual(unexpectedErrors(errors), []);
+      await ctx.context.close();
+    });
+  }
 });

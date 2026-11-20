@@ -9,9 +9,11 @@
 import { initProtectedPage } from './shared/page-setup.js';
 import { getUserProfile } from '../services/users.service.js';
 import { getPlan, getPlanWeekSchedule } from '../services/plans.service.js';
-import { buildWeekAgenda, isoWeekKey, weekRangeLabel, isValidPlanId } from '../domain/plans.js';
+import { buildWeekAgenda, isoWeekKey, weekRangeLabel, profilePlanId } from '../domain/plans.js';
 import { h, byId, replaceContent } from '../ui/dom.js';
 import { renderWeekSlotCard } from '../ui/week-slot-card.js';
+import { currentEnvironment } from '../config/environment.js';
+import { initRoomLobby } from './room-lobby.js';
 
 const section = byId('student-week');
 const subtitle = byId('student-week-subtitle');
@@ -28,8 +30,8 @@ function message(text) {
  */
 async function loadStudentWeek(uid) {
   const profile = await getUserProfile(uid);
-  const planId = profile?.planId;
-  if (!isValidPlanId(planId)) return;
+  const planId = profilePlanId(profile);
+  if (!planId) return;
 
   section.classList.remove('hidden');
   const today = new Date();
@@ -52,6 +54,7 @@ async function loadStudentWeek(uid) {
 
 const session = await initProtectedPage();
 if (session) {
+  if (currentEnvironment.liveRooms) initRoomLobby(session.user.uid);
   try {
     await loadStudentWeek(session.user.uid);
   } catch (error) {

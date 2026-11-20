@@ -43,6 +43,7 @@ export class CardStack {
     this.onExit = onExit;
     this.cards = [];
     this.completionCard = null;
+    this.dismissTimer = null;
   }
 
   /**
@@ -50,8 +51,7 @@ export class CardStack {
    * @param {{ front: string, back: string }[]} flashcards
    */
   load(flashcards) {
-    this.container.replaceChildren();
-    this.progressBar.replaceChildren();
+    this.clear();
     const total = flashcards.length;
 
     this.cards = flashcards.map((flashcard, index) => {
@@ -66,6 +66,15 @@ export class CardStack {
     this.completionCard = this.renderCompletionCard();
     this.container.append(this.completionCard);
     this.updateProgress();
+  }
+
+  /** Remove a pilha e cancela qualquer transição que ainda não terminou. */
+  clear() {
+    this.cancelDismiss();
+    this.container.replaceChildren();
+    this.progressBar.replaceChildren();
+    this.cards = [];
+    this.completionCard = null;
   }
 
   /** @private */
@@ -108,12 +117,20 @@ export class CardStack {
 
   /** Tira o cartão do topo e sobe os demais. @private */
   dismiss(card) {
+    if (this.dismissTimer !== null || positionOf(card) !== 0 || !this.cards.includes(card)) return;
     card.classList.add('removed-card');
-    setTimeout(() => {
+    this.dismissTimer = setTimeout(() => {
+      this.dismissTimer = null;
       this.shiftPositions(-1);
       if (this.cards.every((c) => positionOf(c) < 0)) this.showCompletion();
       else this.updateProgress();
     }, REMOVE_ANIMATION_MS);
+  }
+
+  /** @private */
+  cancelDismiss() {
+    clearTimeout(this.dismissTimer);
+    this.dismissTimer = null;
   }
 
   /** @private */
@@ -147,6 +164,7 @@ export class CardStack {
 
   /** Volta todos os cartões para a pilha, na ordem original. */
   restart() {
+    this.cancelDismiss();
     this.completionCard?.classList.add('hidden');
     this.cards.forEach((card, index) => {
       card.classList.remove('removed-card', 'flipped');
@@ -158,6 +176,7 @@ export class CardStack {
 
   /** Devolve à pilha o último cartão removido. */
   previous() {
+    if (this.dismissTimer !== null) return;
     this.completionCard?.classList.add('hidden');
     const top = this.cards.find((card) => positionOf(card) === 0);
     if (top && top.dataset.questionnumber === '1') return;

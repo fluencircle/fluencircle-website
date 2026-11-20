@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components/icons.css">
+    <link rel="stylesheet" href="css/app.css">
     <!-- Cabeçalho e menu (js/ui/app-shell.js) carregam primeiro: não dependem do Firebase. -->
     <script type="module" src="js/ui/app-shell.js"></script>
     <script type="module" src="js/pages/home.page.js"></script>
@@ -37,6 +37,28 @@
                     </a>
                 </nav>
             </div>
+
+            <section class="student-week hidden" id="live-rooms" aria-labelledby="live-rooms-title">
+                <div class="student-week__header">
+                    <h2 id="live-rooms-title">Círculos ao vivo</h2>
+                </div>
+                <p id="room-status" role="status"></p>
+                <ul id="room-list" class="room-list"></ul>
+                <div id="room-view" class="room-view hidden">
+                    <button id="leave-room" class="home-btn home-btn-secondary" type="button">Sair da sala</button>
+                    <h3 id="room-topic"></h3>
+                    <p id="room-slide" aria-live="polite"></p>
+                    <section aria-labelledby="room-chat-title">
+                        <h4 id="room-chat-title">Chat da sala</h4>
+                        <ol id="room-chat" class="room-chat" role="log" aria-labelledby="room-chat-title" tabindex="0"></ol>
+                        <form id="room-chat-form" class="room-chat-form">
+                            <label for="room-message">Mensagem</label>
+                            <input id="room-message" maxlength="500" required autocomplete="off">
+                            <button id="send-room-message" class="home-btn home-btn-secondary" type="submit">Enviar</button>
+                        </form>
+                    </section>
+                </div>
+            </section>
 
             <!-- Agenda semanal do participante (PR #2): aparece para quem tem plano. -->
             <section class="student-week hidden" id="student-week" aria-labelledby="student-week-title">

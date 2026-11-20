@@ -169,4 +169,60 @@ describe('E2E [Firebase simulado] planos e agenda semanal', () => {
     assert.deepEqual(unexpectedErrors([...errors, ...admin.errors, ...bruno.errors]), []);
     await ctx.context.close();
   });
+
+  test('remover o último horário e criar outro em edição posterior não herda tema nem link', async () => {
+    const backend = createFakeBackend();
+    const ctx = await newContext(browser, backend);
+    const { page, errors } = await openPage(ctx, 'plans.html', { as: ACTORS.admin });
+    await page.locator('#week-agenda .week-slot').first().waitFor();
+    await page.locator('#tab-plans').click();
+    const editPlan = page.getByRole('button', { name: 'Editar plano Essencial' });
+    await editPlan.click();
+    await page.getByRole('button', { name: 'Remover horário 2' }).click();
+    await page.locator('#save-plan-btn').click();
+    await page.locator('.modal--confirm [data-action="confirm"]').click();
+    await expectToast(page, 'Plano atualizado!');
+    const planCard = page.locator(`[data-plan="${PLANS.essencial}"]`);
+    await planCard.locator('.plan-card__schedule').filter({ hasNotText: 'Qua' }).waitFor();
+    assert.equal(backend.adminGet(`plans/${PLANS.essencial}/nextSessionIndex`), 100);
+
+    await editPlan.click();
+    await page.locator('#add-schedule-row-btn').click();
+    await page.getByRole('combobox', { name: 'Dia do horário 2' }).selectOption('3');
+    await page.locator('#save-plan-btn').click();
+    await planCard.locator('.plan-card__schedule', { hasText: 'Qua' }).waitFor();
+    assert.equal(backend.adminGet(`plans/${PLANS.essencial}/nextSessionIndex`), 101);
+    const oldKey = `${PLANS.essencial}_3_1`;
+    assert.equal(backend.adminGet(`weekly_sessions/${AGENDA_WEEK}/${oldKey}/topicTitle`), 'Travel');
+
+    const student = await openPage(ctx, 'index.html', { as: ACTORS.studentA });
+    const newSlot = student.page.locator(`#student-agenda [data-slot="${PLANS.essencial}_3_100"]`);
+    await newSlot.locator('.week-slot__topic', { hasText: 'Tema a definir' }).waitFor();
+    assert.equal(await newSlot.locator('.week-slot__join').count(), 0);
+    assert.equal(await student.page.locator(`#student-agenda [data-slot="${oldKey}"]`).count(), 0);
+    assert.deepEqual(unexpectedErrors([...errors, ...student.errors]), []);
+    await ctx.context.close();
+  });
+
+  test('uma edição aberta antes da gravação de outra aba não sobrescreve o plano', async () => {
+    const backend = createFakeBackend();
+    const ctx = await newContext(browser, backend);
+    const first = await openPage(ctx, 'plans.html', { as: ACTORS.admin });
+    const second = await openPage(ctx, 'plans.html', { as: ACTORS.admin });
+    for (const { page } of [first, second]) {
+      await page.locator('#week-agenda .week-slot').first().waitFor();
+      await page.locator('#tab-plans').click();
+      await page.getByRole('button', { name: 'Editar plano Essencial' }).click();
+    }
+
+    await first.page.locator('#plan-price').fill('200');
+    await first.page.locator('#save-plan-btn').click();
+    await expectToast(first.page, 'Plano atualizado!');
+    await second.page.locator('#plan-price').fill('300');
+    await second.page.locator('#save-plan-btn').click();
+    await expectToast(second.page, 'Este plano mudou em outra tela.');
+    assert.equal(backend.adminGet(`plans/${PLANS.essencial}/price`), 200);
+    assert.deepEqual(unexpectedErrors([...first.errors, ...second.errors]), []);
+    await ctx.context.close();
+  });
 });

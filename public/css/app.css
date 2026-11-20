@@ -1,0 +1,3455 @@
+/*
+ * ARQUIVO GERADO por scripts/build-css.mjs a partir de css/main.css — não edite à mão.
+ * Edite os arquivos de css/ e rode `npm run css:build` (a CI confere com `npm run css:check`).
+ * 21 folhas, na ordem da cascata de main.css.
+ */
+/* ===== base/tokens.css ===== */
+/**
+ * base/tokens.css
+ * Variáveis de design: cores, medidas do cabeçalho e da barra lateral.
+ */
+
+:root {
+    --primary-color: #070d14;
+    --surface-color: #0f1926;
+    --surface-hover: #142233;
+    --surface-card: #121e2c;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(136, 152, 187, 0.4);
+    --second-color: #d35f5f;
+    --third-color: #2bfd78;
+    --accent-blue: #00d2ff;
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --text-muted: rgba(255, 255, 255, 0.45);
+    --sidebar-width: 200px;
+    --sidebar-collapsed-width: 54px;
+    --header-height: 70px;
+}
+
+/* ===== base/base.css ===== */
+/**
+ * base/base.css
+ * Base: box-sizing, barra de rolagem, html/body, fonte dos campos e a classe .hidden.
+ */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* W3C & Webkit Scrollbar */
+* {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-width: thin;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--third-color);
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    height: 100%;
+}
+
+body {
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: 'Montserrat', sans-serif;
+    user-select: none;
+    overflow-x: hidden;
+}
+
+input, select, textarea, button {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== layout/footer.css ===== */
+/**
+ * layout/footer.css
+ * Rodapé institucional (página de login).
+ */
+
+/* Configurações Globais do Footer */
+.site-footer {
+  background-color: #202633; /* Tom escuro e elegante */
+  color: #cbd5e1;
+  padding: 40px 20px 20px 20px;
+  line-height: 1.6;
+
+}
+
+/* Layout em Grid Responsivo */
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.footer-col h3 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-col h3 i {
+  color: var(--third-color);
+}
+
+/* Coluna da Marca */
+
+.cnpj-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.cnpj-info i {
+  color: #94a3b8;
+}
+
+/* Coluna do Endereço */
+.address-col p {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+}
+
+/* Link de Contato / WhatsApp */
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #22c55e; /* Verde estilo WhatsApp */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 8px 12px;
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+/* Rodapé Inferior (Direitos Autorais) */
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 600px) {
+  .footer-container {
+    text-align: center;
+  }
+
+  .footer-col h3,
+  .cnpj-info {
+    justify-content: center;
+  }
+}
+
+/* ===== layout/header.css ===== */
+/**
+ * layout/header.css
+ * Cabeçalho fixo, logo, e-mail, papel e botão Sair.
+ */
+
+header {
+    position: fixed;
+    top: 0;
+    left: var(--sidebar-collapsed-width);
+    right: 0;
+    z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--header-height);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--primary-color);
+    backdrop-filter: blur(8px);
+    transition: left 0.3s ease;
+}
+
+.logo {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+}
+
+.logo-circle-left {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    bottom: -10px;
+    left: -10px;
+    border-radius: 50%;
+    background-color: var(--third-color);
+}
+
+.logo-circle-center {
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    position: relative;
+    border-radius: 50px;
+    background-color: var(--third-color);
+}
+
+.logo-inner-circle{
+     width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--third-color);
+
+}
+
+.logo-complete{
+
+    align-items: center;
+    gap: 10px;
+    display: flex;
+}
+
+.logo-complete .logo-inner-circle{
+    background-color: var(--primary-color);
+}
+
+.logo-complete .logo-top-text{
+    font-size: 1.6rem;
+}
+
+.logo-complete .logo-bottom-text{
+    color: var(--third-color);
+}
+
+.logo-complete p{
+    margin: -5px;
+    padding: 0px;
+}
+
+.logo-text {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+#logo-complete-footer{
+    transform: scale(1.3);
+
+}
+
+#logo-complete-footer .logo-inner-circle{
+    background-color: #202633;
+}
+
+.header-actions {
+    position: absolute;
+    right: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-email {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-role-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: rgb(60, 71, 85) ;
+}
+
+.badge-admin {
+    color: rgb(60, 71, 85) ;
+
+}
+
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: var(--text-primary);
+    padding: 6px 14px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 82, 82, 0.15);
+    border-color: #ff5252;
+    color: #ff5252;
+}
+
+/* ===== layout/sidebar.css ===== */
+/**
+ * layout/sidebar.css
+ * Barra lateral retrátil (no celular vira barra inferior — ver responsive/mobile.css).
+ */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100000;
+    background-color: var(--primary-color);
+    width: var(--sidebar-collapsed-width);
+    border-right: 1px solid var(--border-color);
+    height: 100vh;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar:hover,
+.sidebar:not(.retratil) {
+    width: var(--sidebar-width);
+}
+
+.sidebar-nav {
+    margin-top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 6px 20px;
+    box-sizing: border-box;
+}
+
+.sidebar-menu-top,
+.sidebar-menu-bottom {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.sidebar-nav li {
+    height: 40px;
+    width: 120%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   margin: 0px;
+   border-top-left-radius: 40px;
+   border-bottom-left-radius: 40px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-nav li:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav li.active {
+    background-color: var(--third-color)!important;
+}
+
+.sidebar-nav li.active a {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.sidebar-nav li a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.sidebar-nav li a i {
+    width: var(--sidebar-collapsed-width);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.sidebar-nav li a span {
+    opacity: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.sidebar:hover .sidebar-nav li a span {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar-divider {
+    height: 1px !important;
+    width: 80%;
+    margin: 10px auto;
+    background: var(--border-color);
+}
+
+/* Acessibilidade: pelo teclado (Tab), a barra expande como no :hover. */
+.sidebar:focus-within {
+    width: var(--sidebar-width);
+}
+
+.sidebar:focus-within .sidebar-nav li a span {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ===== layout/main.css ===== */
+/**
+ * layout/main.css
+ * Área principal, .content e cabeçalho de página.
+ */
+
+main {
+    margin: 0;
+    padding: calc(var(--header-height) + 24px) 24px 40px calc(var(--sidebar-collapsed-width) + 24px);
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.no-sidebar-main{
+    padding: 0!important;
+
+}
+.content {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.page-header {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+
+}
+
+.page-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    color: var(--text-primary);
+}
+
+.page-header p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 30px;
+    width: 100%;
+}
+
+/* ===== components/buttons.css ===== */
+/**
+ * components/buttons.css
+ * Botões padrão (.home-btn, .secondary-btn, .danger-btn, .back-button).
+ */
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.home-btn {
+    background-color: var(--third-color);
+    border: none;
+    height: 40px;
+    padding: 0 20px;
+    color: var(--primary-color);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.home-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.home-btn-secondary,
+.secondary-btn {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    border-radius: 50px;
+    height: 40px;
+    padding: 0 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-btn-secondary:hover,
+.secondary-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.danger-btn {
+    background-color: #ff5252;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    height: 40px;
+    padding: 0 20px;
+    font-size: 0.85rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.danger-btn:hover {
+    background-color: #e04343;
+}
+
+.back-button {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    align-self: flex-start;
+    position: fixed!important  ;
+    top: 100px;
+    left: 100px;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Links com aparência de botão (atalhos da home). */
+a.home-btn {
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* ===== pages/home.css ===== */
+/**
+ * pages/home.css
+ * Página inicial.
+ */
+
+.welcome-section {
+    text-align: center;
+    max-width: 640px;
+    margin-top: 40px;
+}
+
+.welcome-section h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.welcome-section .highlight {
+    color: var(--third-color);
+}
+
+.welcome-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.home-page-options{
+    display: grid;
+    row-gap: 30px;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 30px;
+}
+
+.room-list, .room-chat {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.room-list, .room-view, .room-chat-form {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+}
+
+.room-view section, .room-chat-form input {
+    width: 100%;
+    min-width: 0;
+}
+
+#room-slide, .room-chat {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    overflow-wrap: anywhere;
+}
+
+.room-chat {
+    max-height: 15rem;
+    overflow-y: auto;
+    margin-block: 0.5rem;
+}
+
+.room-chat li + li {
+    margin-top: 0.5rem;
+}
+
+/* ===== components/cards-grid.css ===== */
+/**
+ * components/cards-grid.css
+ * Grade de cards e cards de revisão espaçada (SRS) da tela de flashcards.
+ */
+
+.classes-grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 18px;
+    margin-top: 10px;
+}
+
+#themes-grid{
+    grid-template-columns: 1fr 1fr!important;
+}
+/* Flashcard Session Card with Leitner / Ebbinghaus Gamification */
+.srs-meeting-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.srs-meeting-card:hover {
+
+    border-color: var(--border-hover);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.srs-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.srs-card-topic {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+}
+
+.srs-mastery-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+}
+
+.srs-badge-due {
+    background: rgba(43, 253, 242, 0.18);
+    color: rgb(194, 229, 243);
+
+    animation: pulseGlow 1.8s infinite;
+}
+
+.srs-badge-waiting {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-muted);
+    border: none;
+}
+
+.srs-badge-mastered {
+    background: rgba(22, 185, 117, 0.18);
+    color: #15fda4;
+    border: none;
+}
+
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(9, 145, 163, 0.438); }
+    70% { box-shadow: 0 0 0 6px rgba(43, 253, 120, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(43, 253, 120, 0); }
+}
+
+.srs-stages-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.srs-stage-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.srs-stage-step.completed {
+    color: var(--third-color);
+}
+
+.srs-stage-step.active-due {
+    color: var(--accent-blue);
+    font-weight: 700;
+}
+
+.srs-stage-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.62rem;
+}
+
+.srs-stage-step.completed .srs-stage-circle {
+    border-color: var(--third-color);
+    background: var(--third-color);
+    color: var(--primary-color);
+    font-weight: 800;
+}
+
+.srs-stage-step.active-due .srs-stage-circle {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.srs-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+
+/* ===== pages/flashcards.css ===== */
+/**
+ * pages/flashcards.css
+ * Modo de estudo: pilha 3D, ações e barra de progresso.
+ */
+
+#flash-cards-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    min-height: 520px;
+    position: relative;
+}
+
+.flash-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.cards-action-btn {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.cards-action-btn:hover {
+    border-color: var(--third-color);
+    color: var(--third-color);
+}
+
+#flash-cards-container {
+    position: relative;
+    width: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    perspective: 1000px;
+    margin: 20px auto;
+}
+
+.card {
+    height: 380px;
+    width: 420px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    background: #102131;
+    color: var(--text-primary);
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    background: #0d2836;
+}
+
+.card p {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin: 0 0 12px 0;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.card span {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.btn-next {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    background-color: var(--third-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.removed-card {
+    animation: removeCard 0.4s forwards;
+}
+
+@keyframes removeCard {
+    0% { transform: rotateY(180deg); opacity: 1; }
+    100% { transform: rotate(15deg) translate(80px, -60px); opacity: 0; pointer-events: none; display: none;}
+}
+
+#progress-bar {
+    width: 380px;
+    display: flex;
+    gap: 4px;
+
+    position: relative;
+    justify-content: center;
+
+    bottom: -200px;
+    right: -30px;
+
+}
+
+.progress-item {
+    flex: 1;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-item .fill {
+    background-color: var(--third-color);
+    position: absolute;
+    height: 100%;
+    width: 0%;
+}
+
+.progress-item.check .fill {
+    width: 100%;
+}
+
+/* ===== pages/themes-and-sessions.css ===== */
+/**
+ * pages/themes-and-sessions.css
+ * Temas (set-meeting) e Sessões (manage-meetings).
+ */
+
+.manage-theme-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 10px 18px;
+    display: flex;
+    cursor: pointer;
+
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
+.manage-meeting-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+
+.delete-session-btn{
+    background-color: rgba(255, 0, 0, 0.363);
+    left: 300px;
+}
+
+.manage-meeting-card:hover {
+
+    border-color: var(--border-hover);
+}
+
+.manage-meeting-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meeting-badge {
+    background-color: var(--third-color);
+    color: var(--primary-color);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.manage-meeting-topic {
+    font-size: 0.95rem;
+
+    color: var(--text-primary);
+}
+
+.manage-meeting-info {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Theme Editor Form */
+.theme-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.theme-container label {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.theme-container input {
+    height: 42px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    padding: 0 14px;
+    outline: none;
+}
+
+.theme-container input:focus {
+    border-color: var(--third-color);
+}
+
+.questions-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.questionItem{
+    display: flex;
+    width: 100%;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.questionItem .number{
+    background-color: var(--third-color);
+    width: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    height: 50px;
+    font-size: 2rem!important;
+    border-radius: 50%;
+}
+
+.cursor-left{
+    cursor: url(../assets/cursor-left.png), auto;
+}
+.cursor-right{
+    cursor: url(../assets/cursor-right.png), auto;
+}
+
+.slide{
+    width: 100%;
+}
+
+.slide-content{
+    width: 90vw!important;
+
+}
+
+.questionItem .question{
+    font-weight: 400!important;
+    font-size: 2rem!important;
+}
+
+#add-question-button {
+    background-color: var(--second-color);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px;
+    font-size: 0.78rem;
+    height: 40px;
+    width: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#add-question-button:hover {
+    background-color: #eb4f4f;
+}
+
+.questions-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.question-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: 100%;
+}
+
+.question-card .questionNumber {
+    background-color: var(--third-color);
+    color: var(--primary-color);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.question-card input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+.question-card button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding: 4px;
+}
+
+.question-card button:hover {
+    color: #ff5252;
+}
+
+/* Flashcard Editor in manage-meetings */
+.add-card-manual-bar {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.add-card-manual-bar input {
+    flex: 1;
+    height: 40px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0 14px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.add-card-manual-bar input:focus {
+    border-color: var(--third-color);
+}
+
+.cards-editor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.card-editor-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.card-row-index {
+    color: var(--third-color);
+    font-weight: 700;
+    font-size: 0.85rem;
+    min-width: 20px;
+}
+
+.card-inputs-group {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.card-inputs-group input {
+    flex: 1;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0 10px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.card-inputs-group input:focus {
+    border-color: var(--third-color);
+}
+
+.save-single-card-btn {
+    background: var(--third-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.delete-single-card-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+    color: #ff5252;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+}
+
+.delete-single-card-btn:hover {
+    background: rgba(255, 82, 82, 0.15);
+}
+
+/* Campo obrigatório vazio (o JS aplica por 2 s ao tentar salvar). Antes a classe não tinha estilo. */
+.danger-input {
+    border-color: #ff5252 !important;
+}
+
+/* ===== pages/presentation.css ===== */
+/**
+ * pages/presentation.css
+ * Sessão ao vivo: seleção de tema, slides, botões flutuantes e lista de presença.
+ */
+
+#slide-show-page .content,
+.select-content {
+    display: flex;
+    padding-top: 100px ;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 1600px;
+}
+
+#presentation-select {
+    width: 360px;
+    height: 44px;
+    background: var(--third-color);
+    color: var(--primary-color);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    font-weight: 300;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+#presentation-select i{
+position: absolute;
+right: -28px;
+
+}
+
+#presentation-select p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    .not-available-message{
+    display: none;
+}
+#option-list {
+    position: fixed;
+    width: 100%;
+    max-width: 360px;
+    background: #101c29;
+    border: 1px solid rgba(89, 90, 90, 0.3);
+    border-radius: 14px;
+    padding: 6px 0;
+    color: var(--text-primary);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.meeting-option {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.meeting-option:hover {
+    background: rgba(43, 253, 120, 0.12);
+    color: var(--third-color);
+}
+
+#start-presentation-btn {
+    background-color: var(--second-color);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 28px;
+    font-size: 0.9rem;
+
+}
+
+#start-presentation-btn.unclickable {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.slide-content {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    min-height: 750px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide {
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding: 40px 20px;
+}
+
+.slide .title {
+    font-size: 2.2rem;
+    color: white;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.slide .question {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    max-width: 720px;
+}
+
+/* Floating Actions on presentation */
+.translation-button,
+.attendance-toggle-btn {
+    position: fixed;
+    bottom: 24px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 9px 18px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    z-index: 90;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: all 0.2s ease;
+}
+
+#attendance-search-bar{
+    height:40px;
+    width: 300px;
+    outline: none;
+    border: none;
+    color: white;
+    background-color: transparent;
+}
+
+#translate-btn{
+    background-color: var(--third-color) ;
+    border: none;
+    padding: 5px 25px;
+    border-radius: 20px;
+}
+
+#add-flashcards-btn{
+    background-color: var(--third-color);
+    border: none;
+    padding: 5px 25px;
+    border-radius: 20px;
+}
+
+.translation-button {
+    right: 30px;
+}
+
+.attendance-toggle-btn {
+    right: 160px;
+}
+
+.translation-button:hover,
+.attendance-toggle-btn:hover {
+
+    background-color: #2a4969;
+}
+
+.attendance-count-badge {
+    background: var(--third-color);
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 0.72rem;
+    padding: 2px 6px;
+    border-radius: 12px;
+}
+
+/* Attendance Drawer */
+.attendance-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 320px;
+    max-width: 90vw;
+    height: 100vh;
+    background: var(--surface-color);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.5);
+    z-index: 3000000;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.attendance-drawer-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.attendance-drawer-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    text-align: center;
+
+}
+
+.close-drawer-btn {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 10px;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.close-drawer-btn:hover {
+    color: #ff5252;
+}
+
+.custom-student-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select-trigger {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    display: flex;
+    width: 280px;
+    height: 40px;
+    padding: 0px 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.custom-select-options-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 310;
+}
+
+.custom-select-option {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.custom-select-option:hover {
+    background: rgba(43, 253, 120, 0.1);
+    color: var(--third-color);
+}
+
+.attendees-list-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.attendees-list-section h4 {
+    margin: 0 0 10px 0;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.attendees-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.attendee-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+}
+
+.remove-attendee-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+}
+.remove-attendee-btn:hover {
+    color: #ff5252;
+}
+
+/* "Salvar Flashcard" sem tradução válida. Antes a classe só existia para o JS. */
+#add-flashcards-btn.unactive {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Situação da publicação no tradutor público (posse da sessão ativa, Issue #9). */
+.presentation-status {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: min(640px, 90vw);
+    margin: 0;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 10;
+}
+
+.presentation-status:empty {
+    display: none;
+}
+
+.presentation-status[data-tone="warning"] {
+    color: #ffd54f;
+    border-color: rgba(255, 213, 79, 0.5);
+}
+
+.presentation-status[data-tone="error"] {
+    color: #ff8a80;
+    border-color: rgba(255, 138, 128, 0.5);
+}
+
+/* ===== pages/admin.css ===== */
+/**
+ * pages/admin.css
+ * Acessos: tabela de usuários e busca.
+ */
+
+.users-table-container {
+    width: 100%;
+    background: var(--surface-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.users-table th {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-secondary);
+    padding: 12px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.8rem;
+}
+
+.users-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: middle;
+}
+
+.users-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.action-table-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.action-table-btn.edit-btn:hover {
+    border-color: var(--third-color);
+    color: var(--third-color);
+}
+
+.action-table-btn.delete-btn:hover {
+    border-color: #ff5252;
+    color: #ff5252;
+}
+
+.user-avatar{
+    background-color: var(--third-color);
+    padding: 10px;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+
+}
+
+/* Container da barra de pesquisa */
+.admin-search-container {
+
+    width: 100%;
+    max-width: 400px; /* Ajuste a largura máxima conforme necessário */
+}
+
+/* Wrapper para posicionar o ícone e o input juntos */
+.admin-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Ícone de lupa dentro do input */
+.admin-search-wrapper .search-icon {
+    position: absolute;
+    left: 16px;
+    outline: none;
+    color: var( #94a3b8);
+    font-size: 0.95rem;
+    pointer-events: none; /* Garante que o clique vá para o input */
+    transition: color 0.2s ease;
+}
+
+/* Estilização do Input de Pesquisa */
+#admin-search-bar {
+    width: 100%;
+      outline: none;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color, #334155);
+    border-radius: 20px;
+    padding: 12px 16px 12px 44px; /* Espaço à esquerda para acomodar o ícone */
+    color: var(--text-main, #f8fafc);
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Placeholder */
+#admin-search-bar::placeholder {
+    color: var(--text-muted, #94a3b8);
+    font-size: .85rem;
+}
+
+/* Plano do usuário (PR #2) */
+.badge-plan {
+    background: rgba(43, 253, 120, 0.12);
+    color: var(--third-color);
+    border: 1px solid rgba(43, 253, 120, 0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.badge-no-plan {
+    color: var(--text-muted, #8fa0b5);
+    font-size: 0.82rem;
+}
+
+/* ===== pages/plans.css ===== */
+/**
+ * pages/plans.css
+ * Planos e agenda semanal (PR #2, ADR-005): plans.html e a seção
+ * "Sua semana" da home. Cores e medidas vêm de base/tokens.css.
+ */
+
+/* Abas Agenda / Planos */
+.plans-tabs {
+    display: inline-flex;
+    gap: 6px;
+    padding: 4px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+}
+
+.plans-tab {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.plans-tab.active {
+    background: rgba(43, 253, 120, 0.12);
+    color: var(--third-color);
+}
+
+.plans-tab:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+.plans-panel {
+    width: 100%;
+}
+
+.plans-panel__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+/* Navegação entre semanas */
+.week-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.week-nav__btn {
+    width: 40px;
+    padding: 0;
+}
+
+.week-nav__label {
+    min-width: 200px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Lista de encontros da semana */
+.week-agenda {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.week-slot {
+    display: flex;
+    gap: 14px;
+    align-items: stretch;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.week-slot[role="button"] {
+    cursor: pointer;
+}
+
+.week-slot[role="button"]:hover,
+.week-slot[role="button"]:focus-visible {
+    border-color: var(--border-hover);
+    background: var(--surface-hover);
+}
+
+.week-slot--empty .week-slot__topic {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.week-slot__day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    border-right: 1px solid var(--border-color);
+    padding-right: 14px;
+}
+
+.week-slot__weekday {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.week-slot__monthday {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.week-slot__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.week-slot__topic {
+    font-weight: 600;
+}
+
+.week-slot__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.week-slot__link {
+    color: var(--accent-blue);
+}
+
+.week-slot__join {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: var(--third-color);
+    color: var(--primary-color);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.week-slot__questions summary {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--accent-blue);
+}
+
+.week-slot__questions ol {
+    margin: 8px 0 0 18px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Texto só para leitores de tela (o dia já aparece na coluna da esquerda, oculta para eles) */
+.week-slot__sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.week-slot p,
+.week-slot ol,
+.plan-card p,
+.plan-card h3,
+.student-week__header h2,
+.student-week__header p {
+    margin: 0;
+}
+
+/* Catálogo de planos */
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    width: 100%;
+}
+
+.plan-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: left;
+}
+
+.plan-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.plan-card__actions {
+    display: flex;
+    gap: 6px;
+}
+
+.plan-card__price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--third-color);
+}
+
+.plan-card__price span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-left: 4px;
+}
+
+.plan-card__description,
+.plan-card__schedule {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Formulário de plano */
+.plans-select {
+    height: 44px;
+    border-radius: 50px;
+    background: var(--surface-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0 16px;
+    font-size: 0.95rem;
+}
+
+.plan-schedule {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.plan-schedule legend {
+    padding: 0 6px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.schedule-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.schedule-row .schedule-row__day {
+    flex: 1;
+    min-width: 0;
+}
+
+.schedule-row input[type="time"] {
+    height: 44px;
+    border-radius: 12px;
+    background: var(--surface-card);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0 8px;
+    color-scheme: dark;
+}
+
+.plans-empty {
+    text-align: center;
+    padding: 30px;
+    color: var(--text-secondary);
+}
+
+.plans-empty__hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+/* Home: "Sua semana" */
+.student-week {
+    width: 100%;
+    max-width: 720px;
+    margin-top: 36px;
+}
+
+.student-week__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.student-week__header h2 {
+    font-size: 1.2rem;
+}
+
+.student-week__subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .schedule-row {
+        flex-wrap: wrap;
+    }
+
+    .schedule-row .schedule-row__day {
+        flex-basis: 100%;
+    }
+
+    .week-slot {
+        padding: 10px 12px;
+    }
+}
+
+/* ===== components/modals.css ===== */
+/**
+ * components/modals.css
+ * Modais, campos de formulário e .flexbox.
+ */
+
+.modal-container {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background-color: rgba(7, 13, 20, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+    padding: 26px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.modal-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.modal-sub-info {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.close-translation-btn,
+.close-end-meeting-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.close-translation-btn:hover,
+.close-end-meeting-btn:hover {
+    color: #ff5252;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+}
+
+.form-item label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+
+}
+
+.form-item input,
+.modal input {
+    height: 40px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    padding: 0 12px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.form-item input:focus,
+.modal input:focus {
+    transition: .3s ease;
+    border-color: rgb(140, 137, 150);
+}
+
+.flexbox {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Translator modal inputs */
+.translation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#translation-content{
+    gap: 30px;
+}
+
+.translation-container input {
+    height: 48px;
+    font-size: 0.95rem;
+}
+
+#translated-text {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--third-color);
+    pointer-events: none;
+}
+
+/* ===== components/feedback.css ===== */
+/**
+ * components/feedback.css
+ * Avisos (toast) e indicador de carregamento.
+ */
+
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+    max-width: 340px;
+}
+
+.toast-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-success {
+    background: #092619;
+    border: 1px solid var(--third-color);
+    color: #ffffff;
+}
+
+.toast-error {
+    background: #2b0e0e;
+    border: 1px solid #ff5252;
+    color: #ffffff;
+}
+
+.toast-info {
+    background: #0c1f30;
+    border: 1px solid var(--accent-blue);
+    color: #ffffff;
+}
+
+.loading-gif {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 9999;
+    background-color: rgba(7, 13, 20, 0.75);
+    backdrop-filter: blur(4px);
+}
+
+.circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--third-color);
+    animation: loading 0.8s infinite ease-in-out;
+}
+
+.one { animation-delay: 0s; }
+.two { animation-delay: 0.15s; }
+.three { animation-delay: 0.3s; }
+
+@keyframes loading {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* ===== pages/auth.css ===== */
+/**
+ * pages/auth.css
+ * Página de login.
+ */
+
+.auth-body {
+    overflow: auto;
+}
+
+.auth-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--primary-color);
+    z-index: 100;
+}
+
+.auth-layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 90px;
+    padding: 100px 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#auth-elements {
+    max-width: 700px;
+    flex: 1;
+    position: relative;
+    bottom: 100px;
+
+    right: px;
+    z-index: 2;
+}
+
+#auth-elements h1 {
+    font-size: clamp(2.1rem, 3.2vw, 4.1rem);
+    font-weight: 300;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+#auth-elements h1 span {
+    color: var(--third-color);
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(43, 253, 120, 0.3);
+}
+
+#auth-elements p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 480px;
+}
+
+/* Balão saindo pela diagonal atrás do modal de login */
+.auth-illustration {
+    position: absolute;
+    top: 299px;
+    right: -45px;
+    width: 190px;
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #179244;
+    border-radius: 26px;
+    border: 1px solid rgba(43, 253, 120, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(43, 253, 120, 0.15);
+    transform: rotate(14deg);
+    z-index: 1; /* Fica atrás do modal */
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    margin-top: 0;
+}
+
+.auth-illustration2 {
+    position: absolute;
+    top: 200px;
+    right: -45px;
+    width: 190px;
+    height: 145px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--third-color);
+    border-radius: 26px;
+    border: 1px solid rgba(43, 253, 120, 0.4);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(43, 253, 120, 0.15);
+    transform: rotate(20deg);
+    z-index: 1; /* Fica atrás do modal */
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    margin-top: 0;
+}
+
+.auth-illustration i {
+    font-size: 4.2rem;
+    color: var(--primary-color);
+
+    transform: rotate(-6deg);
+}
+
+.auth-illustration2 i {
+    font-size: 4.2rem;
+    color: var(--primary-color);
+
+    transform: rotate(-6deg);
+}
+
+.auth-modal {
+    width: 100%;
+    max-width: 450px;
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    padding: 40px 34px;
+    position: relative;
+    bottom: 100px;
+    z-index: 2; /* Fica sobreposto na frente do balão */
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(14px);
+}
+
+.auth-modal h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: var(--text-primary);
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0 0 24px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-form button {
+    height: 48px;
+    background: var(--third-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(43, 253, 120, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(43, 253, 120, 0.35);
+    opacity: 0.95;
+}
+
+/* Botão "Entrar" enquanto o login é verificado (antes aplicado via style= no JS). */
+.auth-form button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* ===== responsive/mobile.css ===== */
+/**
+ * responsive/mobile.css
+ * Ajustes para telas até 768 px. Vem depois de tudo: sobrescreve as regras de desktop.
+ */
+
+@media (max-width: 768px) {
+    /* 1. Tipografia e Limites Globais */
+    html {
+        font-size: 14px;
+    }
+
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* 2. Cabeçalho Superior Fixo */
+    header {
+        left: 0;
+        right: 0;
+        height: 56px;
+        padding: 0 14px;
+        justify-content: space-between;
+    }
+
+    .header-actions .user-email {
+        display: none; /* Oculta e-mail longo para não espremer o topo */
+    }
+
+    .user-role-badge {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+    }
+
+    .logout-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .logout-btn span {
+        display: none; /* Mantém apenas o ícone no mobile */
+    }
+
+    /* 3. Área Principal (Main) - Compensação de Topo e Rodapé */
+    main {
+        padding: 70px 14px 80px 14px !important;
+        width: 100%;
+        min-height: 100vh;
+        box-sizing: border-box;
+        align-items: center;
+    }
+
+    .home-page-options{
+        margin-top: 40px;
+    display: grid;
+    row-gap: 10px;
+    grid-template-columns: 1fr;
+    column-gap: 30px;
+}
+
+    /* 4. Barra de Navegação Inferior (Estilo App Nativo) */
+    .sidebar,
+    .sidebar.retratil,
+    .sidebar:hover {
+        position: fixed!important;
+        height: 60px !important;
+        width: 100vw !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        bottom: 0 !important;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        background-color: var(--surface-card);
+        flex-direction: row;
+
+    }
+
+    .sidebar{
+        background-color: var(--primary-color)!important;
+    }
+
+    .sidebar-nav {
+        margin-top: 0;
+        height: 100%;
+        width: 100%;
+        flex-direction: row;
+        padding: 0 4px;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .sidebar-menu-top,
+    .sidebar-menu-bottom {
+        flex-direction: row;
+        height: 100%;
+        gap: 0;
+        width: 45%;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .sidebar-menu-top{
+                flex-direction: row;
+        height: 100%;
+        gap: 0;
+        width: 85%;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .sidebar-divider {
+        display: none!important; /* Remove separador vertical no modo horizontal */
+    }
+
+    .sidebar-nav li {
+        height: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0;
+
+    }
+
+    .sidebar-nav li.active {
+        background: transparent !important;
+        border-top: 3px solid var(--third-color);
+
+
+
+    }
+
+    #themes-grid{
+        grid-template-columns: 1fr!important;
+    }
+
+    .sidebar-nav li a {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .sidebar-nav li a i {
+        font-size: 1.15rem;
+        min-width: auto;
+        margin: 0;
+        color: white!important;
+    }
+
+    /* Exibe sempre o texto do menu no mobile com tamanho reduzido */
+    .sidebar-nav li a span,
+    .sidebar:not(.retratil) .sidebar-nav li a span,
+    .sidebar:hover .sidebar-nav li a span {
+        display: none;
+    }
+
+    /* 5. Página de Apresentação e Seleção de Reunião */
+    #slide-show-page {
+        width: 100%;
+        padding: 0 4px;
+    }
+
+    .select-content {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #presentation-select {
+        width: 100%;
+        max-width: 92vw;
+        height: 48px; /* Área de toque confortável */
+        padding: 0 16px;
+    }
+
+    #option-list {
+        width: 92vw !important;
+        max-width: 92vw !important;
+        left: 4vw !important; /* Centralização automática em telas estreitas */
+    }
+
+    .meeting-option {
+        padding: 12px 16px; /* Alvo de toque >= 44px */
+        font-size: 0.85rem;
+    }
+
+    #start-presentation-btn {
+        width: 100%;
+        max-width: 92vw;
+        height: 46px;
+    }
+
+
+
+
+
+
+    /* 6. Flashcards e Prática */
+    #flash-cards-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+
+        flex-direction: column !important;
+        align-items: center !important;
+        position: relative !important;
+        gap: 0 !important;
+    }
+
+    /* 2. CORREÇÃO CRÍTICA DO BOTÃO VOLTAR (Remove o fixed de 100px) */
+    .back-button,
+    #back-to-meetings-btn {
+        position: static !important; /* Volta para o fluxo normal do topo */
+        top: auto !important;
+        left: auto !important;
+        margin: 0 0 12px 0 !important;
+        align-self: center !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-secondary) !important;
+        padding: 6px 16px !important;
+        font-size: 0.8rem !important;
+        border-radius: 50px !important;
+        z-index: 10 !important;
+    }
+
+    /* 3. Cabeçalho da Sessão (Tema e Instrução) */
+    #flash-cards-content .page-header {
+        margin-bottom: 10px !important;
+        text-align: center !important;
+    }
+
+    #current-meeting-title {
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+        margin: 0 0 6px 0 !important;
+        color: #ffffff !important;
+    }
+
+    #study-instruction-text {
+        font-size: 0.85rem !important;
+        color: var(--text-secondary) !important;
+        margin: 0 !important;
+    }
+
+    /* 4. Ações de Reiniciar e Voltar Cartão */
+    .flash-cards-study-content {
+        width: 100% !important;
+        display: flex!important;
+        justify-content: center !important;
+        margin: 10px 0 !important;
+    }
+
+    .flash-card-actions {
+        display: flex !important;
+        gap: 16px !important;
+        margin-bottom: 0 !important;
+        justify-content: center !important;
+    }
+
+    .cards-action-btn {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1rem !important;
+        border-radius: 50% !important;
+        background-color: var(--surface-card) !important;
+        border: 1px solid var(--border-color) !important;
+    }
+
+    .card {
+        position: absolute !important;
+        top: 7% !important;
+        left: 20% !important;
+        width: 60% !important; /* Ocupa 100% dos 350px max */
+        height: 95% !important;
+        border-radius: 20px !important;
+        border: none;
+    }
+
+    .card-front, .card-back {
+        border-radius: 20px !important;
+        padding: 24px 18px !important;
+    }
+
+    .card p {
+        font-size: 0.72rem !important;
+        margin-bottom: 18px !important;
+    }
+
+    .card span {
+        font-size: 1.35rem !important;
+        line-height: 1.4 !important;
+        font-weight: 600 !important;
+        word-break: break-word !important;
+    }
+
+    /* 6. CORREÇÃO CRÍTICA DO PROGRESS-BAR (Zera o bottom: -200px e right: -30px) */
+    #progress-bar {
+        position: static !important; /* Fica logo abaixo do card naturalmente */
+        bottom: auto !important;
+        right: auto !important;
+        width: calc(100vw - 36px) !important;
+        max-width: 200px !important;
+        margin: 50px auto 0 auto !important;
+        gap: 6px !important;
+        justify-content: center !important;
+    }
+
+    .progress-item {
+        height: 6px !important;
+        border-radius: 6px !important;
+    }
+
+    /* 7. Grids e Listagens (Aulas / Reuniões) */
+    .classes-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        width: 100%;
+    }
+
+    /* 8. Tabelas e Painéis Administrativos */
+
+
+    table {
+        min-width: 550px; /* Garante rolagem horizontal sem esmagar colunas */
+    }
+
+    /* 9. Modais e Caixas de Diálogo */
+    .modal-container {
+        padding: 14px;
+        align-items: flex-end; /* Abre tipo bottom-sheet em telas pequenas */
+    }
+
+    .modal {
+        max-width: 100%;
+        top: 100px;
+        transform: scale(.85);
+        position: absolute;
+        width: 100%;
+        border-radius: 20px 20px 10px 10px;
+        padding: 22px 18px;
+    }
+
+    .flexbox {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    #manage-meetings-page{
+        display: none;
+    }
+
+    .flexbox button,
+    .modal-content button {
+        width: 100%;
+        height: 44px;
+    }
+
+    /* 10. Gaveta Lateral de Presença (Attendance Drawer) */
+    .attendance-drawer {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        right: 0;
+        top: 0;
+        bottom: 60px; /* Fica acima da barra inferior de navegação */
+        height: calc(100vh - 60px);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /* 3. Modal de Login - Cria espaço superior real para os balões */
+    .auth-modal {
+        position: relative !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-width: 390px !important;
+        margin-bottom: 120px;
+        padding: 34px 22px 28px 22px !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. Balão 1 (Verde Escuro - Base de trás) */
+    .auth-layout {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 24px !important;
+        padding: 85px 16px 40px 16px !important;
+        min-height: 100vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. Zera deslocamentos manuais de desktop no texto */
+    #auth-elements {
+        position: static !important;
+        bottom: auto !important;
+        right: auto !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 35px !important; /* Espaço para respirar antes dos balões */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    #auth-elements h1 {
+        font-size: 1.85rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 10px !important;
+    }
+
+    #auth-elements p {
+        font-size: 0.92rem !important;
+        line-height: 1.5 !important;
+        max-width: 90% !important;
+    }
+
+    /* 3. Modal de Login - Cria espaço superior real para os balões */
+    .auth-modal {
+        position: relative !important;
+        bottom: auto !important;
+        width: 100% !important;
+        max-width: 390px !important;
+        margin-top: 55px !important; /* CRUCIAL: Abre espaço exato para os balões sem empurrar o formulário */
+        padding: 34px 22px 28px 22px !important;
+        z-index: 10 !important;
+        box-sizing: border-box !important;
+    }
+
+
+
+    /* 5. Balão 2 (Verde Claro - Sobreposto à frente) */
+    .auth-illustration2 {
+        position: absolute !important;
+        top: 250px !important;
+        left: calc(50%-1px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 96px !important;
+        height: 72px !important;
+
+    }
+    .auth-illustration {
+        position: absolute !important;
+        top: 269px !important;
+        left: calc(50%-20px) !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 96px !important;
+        height: 72px !important;
+
+    }
+
+    /* 6. Ícones proporcionais dentro dos balões */
+    .auth-illustration i,
+    .auth-illustration2 i {
+        font-size: 2.1rem !important;
+        transform: rotate(0deg) !important;
+    }
+
+
+
+
+
+
+
+    /* 7. Ajuste interno do formulário para toque mobile */
+    .auth-modal h2 {
+        font-size: 1.5rem !important;
+    }
+
+    .auth-form .form-item input {
+        height: 46px !important;
+        font-size: 16px !important; /* Evita que o iOS dê zoom automático ao focar */
+    }
+
+    .auth-form button {
+        height: 46px !important;
+        font-size: 1rem !important;
+    }
+
+
+
+    .hide-on-mobile{
+    display: none !important;
+}
+
+.not-available-message{
+    position: absolute;
+    top: 300px;
+    flex-direction: column;
+    display: flex;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    left: 21%;
+}
+
+.not-available-message p{
+    text-align: center;
+    opacity: .7;
+}
+
+}
+
+/* ===== components/late-shared.css ===== */
+/**
+ * components/late-shared.css
+ * Regras compartilhadas que sobraram da antiga página de Planos. Ficam por último porque sobrescrevem regras anteriores (ex.: .empty-state).
+ */
+
+.btn-primary {
+    background: var(--third-color);
+    color: #070d14;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+.empty-state {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 40px 20px;
+    grid-column: 1 / -1;
+    font-size: 1rem;
+}
+
+/* ===== components/environment-badge.css ===== */
+/**
+ * Selo do ambiente de teste (Firebase Emulator), desenhado por
+ * js/ui/environment-badge.js somente em endereço local. Faixa fixa no rodapé
+ * para não deslocar o layout; não captura cliques. Cores com contraste AA.
+ */
+.environment-badge {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200000;
+    padding: 4px 12px;
+    background: #fff3cd;
+    color: #4d3a00;
+    border-top: 2px solid #c99a00;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* ===== overrides/inline-replacements.css ===== */
+/**
+ * overrides/inline-replacements.css
+ *
+ * Classes que substituem os antigos atributos style="" do HTML e os estilos
+ * escritos dentro de templates no JavaScript. Os valores são os mesmos de antes.
+ *
+ * Este arquivo é carregado por ÚLTIMO de propósito: um style="" vencia as
+ * regras comuns, e ficar no fim da cascata preserva esse comportamento.
+ * Ao migrar para a arquitetura B, estas regras podem ir para os arquivos
+ * de cada página.
+ */
+
+/* ---------- Layout de página (flash-cards, set-meeting, admin) ---------- */
+.content--wide {
+    max-width: 1200px;
+    width: 90%;
+}
+
+.content--list {
+    width: 90%;
+    max-width: 1100px;
+    flex-direction: column;
+}
+
+.content--editor {
+    width: 60%;
+    min-width: 320px;
+    max-width: 800px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 30px;
+}
+
+.page-header__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.page-header--stack {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.page-header__titles {
+    margin: 0 auto;
+}
+
+.page-header__actions {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    justify-content: center;
+}
+
+.page-header--left {
+    text-align: left;
+    margin: 0;
+}
+
+.home-btn--auto {
+    width: auto;
+    padding: 0 24px;
+}
+
+.home-btn--roomy {
+    padding: 0 28px;
+}
+
+/* ---------- Temas (set-meeting) ---------- */
+.classes-grid--full {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.theme-container--full {
+    height: auto;
+    width: 100%;
+}
+
+.questions-container--full {
+    width: 100%;
+}
+
+.questions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.questions-header__title {
+    margin: 0;
+    font-weight: 600;
+    color: white;
+}
+
+.questions-list--scroll {
+    max-height: 380px;
+    width: 100%;
+}
+
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.editor-action-btn {
+    width: 140px;
+}
+
+/* ---------- Sessões (manage-meetings) ---------- */
+.manage-meeting-date {
+    font-size: 0.75rem;
+    color: #8fa0b5;
+    margin-top: 3px;
+}
+
+.manage-meeting-mediator {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
+}
+
+/* ---------- Flashcards: estados vazios e cartão final ---------- */
+.empty-state--decks {
+    grid-column: 1 / -1;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.empty-state__icon {
+    font-size: 3rem;
+    color: #8fa0b5;
+    margin-bottom: 15px;
+}
+
+.empty-state__hint {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.empty-state--study {
+    margin-top: 100px;
+}
+
+.completion-card__body {
+    padding: 40px 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 16px;
+}
+
+.completion-card__icon {
+    font-size: 3.5rem;
+    color: #2bfd78;
+}
+
+.completion-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.completion-card__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.completion-btn {
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.completion-btn--secondary {
+    background: #1e293b;
+    color: #fff;
+    border: 1px solid #334155;
+    font-weight: 600;
+}
+
+.completion-btn--primary {
+    background: #2bfd78;
+    color: #000;
+    border: none;
+    padding: 10px 22px;
+    font-weight: 700;
+}
+
+/* ---------- Sessão ao vivo (presentation) ---------- */
+.presentation-select__inner {
+    position: relative;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attendance-drawer-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.attendance-drawer-title__icon,
+.custom-select-option__check {
+    color: var(--third-color);
+}
+
+.custom-select-option--muted {
+    color: #8fa0b5;
+}
+
+.empty-state--compact {
+    padding: 20px 0;
+    font-size: 0.85rem;
+}
+
+/* ---------- Modais ---------- */
+.modal--confirm {
+    max-width: 480px;
+    padding: 30px;
+}
+
+.modal--confirm .modal-content {
+    gap: 15px;
+}
+
+.modal--confirm .flexbox,
+.modal--form .flexbox {
+    margin-top: 15px;
+}
+
+.modal--form {
+    max-width: 520px;
+    padding: 30px;
+}
+
+.modal--form .modal-content {
+    gap: 16px;
+}
+
+/* ---------- Acessos (admin) ---------- */
+.user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+#user-role-select,
+#user-plan-select {
+    height: 44px;
+    border-radius: 50px;
+    background: #121e2c;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0 16px;
+    font-size: 0.95rem;
+}
+
+.users-table__actions-head,
+.users-table td.user-actions-cell {
+    text-align: right;
+}
+
+.users-table td.users-table__message {
+    text-align: center;
+    padding: 30px;
+    color: #8fa0b5;
+}
+
+.users-table td.users-table__message--error {
+    color: #ff5252;
+}
+
+.users-table td.user-name-cell {
+    font-weight: 600;
+}
+
+.user-name-cell__inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.users-table td.user-uid-cell {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #8fa0b5;
+}
+
+/* ---------- Rodapé da página de login ---------- */
+.brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: start;
+    justify-content: center;
+}

@@ -11,7 +11,18 @@
  * Nenhum outro arquivo repete estes valores.
  */
 
-/** Projeto REAL (`fluentech-1e18a`). Só é usado fora de localhost. */
+/**
+ * Endereços em que o site publicado roda e que, SÓ ELES, usam o projeto real.
+ * Qualquer outro endereço (localhost, 0.0.0.0, IP da rede, canal de pré-visualização
+ * do Hosting, arquivo aberto do disco) usa o Emulator. Um domínio próprio precisa
+ * ser incluído aqui ANTES do deploy (docs/operacao/SEGURANCA_E_DEPLOY.md).
+ */
+export const PRODUCTION_HOSTNAMES = Object.freeze([
+  'fluentech-1e18a.web.app',
+  'fluentech-1e18a.firebaseapp.com',
+]);
+
+/** Projeto REAL (`fluentech-1e18a`). Só é usado nos endereços de PRODUCTION_HOSTNAMES. */
 export const PRODUCTION_FIREBASE_CONFIG = Object.freeze({
   apiKey: 'AIzaSyAG6PEwWQADPAs5RjwzqbrO0DRBXVIv7G0',
   authDomain: 'fluentech-1e18a.firebaseapp.com',

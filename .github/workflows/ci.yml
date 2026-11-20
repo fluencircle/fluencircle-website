@@ -36,6 +36,8 @@ jobs:
         run: node scripts/verify-architecture.mjs
       - name: Regras propostas em sincronia com a fonte comentada
         run: npm run rules:check
+      - name: Folha única css/app.css em sincronia com css/main.css
+        run: npm run css:check
       - name: Matriz de regras no SIMULADOR local (pré-verificação, não substitui o Emulator)
         run: npm run test:rules:sim
 
@@ -71,6 +73,32 @@ jobs:
           npx firebase --version
       - name: Matriz de regras no Firebase Emulator
         run: npm run test:rules
+      - name: Chromium do Playwright
+        run: npx playwright install chromium
+      - name: Carga sintética e navegador no Emulator (Hosting, Auth e RTDB)
+        run: npm run test:e2e:emulator
+
+  seed-cli-windows:
+    name: Smoke do inicializador de dados no Windows (sem rede)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar invocação direta do script no Windows
+        shell: pwsh
+        run: |
+          $result = & node scripts/emulator/seed.mjs --check
+          Write-Host $result
+          if ($LASTEXITCODE -ne 0 -or $result -notmatch 'SEED_CLI_CHECK_OK') {
+            throw 'O script de seed não executou corretamente no Windows.'
+          }
 
   e2e:
     name: E2E de perfis e acessibilidade básica (Playwright, Firebase simulado)
@@ -88,6 +116,8 @@ jobs:
       - name: Dependências de teste
         run: npm ci --no-audit --no-fund
       - name: Chromium do Playwright
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: E2E (rede bloqueada; banco simulado aplica as regras propostas)
         run: npm run test:e2e
+      - name: Ícones gerados em sincronia com o uso (css/components/icons.css)
+        run: npm run icons:check

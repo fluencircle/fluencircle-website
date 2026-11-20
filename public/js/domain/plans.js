@@ -4,7 +4,7 @@
  * Origem: PR #2 (planos como atributo do usuário e agenda do participante),
  * reimplementada sobre a arquitetura em camadas. Nada aqui acessa o banco.
  *
- * Modelo (detalhes em docs/decisoes/ADR-005-planos-e-agenda.md):
+ * Modelo (detalhes em docs/engenharia/ADR-005-PLANOS-E-AGENDA.md):
  * - um plano tem horários fixos na semana: `sessions[i] = { dayOfWeek, startTime, endTime }`;
  * - cada horário, numa semana concreta, vira um "encontro" identificado por
  *   `slotKey = <planId>_<dayOfWeek>_<i>` (mesmo formato do PR #2);
@@ -34,6 +34,9 @@ export const PLAN_LIMITS = Object.freeze({
 
 const TIME_PATTERN = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
 const PLAN_ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
+const SESSION_INDEX_PATTERN = /^(0|[1-9][0-9]{0,5})$/;
+const FIRST_UNUSED_LEGACY_INDEX = 100;
+const MAX_SESSION_INDEX = 999999;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Posição do dia na semana que começa na segunda (seg = 1 … dom = 7). */
@@ -105,6 +108,12 @@ export function isValidPlanId(planId) {
   return typeof planId === 'string' && PLAN_ID_PATTERN.test(planId);
 }
 
+/** Perfis antigos usavam `plan`; um `planId` explícito tem precedência. */
+export function profilePlanId(profile) {
+  const id = profile?.planId ?? profile?.plan;
+  return isValidPlanId(id) ? id : '';
+}
+
 /**
  * Horários do plano como lista `{ index, dayOfWeek, startTime, endTime }`.
  * O RTDB devolve listas como array OU objeto `{ "0": …, "2": … }`; o índice
@@ -115,7 +124,7 @@ export function planSessions(plan) {
   const raw = plan?.sessions;
   if (!raw || typeof raw !== 'object') return [];
   return Object.entries(raw)
-    .filter(([, s]) => s && Number.isInteger(Number(s.dayOfWeek)))
+    .filter(([index, s]) => SESSION_INDEX_PATTERN.test(index) && s && Number.isInteger(Number(s.dayOfWeek)))
     .map(([index, s]) => ({
       index: Number(index),
       dayOfWeek: Number(s.dayOfWeek),
@@ -139,33 +148,35 @@ export function isSafeMeetLink(url) {
  * Reindexar um array após apagar a primeira linha poderia reutilizar a chave
  * de outro horário e exibir o tema de uma aula na aula errada.
  *
- * Índices antigos não são reutilizados nesta edição; novos horários recebem
- * índices maiores que o maior índice histórico ainda presente no plano.
- * O limite de 99 é compatível com o validador de regras RTDB.
+ * O contador persistido mantém índices removidos fora de uso. Planos sem
+ * contador reservam 0–99 porque uma edição anterior pode ter removido um
+ * horário nesse intervalo com encontros ainda gravados em alguma semana.
+ * Mudar o dia cria outra identidade, pois o dia faz parte da chave do encontro.
  */
 export function preservePlanSessionIndices(previousPlan, sessions, sourceIndices = []) {
   if (!Array.isArray(sessions) || !Array.isArray(sourceIndices) || sessions.length !== sourceIndices.length) {
     throw new TypeError('Horários e índices de origem devem possuir o mesmo tamanho.');
   }
-  const existing = new Set(planSessions(previousPlan).map((slot) => slot.index));
+  const existing = new Map(planSessions(previousPlan).map((slot) => [slot.index, slot]));
   const used = new Set();
-  let nextIndex = Math.max(-1, ...existing) + 1;
+  const savedIndex = Number.isInteger(previousPlan?.nextSessionIndex) ? previousPlan.nextSessionIndex : FIRST_UNUSED_LEGACY_INDEX;
+  let nextIndex = Math.max(savedIndex, Math.max(-1, ...existing.keys()) + 1);
   const result = {};
 
   sessions.forEach((session, position) => {
     const raw = sourceIndices[position];
-    const candidate = typeof raw === 'string' && /^(0|[1-9][0-9]?)$/.test(raw) ? Number(raw) : null;
+    const candidate = typeof raw === 'string' && SESSION_INDEX_PATTERN.test(raw) ? Number(raw) : null;
     let index;
-    if (candidate !== null && existing.has(candidate) && !used.has(candidate)) {
+    if (candidate !== null && existing.get(candidate)?.dayOfWeek === session.dayOfWeek && !used.has(candidate)) {
       index = candidate;
     } else {
       index = nextIndex++;
     }
-    if (index > 99) throw new RangeError('Limite de índices da agenda atingido; é necessária migração.');
+    if (index > MAX_SESSION_INDEX) throw new RangeError('Limite de índices da agenda atingido; é necessária migração.');
     used.add(index);
     result[index] = { ...session };
   });
-  return result;
+  return { sessions: result, nextSessionIndex: nextIndex };
 }
 
 /** Mudanças que podem desvincular temas de encontros já programados. */

@@ -67,7 +67,9 @@ export function buildSyntheticDatabase({ uids = {} } = {}) {
     const { email, firstName, lastName, role } = ACTORS[key];
     users[uid(key)] = { firstName, lastName, email, role, createdAt: '2026-09-01T12:00:00.000Z' };
   }
-  users[uid('studentA')].planId = PLANS.essencial;
+  // Cadastro anterior ao plano canônico, como lido pelo PR #2 histórico.
+  users[uid('studentA')].plan = PLANS.essencial;
+  users[uid('studentA')].planName = 'Essencial';
 
   return {
     users,

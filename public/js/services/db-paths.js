@@ -18,6 +18,9 @@ export const DB_PATHS = Object.freeze({
   sessions: 'meeting_sessions',
   /** current_session → { sessionId, topic, startedAt } — lido pelo tradutor público */
   currentSession: 'current_session',
+  liveRooms: 'live_rooms',
+  liveRoomMembers: 'live_room_members',
+  liveRoomChat: 'live_room_chat',
   /** flashcards/{sessionId}/{cardId} → { front, back, topic, sessionId, createdAt } */
   flashcards: 'flashcards',
   /** student_reviews/{uid}/{sessionId} → { stage, lastReviewedAt, stageNCompletedAt } */

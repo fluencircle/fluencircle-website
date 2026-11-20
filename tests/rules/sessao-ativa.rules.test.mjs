@@ -26,7 +26,8 @@ const intent = (presenterId, sessionId) => ({ sessionId, topic: sessionId === SE
 
 /** Publica como o serviço faz: transação + onDisconnect só da própria presença. */
 async function publish(client, presenterId, sessionId, { takeover = false } = {}) {
-  const transaction = publishTransaction(intent(presenterId, sessionId), { takeover });
+  const confirmed = takeover ? await client.get(CURRENT) : false;
+  const transaction = publishTransaction(intent(presenterId, sessionId), { takeover: confirmed });
   const result = await client.transaction(CURRENT, transaction.update);
   if (result.committed) await client.onDisconnectRemove(`${CURRENT}/live/${presenterId}`);
   return { committed: result.committed, plan: transaction.lastPlan() };

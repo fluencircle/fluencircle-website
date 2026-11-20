@@ -1,7 +1,8 @@
 # ADR-002 — Ambiente isolado por padrão, regras geradas e dois executores de teste
 
-**Estado:** aceita para desenvolvimento e testes; não altera produção.
-**Data:** 19/11/2026 · **Issues:** #5, #7, #13, #15 · **Implementação:** Claude · **Revisão:** pendente (ChatGPT) e aceite humano.
+**Estado:** aceita para desenvolvimento e testes; não altera produção. **Decisão 1 revista em 20/11/2026** (ver
+"Revisão de 20/11/2026" no fim).
+**Data:** 19/11/2026 · **Issues:** #5, #7, #13, #15, #41 · **Implementação:** Claude · **Revisão:** pendente (ChatGPT) e aceite humano.
 
 ## Contexto
 
@@ -51,5 +52,28 @@
   **SIMULADOS**, não prova.
 - ⚠️ O E2E prova o fluxo da interface e a integração com as regras **simuladas**; não prova o SDK real nem a rede.
 - ⚠️ Rodar o Emulator exige **Java 21+** (firebase-tools 15) e `npm install` (sem `package-lock.json` por enquanto).
-- ℹ️ Servir o site por IP de rede local (ex.: `192.168.x.x`) seleciona **produção** — decisão consciente para não
-  quebrar uso em sala; documentada no guia do aluno.
+- ~~ℹ️ Servir o site por IP de rede local (ex.: `192.168.x.x`) seleciona **produção** — decisão consciente para não
+  quebrar uso em sala; documentada no guia do aluno.~~ Substituída pela revisão abaixo.
+
+## Revisão de 20/11/2026 — seleção fechada por padrão (Issue #41)
+
+**Problema confirmado (executado):** a regra "endereço local → Emulator; **qualquer outro** → produção" falhava
+aberta. `npm run serve` (o `http.server` do Python) imprime `http://0.0.0.0:5501/`; abrir esse link selecionava o
+projeto **real**, assim como `127.0.0.2`, IP da rede local, `*.local`, canal de pré-visualização do Hosting
+(`fluentech-1e18a--<canal>.web.app`) e arquivo aberto do disco (hostname vazio). Isso contradizia a garantia de
+"nunca tocar produção por engano" e as regras do `AGENTS.md`.
+
+**Decisão:** só os endereços publicados listados em `PRODUCTION_HOSTNAMES` (`public/js/config/firebase.config.js`:
+`fluentech-1e18a.web.app` e `fluentech-1e18a.firebaseapp.com`) usam produção. **Todo o resto usa o Emulator.**
+Endereço que não é desta máquina (IP da rede, pré-visualização, arquivo) continua no Emulator e mostra um selo
+próprio ("Endereço não reconhecido…"). `npm run serve` passa a escutar só em `127.0.0.1`.
+
+**Consequências:**
+- ✅ Nenhum endereço de desenvolvimento, teste ou pré-visualização alcança o banco real.
+- ⚠️ **Domínio próprio** (se houver) precisa entrar em `PRODUCTION_HOSTNAMES` **antes** do deploy; senão o site
+  publicado aponta para o Emulator e não funciona — falha **segura**, mas visível. Gate registrado em
+  `docs/operacao/SEGURANCA_E_DEPLOY.md`.
+- ⚠️ Usar o site "em sala" pela rede local passa a exigir o endereço publicado (o motivo original da exceção). Para
+  testar no celular, use o Emulator com um túnel/porta encaminhada na mesma máquina ou um projeto de staging.
+- Testes: `tests/unit/environment.test.js` (regressão com cada endereço que antes ia para produção) e
+  `tests/e2e/ambiente.e2e.test.mjs` (origens de rede local e de pré-visualização), que falham no código anterior.

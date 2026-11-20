@@ -6,7 +6,7 @@
  */
 import { describe, test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { createFakeBackend, launchBrowser, newContext, openPage, expectToast, unexpectedErrors } from './support/harness.mjs';
+import { createFakeBackend, FIXED_NOW, launchBrowser, newContext, openPage, expectToast, unexpectedErrors } from './support/harness.mjs';
 import { ACTORS, SESSIONS, DEMO_PASSWORD } from '../fixtures/synthetic-data.mjs';
 import { startLiveSession, finishDeck } from './support/actions.mjs';
 
@@ -101,6 +101,76 @@ describe('E2E [Firebase simulado] fluxos principais', () => {
     assert.equal(review.stage1CompletedAt, '2026-11-19T15:00:00.000Z');
     assert.deepEqual(unexpectedErrors(errors), []);
     await ctx.context.close();
+  });
+
+  test('cliques repetidos e reinício durante a saída do cartão não pulam a pilha', async () => {
+    const backend = createFakeBackend();
+    const ctx = await newContext(browser, backend);
+    try {
+      const { page } = await openPage(ctx, 'flash-cards.html', { as: ACTORS.studentA });
+      await page.locator('#sessions-grid .srs-meeting-card', { hasText: 'Travel' }).click();
+      await page.clock.install({ time: FIXED_NOW });
+      await page.evaluate(() => {
+        const first = document.querySelector('#card-1 .btn-next');
+        first.click();
+        first.click();
+        document.querySelector('#card-2 .btn-next').click();
+      });
+      await page.clock.runFor(150);
+      assert.equal(await page.locator('#card-2').getAttribute('data-position'), '0');
+      assert.ok(await page.locator('#completion-card').isHidden());
+
+      await page.evaluate(() => {
+        document.querySelector('#card-2 .btn-next').click();
+        document.querySelector('#restart-cards-btn').click();
+      });
+      await page.clock.runFor(150);
+      assert.equal(await page.locator('#card-1').getAttribute('data-position'), '0');
+      assert.ok(await page.locator('#completion-card').isHidden());
+      assert.equal(backend.adminGet(`student_reviews/${ACTORS.studentA.uid}/${SESSIONS.both}`), null);
+    } finally {
+      await ctx.context.close();
+    }
+  });
+
+  test('gravação pendente de uma revisão não altera outro deck aberto', { timeout: 10000 }, async () => {
+    const backend = createFakeBackend();
+    const travelReview = `student_reviews/${ACTORS.studentA.uid}/${SESSIONS.both}`;
+    let releaseSave;
+    let requestedSave;
+    const release = new Promise((resolve) => { releaseSave = resolve; });
+    const requested = new Promise((resolve) => { requestedSave = resolve; });
+    let travelWrites = 0;
+    const ctx = await newContext(browser, {
+      async handle(page, op, payload) {
+        if (op === 'db.update' && payload.path === travelReview) {
+          travelWrites++;
+          requestedSave();
+          await release;
+        }
+        return backend.handle(page, op, payload);
+      },
+    });
+    try {
+      const { page } = await openPage(ctx, 'flash-cards.html', { as: ACTORS.studentA });
+      await page.locator('#sessions-grid .srs-meeting-card', { hasText: 'Travel' }).click();
+      await finishDeck(page);
+      await requested;
+      await page.locator('#finish-restart-btn').click();
+      await finishDeck(page);
+
+      await page.locator('#back-to-meetings-btn').click();
+      await page.locator('#sessions-grid .srs-meeting-card', { hasText: 'Technology & Daily Life' }).click();
+      releaseSave();
+      await finishDeck(page);
+      await expectToast(page, 'Etapa de 7 Dias concluída!');
+      assert.equal(backend.adminGet(travelReview).stage, 1);
+      assert.equal(backend.adminGet(`student_reviews/${ACTORS.studentA.uid}/${SESSIONS.anaOnly}`).stage, 2);
+      assert.equal(travelWrites, 1);
+    } finally {
+      releaseSave();
+      await ctx.context.close();
+    }
   });
 
   test('admin cria conta de aluno; a nova conta entra no site', async () => {

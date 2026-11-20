@@ -133,3 +133,17 @@ regras; "Emulator" = pendente de execução na CI.
 | RNF-06, RNF-07 | CI em três jobs sem deploy; Emulator local isolado e verificável | `.github/workflows/ci.yml`; U emulator-safety/environment; E ambiente | CI ainda não executada no GitHub |
 | RNF-04 | Checagens básicas de acessibilidade e teclado nas 8 páginas | E acessibilidade (12) | Auditoria WCAG completa pendente |
 
+
+## 11. Rastreabilidade da auditoria técnica (Claude, 20/11/2026 — Issue #41, PR #42)
+
+E = EXECUTADO nesta auditoria; M = medido com `scripts/benchmarks/page-performance.mjs`.
+
+| Requisito | O que mudou ou foi verificado | Evidência | Pendente |
+| --- | --- | --- | --- |
+| RNF-01 Segurança | Seleção de ambiente fechada: produção só em `PRODUCTION_HOSTNAMES`; `h()` recusa código em atributos; SRI exigido para terceiros | U `environment`, `dom-safety`; E2E `ambiente` (falha no código antigo); `verify-static` (E) | Regras ativas, credencial histórica, backend |
+| RNF-03 Desempenho (dados) | Aluno: custo proporcional às próprias sessões **confirmado** (46 leituras, 107–141 KiB com 300 ou 1.500 sessões) | M escalas média e grande | **Equipe** ainda lê coleções inteiras (até 6,2 MiB / ~50 s no perfil móvel) — ARQ-04 |
+| RNF-03b Desempenho (carregamento) — **proposto agora** | Meta: página interna ≤ 250 KiB transferidos e ≤ 40 requisições com cache frio | M: 198–213 KiB e 33–45 requisições (antes 373–403 KiB e 56–67) | Aprovar a meta; CLS do login 0,12 (meta ≤ 0,1) |
+| RNF-06 Qualidade | CI: matriz de camadas e ciclos, `css:check`, `icons:check`, SRI | U `architecture-rules`, `css-bundle`, `icons`; CI do PR #42 | lint de HTML/CSS continua ausente |
+| RNF-07 Operação | Nenhum endereço de desenvolvimento, teste ou pré-visualização alcança produção; gate para domínio próprio | ADR-002 (revisão), `SEGURANCA_E_DEPLOY.md` | Staging, backup testado |
+| RNF-08 Observabilidade | Sem mudança; lacuna registrada (ARQ-09) | — | Endpoint de erros/métricas no backend |
+| RNF-09 Evolução | Dependência reversa e ciclos agora **impedidos** pela CI; ADR-006 (artefatos gerados) | U `architecture-rules` (violações injetadas) | Decisão sobre empacotador só com medição |

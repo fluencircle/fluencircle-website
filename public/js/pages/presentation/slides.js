@@ -8,8 +8,9 @@ const TITLE_SLIDE = -1;
 
 /**
  * @param {HTMLElement} slideElement área onde o slide é desenhado (.slide)
+ * @param {(text: string) => void} onSlideChange texto do slide para a sala ao vivo
  */
-export function createSlideDeck(slideElement) {
+export function createSlideDeck(slideElement, onSlideChange) {
   let topic = '';
   let questions = [];
   let index = TITLE_SLIDE;
@@ -17,12 +18,15 @@ export function createSlideDeck(slideElement) {
   function render() {
     if (index === TITLE_SLIDE) {
       replaceContent(slideElement, h('span', { class: 'title' }, topic));
+      onSlideChange(topic);
     } else if (index < questions.length) {
       replaceContent(slideElement, h('div', { class: 'questionItem' },
         h('span', { class: 'number' }, String(index + 1)),
         h('span', { class: 'question' }, questions[index])));
+      onSlideChange(questions[index]);
     } else {
       replaceContent(slideElement, h('div', { class: 'questionItem' }, h('span', { class: 'question' }, 'Fim da sessão')));
+      onSlideChange('Fim da sessão');
     }
   }
 

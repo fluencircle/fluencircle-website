@@ -1,5 +1,7 @@
 # Matriz de testes — relatório histórico de execução Claude
 
+> **Atualização (Claude, 20/11/2026, PR #42):** execução mais recente, num **clone limpo** da branch `audit/claude-security-performance-architecture`: 153/153 unitários, 79/79 regras no **Firebase Emulator oficial**, 79/79 no simulador, 60/60 E2E (Firebase simulado), seed verificado (`SEED_OK`/`SEED_VERIFY_OK`) e as verificações estáticas, de arquitetura e de artefatos gerados. Comandos, ambiente e o que **não** foi executado: [`CLAUDE_IMPLEMENTATION_LOG.md`](../processo/CLAUDE_IMPLEMENTATION_LOG.md) §5–§6; desempenho medido: [`CLAUDE_AUDITORIA_DESEMPENHO.md`](../auditorias/CLAUDE_AUDITORIA_DESEMPENHO.md).
+
 > **Complemento posterior (ChatGPT, 19/11/2026):** o registro abaixo descreve o ambiente original do Claude e não deve ser reescrito como se ele tivesse acesso ao GitHub ou ao Firebase Emulator. Depois do recebimento, os PRs #29–#34 foram abertos e mesclados, a correção de isolamento de testes foi aplicada por ChatGPT e a CI independente aprovou **87/87 unitários offline, 65/65 testes de regras no Firebase Emulator oficial e 44/44 E2E Playwright com Firebase simulado** na execução [44537468469](https://github.com/Lucas-Sperotto/fluencircle-website/actions/runs/44537468469). Os resultados e ressalvas atuais estão em [CHATGPT_ACEITE_ACADEMICO_2026-11-19.md](../auditorias/CHATGPT_ACEITE_ACADEMICO_2026-11-19.md). Esses testes não validam produção.
 
 **Executor:** Claude (Opus 5.5), em ambiente Linux isolado da Anthropic, em 19/11/2026.

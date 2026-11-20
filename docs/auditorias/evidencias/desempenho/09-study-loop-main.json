@@ -1,0 +1,86 @@
+{
+ "label": "main",
+ "date": "2026-11-20T17:16:47.686Z",
+ "options": {
+  "scale": "small",
+  "runs": 20,
+  "network": "none",
+  "protocol": "h2",
+  "pages": null,
+  "scenario": "study-loop",
+  "skipSeed": false,
+  "out": "/tmp/claude-1000/-home-sperotto-fluencircle-website/adb28f5e-233c-4e76-8963-bf48fd5e4fa0/scratchpad/bench/main-study-loop-v2.json",
+  "label": "main"
+ },
+ "environment": {
+  "node": "v22.22.3",
+  "chromium": "153.0.8010.12",
+  "platform": "linux",
+  "server": "HTTP/2 + TLS + gzip (local)"
+ },
+ "seed": {
+  "scale": "small",
+  "sessions": 3,
+  "users": 5,
+  "studentSessions": 2,
+  "databaseBytes": 4417
+ },
+ "studyLoop": {
+  "samples": [
+   {
+    "iteration": 0,
+    "heapUsedBytes": 2359484,
+    "domNodes": 225,
+    "jsEventListeners": 32
+   },
+   {
+    "iteration": 1,
+    "heapUsedBytes": 3140772,
+    "domNodes": 296,
+    "jsEventListeners": 53
+   },
+   {
+    "iteration": 5,
+    "heapUsedBytes": 3288756,
+    "domNodes": 298,
+    "jsEventListeners": 53
+   },
+   {
+    "iteration": 10,
+    "heapUsedBytes": 3322012,
+    "domNodes": 298,
+    "jsEventListeners": 53
+   },
+   {
+    "iteration": 15,
+    "heapUsedBytes": 3361476,
+    "domNodes": 298,
+    "jsEventListeners": 53
+   },
+   {
+    "iteration": 20,
+    "heapUsedBytes": 3397212,
+    "domNodes": 298,
+    "jsEventListeners": 53
+   }
+  ],
+  "detachedElements": [
+   [
+    "div#card-N.card.flipped.removed-card",
+    2
+   ],
+   [
+    "button.btn-next",
+    2
+   ],
+   [
+    "div#completion-card.card.completion-card",
+    1
+   ],
+   [
+    "div.card-front",
+    1
+   ]
+  ]
+ }
+}

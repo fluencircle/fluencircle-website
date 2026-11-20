@@ -13,7 +13,7 @@ Legenda: ✅ permitido · ❌ negado · — não se aplica. Coluna "Teste" apont
 | --- | --- | --- | --- | --- | --- |
 | `auth.html` (login) | ✅ | ✅ | ✅ | ✅ | E: perfis |
 | `circle-translator.html` (tradutor público) | ✅ | ✅ | ✅ | ✅ | E: fluxos, tradutor-contas |
-| `index.html` (início) | ❌ → login | ✅ só atalho de flashcards; agenda "Sua semana" se tiver plano | ✅ atalhos de equipe | ✅ | E: perfis, planos |
+| `index.html` (início) | ❌ → login | ✅ flashcards, agenda própria e círculos no demo | ✅ atalhos de equipe e círculos no demo | ✅ | E: perfis, planos; `tests/e2e-emulator/rooms.test.mjs` |
 | `flash-cards.html` | ❌ → login | ✅ só os próprios decks | ✅ todos os decks | ✅ todos | E: perfis, privacidade |
 | `presentation.html` (sessão ao vivo) | ❌ → login | ❌ aviso + home | ✅ | ✅ | E: perfis, concorrencia |
 | `set-meeting.html` (temas) | ❌ → login | ❌ aviso + home | ✅ | ✅ | E: perfis, fluxos |
@@ -38,6 +38,9 @@ Legenda: ✅ permitido · ❌ negado · — não se aplica. Coluna "Teste" apont
 | `meeting_sessions/{s}/attendees` | ❌ | ❌ | ✅ grava `{addedAt}` junto com o índice | ✅ | R: rbac, privacidade |
 | `current_session` | ✅ **ler** | ✅ ler | ✅ publicar com posse/versão | ✅ | R: rbac, sessao-ativa |
 | `current_session/live/{aba}` | ❌ | ❌ | ✅ só a aba dona | ✅ só a aba dona | R: sessao-ativa |
+| `live_rooms/{s}` (demo) | ❌ | ✅ ler | ✅ ler e controlar sala própria | ✅ ler e controlar sala própria | R: live-rooms |
+| `live_room_members/{s}/{uid}` (demo) | ❌ | ✅ registrar só a própria entrada em sala online | ✅ mesma entrada, anfitrião encerra | ✅ mesma entrada, anfitrião encerra | R: live-rooms |
+| `live_room_chat/{s}` (demo) | ❌ | ✅ ler após entrada e escrever mensagens próprias com sala online | ✅ após entrada ou como anfitrião | ✅ após entrada ou como anfitrião | R: live-rooms |
 | `flashcards` (coleção) | ❌ | ❌ | ✅ ler | ✅ | R: privacidade |
 | `flashcards/{s}` | ❌ **inclusive criar card** | ✅ ler se participou | ✅ ler/gravar | ✅ | R: rbac, privacidade; E: tradutor-contas |
 | `student_reviews/{uid}` próprio | ❌ | ✅ +1 etapa, sessão em que participou | ✅ o próprio | ✅ o próprio | R: rbac |

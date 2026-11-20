@@ -43,9 +43,18 @@ Use **dois terminais**:
 # terminal 1 — sobe Auth (9099), Realtime Database (9000), Hosting (5050) e a interface do Emulator (4000)
 npm run emulators
 
-# terminal 2 — cria as contas e carrega o banco sintético
+# terminal 2 — execute SOMENTE depois que todos os emuladores estiverem prontos
 npm run emulators:seed
+npm run emulators:verify  # SOMENTE LEITURA: verifica usuários, sessões, planos e flashcards
 ```
+
+A carga agora precisa imprimir **`SEED_OK`** e a verificação precisa imprimir **`SEED_VERIFY_OK`**,
+com pelo menos 5 perfis, 3 sessões e 2 planos no projeto `demo-fluencircle-audit`.
+Se os comandos terminarem silenciosamente, **não considere a carga concluída**:
+atualize o clone (`git pull --ff-only`) e execute `npm run emulators:seed -- --check`
+(precisa imprimir `SEED_CLI_CHECK_OK`, sem gravar nada). A carga substitui apenas
+o **banco demo local** e recria suas contas; não a execute para preservar modificações
+feitas anteriormente no Emulator.
 
 Abra **http://127.0.0.1:5050**. Uma faixa amarela no rodapé confirma: *"Ambiente de teste local — Firebase Emulator
 (demo-fluencircle-audit)"*. Se a faixa não aparecer, **pare**: você não está no ambiente de teste.
@@ -97,6 +106,12 @@ Use uma janela normal e uma **anônima** (contas diferentes ao mesmo tempo).
    (`tests/rules/privacidade.rules.test.mjs`) e no E2E que lista cada caminho lido (`tests/e2e/privacidade.e2e.test.mjs`).
 10. **Encerrar.** *Encerrar* na sessão. Pare o Emulator com `Ctrl+C` (os dados somem; rode o seed de novo quando quiser).
 
+Para demonstrar duas salas, mantenha Carla na primeira apresentação. No tema do Diego, desmarque **Publicar no
+tradutor público** antes de clicar em **Iniciar**. Em outro contexto do navegador, entre como aluna e abra um dos
+**Círculos ao vivo** na home. As mudanças de slide do anfitrião aparecem na sala escolhida. Use **Abrir sala e chat**
+na apresentação para acompanhar a conversa em outra aba. A presença usada pelos flashcards é registrada pelo
+mediador em **Participantes**. Para voz, os encontros da agenda podem incluir um link HTTPS de chamada.
+
 ## 6. Testes
 
 | Comando | O que prova | Precisa de |
@@ -105,6 +120,7 @@ Use uma janela normal e uma **anônima** (contas diferentes ao mesmo tempo).
 | `npm run test:rules` | **matriz de acesso no Firebase Emulator** (prova oficial das regras) | `npm ci` + Java 21 |
 | `npm run test:rules:sim` | a mesma matriz no simulador local (pré-verificação rápida, **não é o Firebase**) | só Node |
 | `npm run test:e2e` | fluxos pela interface, perfis, concorrência, privacidade e acessibilidade básica, com Firebase **simulado** | `npm install` + `npx playwright install chromium` |
+| `npm run test:e2e:emulator` | Chromium com Auth, RTDB e Hosting do Firebase Emulator, incluindo salas e chat | `npm ci`, Java 21+, Chromium e portas locais livres |
 | `npm run rules:check` | o JSON das regras corresponde à fonte comentada | só Node |
 | `node scripts/verify-architecture.mjs` | camadas respeitadas e nenhum `innerHTML` com dados | só Node |
 
@@ -119,8 +135,11 @@ usa um Chrome já instalado. Os títulos dos testes de regras dizem qual executo
 | mudar regra da revisão espaçada | `public/js/domain/srs.js` + `tests/unit/srs.test.js` |
 | mudar o protocolo da sessão ativa | `public/js/domain/presentation-lock.js` + regras + `tests/rules/sessao-ativa.rules.test.mjs` |
 | acessar um nó novo do banco | `public/js/services/db-paths.js` e um serviço em `public/js/services/` |
-| criar uma tela | HTML em `public/`, script em `public/js/pages/`, estilos na pasta `public/css/` correspondente |
-| mudar endereços/limites/ambiente | `public/js/config/` |
+| criar uma tela | HTML em `public/` (carregando `css/app.css`), script em `public/js/pages/`, estilos na pasta `public/css/` correspondente |
+| mudar estilos | o arquivo da seção em `public/css/` (nunca `css/app.css`, que é gerado) → `npm run css:build` |
+| usar um ícone novo | `icon('fa-nome')` ou `<i class="fa-solid fa-nome">` → `npm run icons:build` (ADR-006) |
+| mudar endereços/limites/ambiente | `public/js/config/` — produção só nos endereços de `PRODUCTION_HOSTNAMES` (ADR-002) |
+| medir desempenho | `npm run bench:pages` (ver `docs/auditorias/CLAUDE_AUDITORIA_DESEMPENHO.md` §5) |
 
 Camadas e motivos: [`docs/entrega/ARQUITETURA_E_FLUXOS.md`](ARQUITETURA_E_FLUXOS.md) e [`docs/ARQUITETURA.md`](../ARQUITETURA.md).
 Regras do código (resumo): dados nunca em `innerHTML` (use `h()`); só `services/` fala com o banco; `domain/` não
@@ -132,7 +151,7 @@ Em ordem sugerida (detalhes em [`LIMITACOES_E_PENDENCIAS.md`](LIMITACOES_E_PENDE
 
 1. Confirmar que a CI continua verde após cada mudança; o job `rules-emulator` e o `package-lock.json` **já existem** na `main`. Usar `npm ci` e manter o lockfile atualizado quando dependências forem alteradas.
 2. Backend controlado do tradutor (contrato em `docs/backend/CONTRATO_BACKEND.md`) e criação de contas pelo Admin SDK.
-3. Salas por código/QR para várias sessões simultâneas (plano no `ADR-003`).
+3. Validar os círculos autenticados em staging e decidir a evolução do tradutor público para várias salas por código/QR (ADR-003).
 4. Projeto de staging, migração de privacidade em staging e publicação controlada (checklist).
 5. Acessibilidade completa (axe-core, contraste, leitor de tela) e E2E contra o Emulator com o SDK real.
 6. Avaliar a arquitetura B (Vite) só depois disso (`ADR-001`).
@@ -145,9 +164,12 @@ Para cada contribuição: Issue → branch própria → commits pequenos (`feat(
 | Sintoma | Causa provável | Solução |
 | --- | --- | --- |
 | `firebase-tools no longer supports Java version before 21` | Java antigo | instale JDK 21+ e confira `java -version` |
-| `npm run emulators:seed` falha com "fetch failed" | Emulator não está rodando | rode `npm run emulators` no outro terminal |
+| `npm run emulators:seed` termina sem mensagem nem contas | Versão anterior usava comparação `file://` incompatível com Windows/espaços | atualize o clone e confirme `npm run emulators:seed -- --check` exibindo `SEED_CLI_CHECK_OK` |
+| `npm run emulators:seed` falha com "fetch failed" | Auth/RTDB Emulator não iniciou ou está em outra máquina/porta | espere os serviços ficarem prontos no terminal 1; use o mesmo ambiente/WSL nos dois terminais |
+| `npm run emulators:verify` informa coleções ausentes | carga não executada ou interface está olhando outro projeto/namespace | confira `demo-fluencircle-audit-default-rtdb` e a porta 9000; rode `npm run emulators:seed` novamente |
 | porta 9000/9099/5050/4000 ocupada | outro processo usando a porta | feche o processo ou mude a porta em `firebase.emulator.json` **e** em `public/js/config/firebase.config.js` |
 | página em branco, erro de módulo | aberta via `file://` | sirva por HTTP (`npm run emulators` ou `npm run serve`) |
-| sem a faixa amarela | página aberta por IP de rede (ex.: `192.168…`) seleciona **produção** | use `127.0.0.1` ou `localhost` |
+| faixa "Endereço não reconhecido" | página aberta por IP de rede (ex.: `192.168…`) ou pré-visualização: continua no Emulator (nunca produção), mas o Emulator só responde em `127.0.0.1` | use `127.0.0.1` ou `localhost` na mesma máquina |
+| sem nenhuma faixa | só acontece nos endereços publicados (`PRODUCTION_HOSTNAMES`): é a **produção** | feche a página; para testar use `127.0.0.1` |
 | tradução falha | backend do Render indisponível ou sem internet | não afeta o restante; ver contrato do backend |
 | E2E: "exigem o pacote playwright" | dependências não instaladas | `npm install` e `npx playwright install chromium` |

@@ -33,6 +33,7 @@ const sessionLabel = byId('sessionName');
 
 /** Sessão em andamento, atualizada em tempo real. */
 let activeSession = null;
+let pendingTranslation = null;
 
 /**
  * @param {string} text
@@ -48,12 +49,18 @@ function clearStatus() {
   statusMessage.className = 'status-message';
 }
 
+function setTranslationBusy(busy) {
+  translateButton.disabled = busy;
+  translateButton.textContent = busy ? 'Traduzindo...' : 'Traduzir';
+}
+
 function renderSessionLabel() {
   sessionLabel.textContent = activeSession ? `Sessão ativa: ${activeSession.topic}` : 'Nenhuma sessão ativa no momento';
   sessionLabel.classList.toggle('session-label--active', Boolean(activeSession));
 }
 
 async function handleTranslate() {
+  if (pendingTranslation) return;
   const text = sourceInput.value.trim();
   if (!text) {
     showStatus('Por favor, digite uma palavra ou frase.', 'warning');
@@ -61,29 +68,35 @@ async function handleTranslate() {
   }
 
   // Salvar o id da aula antes de aguardar o backend assíncrono.
-  const originSession = activeSession;
-  translateButton.disabled = true;
-  translateButton.textContent = 'Traduzindo...';
+  const request = { session: activeSession, text };
+  pendingTranslation = request;
+  setTranslationBusy(true);
+  resultInput.value = '';
   clearStatus();
   try {
     let translation;
     try {
       translation = await translateText(text);
     } catch (error) {
+      if (pendingTranslation !== request) return;
       console.error('Erro na tradução:', error);
       showStatus('Não foi possível traduzir agora. Tente novamente.', 'error');
       return;
     }
+    if (pendingTranslation !== request) return;
     resultInput.value = translation;
-    if (originSession && translation) await saveTranslation(originSession, text, translation);
+    if (request.session && translation) await saveTranslation(request, translation);
   } finally {
-    translateButton.disabled = false;
-    translateButton.textContent = 'Traduzir';
+    if (pendingTranslation === request) {
+      pendingTranslation = null;
+      setTranslationBusy(false);
+    }
   }
 }
 
 /** Tenta salvar a tradução como flashcard da sessão no ar, conforme o ambiente. */
-async function saveTranslation(originSession, front, back) {
+async function saveTranslation(request, back) {
+  const { session: originSession, text: front } = request;
   if (!currentEnvironment.publicTranslatorSavesFlashcards) {
     showStatus('Tradução concluída. Neste ambiente o tradutor público não salva flashcards automaticamente.', 'info');
     return;
@@ -94,8 +107,10 @@ async function saveTranslation(originSession, front, back) {
   }
   try {
     await addFlashcard(originSession.sessionId, { front, back, topic: originSession.topic || DEFAULT_TOPIC });
+    if (pendingTranslation !== request) return;
     showStatus(`Flashcard salvo na sessão "${originSession.topic || DEFAULT_TOPIC}".`, 'success');
   } catch (error) {
+    if (pendingTranslation !== request) return;
     console.error('Erro ao salvar o flashcard:', error);
     showStatus(isPermissionDenied(error)
       ? 'Tradução concluída, mas o flashcard não foi salvo: a gravação pública está bloqueada pelas regras de segurança.'
@@ -106,8 +121,14 @@ async function saveTranslation(originSession, front, back) {
 mountEnvironmentBadge();
 sourceInput.maxLength = TRANSLATOR_MAX_LENGTH;
 translateButton.addEventListener('click', handleTranslate);
+sourceInput.addEventListener('input', () => {
+  pendingTranslation = null;
+  setTranslationBusy(false);
+  resultInput.value = '';
+  clearStatus();
+});
 sourceInput.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') handleTranslate();
+  if (event.key === 'Enter' && !event.repeat && !event.isComposing) handleTranslate();
 });
 
 watchCurrentSession((session) => {

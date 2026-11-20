@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components/icons.css">
+    <link rel="stylesheet" href="css/app.css">
     <script type="module" src="js/ui/app-shell.js"></script>
     <script type="module" src="js/pages/presentation/presentation.page.js"></script>
 </head>
@@ -35,6 +35,10 @@
                 </div>
             </div>
 
+            <label class="hidden" id="public-translator-option">
+                <input type="checkbox" id="share-public-translator" checked>
+                Publicar no tradutor público
+            </label>
             <button type="button" id="start-presentation-btn" class="unclickable" aria-disabled="true">Iniciar</button>
         </div>
 
@@ -46,6 +50,7 @@
                 </button>
                 <!-- Situação da publicação no tradutor público (posse da sessão ativa) -->
                 <p id="presentation-status" class="presentation-status" role="status" aria-live="polite"></p>
+                <a id="open-live-room" class="hidden" href="index.html" target="_blank" rel="noopener">Abrir sala e chat</a>
             </div>
 
             <div class="slide" aria-live="polite"></div>

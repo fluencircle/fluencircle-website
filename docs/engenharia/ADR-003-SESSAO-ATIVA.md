@@ -36,7 +36,7 @@ current_session: {
 ```
 
 - **Publicar** usa `runTransaction` com `publishTransaction()` (`domain/presentation-lock.js`). Se outra aba estiver
-  no ar, nada é gravado; a tela pergunta e só então publica com `takeover`.
+  no ar, nada é gravado; a tela pergunta e só então publica com `takeover` vinculado ao ID, aba e versão observados.
 - Cada aba registra `onDisconnect` **somente** em `live/{presenterId}`. Uma aba antiga que cai não toca a nova.
 - **Reconectar:** registra de novo o `onDisconnect` (ele dispara uma vez) e, por transação, restaura a presença
   apenas se ainda for a dona; senão mostra "outra tela assumiu".
@@ -49,14 +49,24 @@ current_session: {
 
 - ✅ Testado: `tests/unit/presentation-lock.test.js` (decisões puras), `tests/rules/sessao-ativa.rules.test.mjs`
   (dois mediadores, duas abas, desconexão, retorno, formato antigo, esquema) e `tests/e2e/concorrencia.e2e.test.mjs`
-  (interface). No Emulator: **pendente de execução na CI**.
+  (interface). Execução no Emulator e navegador documentada em [Testes funcionais reais](../auditorias/CODEX_TESTES_FUNCIONAIS_REAIS.md).
 - ⚠️ Qualquer membro da equipe consegue **apagar** `current_session` pela API (a regra não sabe qual aba pede a
   remoção). O cliente só apaga o próprio. Teste explícito registra o risco.
-- ⚠️ A regra do RTDB é avaliada quando o `onDisconnect` é **registrado**, não quando dispara. O desenho não depende
-  disso: a remoção de uma chave de presença que já não existe é inofensiva.
 - ⚠️ Se a aba fechar entre publicar e registrar o `onDisconnect` (milissegundos), a presença fica "viva"; a próxima
   pessoa precisa confirmar "assumir". Não há bloqueio permanente.
 - ℹ️ O tradutor público mostra uma sessão por vez — limitação de produto, resolvida só pela opção B.
+
+## Círculos autenticados no Emulator (AS-IS em demonstração)
+
+Cada apresentação pode abrir seu próprio círculo em `live_rooms/{sessionId}`. Perfis ativos encontram os círculos
+na home e recebem o slide atual. A equipe controla a apresentação que abriu. Após entrar na sala, a pessoa lê
+`live_room_chat/{sessionId}` e grava mensagens com o próprio UID. Os registros de `live_room_members` concedem acesso
+ao chat até o encerramento. A presença histórica continua sob responsabilidade da equipe.
+
+A queda da aba remove a marca `online`. Ao reconectar, a mesma aba torna a sala disponível novamente. Em **Encerrar**,
+o cliente remove sala, entradas e chat em uma atualização atômica. Fechamentos abruptos podem deixar dados de salas
+inativas no Emulator até o próximo seed. A interface opera com dados sintéticos localmente. Retenção, operação e
+moderação exigem decisão antes de liberar o recurso em outro ambiente.
 
 ## Plano de migração para salas por código e QR (TO-BE, não implementado)
 

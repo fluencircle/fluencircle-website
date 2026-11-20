@@ -46,11 +46,18 @@ test('publicar sobre apresentação viva de outra aba: conflito, sem gravar', ()
 });
 
 test('assumir com confirmação: versão +1 e takeoverOf com o dono anterior', () => {
-  const { outcome, value } = planPublish(liveBy(B, 4), intent(A), { takeover: true });
+  const { outcome, value } = planPublish(liveBy(B, 4), intent(A), { takeover: liveBy(B, 4) });
   assert.equal(outcome, 'write');
   assert.equal(value.version, 5);
   assert.equal(value.takeoverOf, B);
   assert.deepEqual(value.live, { [A]: true });
+});
+
+test('confirmação de uma publicação não substitui outra que entrou durante o diálogo', () => {
+  const shown = liveBy(B, 4);
+  for (const current of [liveBy(B, 5), liveBy(B, 4, { sessionId: 'different' }), liveBy('aba-C-0123456789abcdef', 4)]) {
+    assert.deepEqual(planPublish(current, intent(A), { takeover: shown }), { outcome: 'conflict', current });
+  }
 });
 
 test('dono anterior caiu (sem presença): publica direto, versão +1, sem takeoverOf', () => {
@@ -63,7 +70,7 @@ test('dono anterior caiu (sem presença): publica direto, versão +1, sem takeov
 test('formato antigo: exige confirmação e recomeça a versão em 1', () => {
   const legacy = { sessionId: 's0', topic: 'Antigo', startedAt: '2026-11-18T10:00:00.000Z' };
   assert.equal(planPublish(legacy, intent(A)).outcome, 'conflict');
-  const { value } = planPublish(legacy, intent(A), { takeover: true });
+  const { value } = planPublish(legacy, intent(A), { takeover: legacy });
   assert.equal(value.version, 1);
   assert.equal('takeoverOf' in value, false);
 });
