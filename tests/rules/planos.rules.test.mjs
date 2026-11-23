@@ -63,12 +63,23 @@ describe(`${env.label} planos e agenda semanal (PR #2)`, () => {
       assert.ok(sessions);
       await env.denied(a.set('plans/p1', withoutSessions));
     });
+    test('o próximo índice pode avançar e não pode ser reduzido ou apagado', async () => {
+      const a = env.as(admin);
+      const path = `plans/${PLANS.essencial}`;
+      await env.allowed(a.update(path, { 'sessions/100': validPlan().sessions[0], nextSessionIndex: 101 }));
+      await env.allowed(a.update(path, { 'sessions/100': null }));
+      await env.denied(a.update(path, { nextSessionIndex: 100 }));
+      await env.denied(a.update(path, { nextSessionIndex: null }));
+      await env.denied(a.update(path, { nextSessionIndex: 101.5 }));
+      await env.denied(a.update(path, { nextSessionIndex: 1000001 }));
+    });
   });
 
   describe('users/{uid}/planId', () => {
     test('admin vincula e desvincula um plano existente', async () => {
       await env.allowed(env.as(admin).update(`users/${studentB.uid}`, { planId: PLANS.intensivo, updatedAt: NOW }));
-      await env.allowed(env.as(admin).update(`users/${studentA.uid}`, { planId: null, updatedAt: NOW }));
+      await env.allowed(env.as(admin).update(`users/${studentA.uid}`, { planId: null, plan: null, planName: null, updatedAt: NOW }));
+      await env.denied(env.as(studentA).get(anaSlot));
     });
     test('plano inexistente ou id malformado é recusado', async () => {
       await env.denied(env.as(admin).update(`users/${studentB.uid}`, { planId: 'nao-existe' }));
@@ -77,6 +88,21 @@ describe(`${env.label} planos e agenda semanal (PR #2)`, () => {
     test('aluno não escolhe o próprio plano', async () => {
       await env.denied(env.as(studentB).update(`users/${studentB.uid}`, { planId: PLANS.essencial }));
       await env.denied(env.as(studentA).set(`users/${studentA.uid}/planId`, PLANS.intensivo));
+    });
+    test('um perfil com vínculo legado pode ser atualizado e normalizado pelo admin', async () => {
+      const a = env.as(admin);
+      const path = `users/${studentA.uid}`;
+      await env.allowed(a.update(path, { firstName: 'Ana Aparecida' }));
+      await env.denied(a.update(path, { plan: PLANS.intensivo }));
+      await env.denied(a.update(`users/${studentB.uid}`, { plan: PLANS.essencial }));
+      await env.allowed(a.update(path, { planId: PLANS.intensivo }));
+      await env.allowed(env.as(studentA).get(`plans/${PLANS.intensivo}`));
+      await env.allowed(env.as(studentA).get(otherSlot));
+      await env.denied(env.as(studentA).get(`plans/${PLANS.essencial}`));
+      await env.denied(env.as(studentA).get(anaSlot));
+      await env.allowed(a.update(path, { plan: null, planName: null }));
+      assert.equal(await env.allowed(a.get(`${path}/plan`)), null);
+      assert.equal(await env.allowed(a.get(`${path}/planName`)), null);
     });
   });
 
@@ -91,6 +117,13 @@ describe(`${env.label} planos e agenda semanal (PR #2)`, () => {
       // encontro do próprio plano ainda sem tema: leitura permitida, valor vazio
       assert.equal(await env.allowed(env.as(studentA).get(`weekly_sessions/${AGENDA_WEEK}/${PLANS.essencial}_1_0`)), null);
       await env.denied(env.as(studentA).get(otherSlot));
+    });
+    test('encontro com índice novo tem a mesma separação de leitura por plano', async () => {
+      const slot = `weekly_sessions/${AGENDA_WEEK}/${PLANS.essencial}_5_100`;
+      await env.allowed(env.as(mediatorA).set(slot, validSlot()));
+      assert.equal((await env.allowed(env.as(studentA).get(slot))).topicTitle, 'Travel');
+      await env.denied(env.as(studentB).get(slot));
+      await env.denied(env.as(null).get(slot));
     });
     test('id de outro plano que começa com o id do meu plano não abre os encontros dele', async () => {
       // ids do push() podem conter "_": o plano "<meu>_x" não pode ser lido por quem tem "<meu>"

@@ -39,7 +39,7 @@ As instruções descrevem o comportamento observado na main após os PRs #2 e #1
 2. Selecione um tema existente e clique em **Iniciar**.
 3. Apresente as perguntas com os controles de navegação; a implementação aceita teclado (setas e espaço), além da interação com a tela.
 4. Abra o painel de participantes para marcar a presença dos alunos. A presença grava só a data; nome e e-mail continuam apenas no cadastro, que alunos não veem.
-5. Use o tradutor integrado quando precisar; as traduções podem gerar flashcards vinculados à sessão.
+5. Use o tradutor integrado quando precisar. Ao receber a tradução, clique em **Salvar Flashcard** para adicionar o par ao deck da sessão. Se editar o campo de origem, traduza o novo texto antes de salvar.
 6. Ao terminar, use **Encerrar** e confirme.
 
 **Uma sessão por vez no tradutor público.** O tradutor mostra apenas uma sessão. Se outra tela (outro mediador ou outra aba sua) já estiver apresentando, o sistema pergunta antes: **Cancelar** não cria nada; **Assumir o tradutor** passa as traduções para a sua sessão e a outra tela recebe o aviso "Outra tela assumiu o tradutor público" — ela continua salvando presença e cards na própria sessão.
@@ -61,7 +61,7 @@ As instruções descrevem o comportamento observado na main após os PRs #2 e #1
 
 1. Abra a página pública **Circle Tradutor** (`circle-translator.html`).
 2. Digite a palavra ou frase no campo de origem, com até 300 caracteres (limite observado na interface).
-3. Clique em **Traduzir** e aguarde a resposta.
+3. Clique em **Traduzir** ou pressione Enter e aguarde a resposta. Se editar o texto, solicite a tradução novamente.
 4. Se houver uma sessão no ar, a mensagem abaixo do tradutor diz o que aconteceu com a tradução:
    - **"Flashcard salvo na sessão ..."** — a tradução virou card da sessão;
    - **"Tradução concluída, mas o flashcard não foi salvo..."** — as regras de segurança bloquearam a gravação pública (a tradução continua valendo);

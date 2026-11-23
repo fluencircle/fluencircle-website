@@ -67,11 +67,10 @@ export async function getCurrentSession() {
 /**
  * Publica a sessão como ativa para o tradutor público, com posse desta aba.
  *
- * Usa transação: se outra aba/mediador estiver no ar e `takeover` for falso,
- * NADA é gravado e o resultado traz o conflito para a tela perguntar.
+ * A transação exige que a confirmação de substituição corresponda à publicação que ainda está no ar.
  *
  * @param {{ sessionId: string, topic: string, startedAt: string }} session
- * @param {{ presenterId: string, takeover?: boolean, onStatusChange?: (status: PresentationStatus) => void }} options
+ * @param {{ presenterId: string, takeover?: import('../domain/presentation-lock.js').CurrentSession|false, onStatusChange?: (status: PresentationStatus) => void }} options
  * @returns {Promise<{ status: 'published', presentation: PresentationHandle } | { status: 'conflict', current: object }>}
  */
 export async function publishCurrentSession({ sessionId, topic, startedAt }, { presenterId, takeover = false, onStatusChange = () => {} }) {

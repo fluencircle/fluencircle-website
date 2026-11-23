@@ -36,7 +36,9 @@ para **produção** e o que é **melhoria futura**. Redigido originalmente por C
 5. **Resumo no índice do aluno é cópia** do tema/início da sessão; se um dia a sessão puder ser renomeada, o índice não acompanha.
 6. **Gravação direta do tradutor em produção** permanece ligada por compatibilidade com regras desconhecidas.
 7. **Conta órfã** ainda é possível se o perfil falhar **e** o desfazer também falhar (o admin recebe o uid).
-8. **Servir por IP de rede local** (ex.: `192.168…`) seleciona produção (decisão consciente; documentada).
+8. **Produção só nos endereços publicados** (`PRODUCTION_HOSTNAMES`, revisão do ADR-002 em 20/11/2026). IP de rede
+   local, pré-visualização do Hosting e arquivo do disco usam o Emulator. Um domínio próprio precisa ser incluído na
+   lista antes do deploy.
 9. O SDK do Firebase no navegador continua na **10.8.0**; atualizar exige E2E e Emulator verdes.
 10. **Agenda por posição do horário** (ADR-005): remover ou reordenar horários de um plano pode desalinhar temas já
     agendados (a tela avisa); excluir um plano não limpa `users/*/planId`. Plano é só informativo (sem cobrança).

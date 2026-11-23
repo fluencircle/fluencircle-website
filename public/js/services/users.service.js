@@ -86,6 +86,8 @@ export function updateUserProfile(uid, { firstName, lastName, role, planId = '' 
     lastName,
     role,
     planId: planId || null,
+    plan: null,
+    planName: null,
     updatedAt: nowIso(),
   });
 }

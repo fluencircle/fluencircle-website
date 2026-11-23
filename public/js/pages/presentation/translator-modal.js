@@ -23,41 +23,65 @@ export function createTranslatorModal(getActiveSession) {
   const saveButton = byId('add-flashcards-btn');
   sourceInput.maxLength = TRANSLATOR_MAX_LENGTH;
 
-  const setSaveEnabled = (enabled) => {
+  let translation = null;
+  let saving = false;
+
+  function renderControls() {
+    translateButton.disabled = Boolean(translation?.pending);
+    const enabled = Boolean(translation?.back) && !saving;
+    saveButton.disabled = !enabled;
     saveButton.classList.toggle(INACTIVE, !enabled);
     saveButton.setAttribute('aria-disabled', String(!enabled));
-  };
+  }
+
+  function clearTranslation() {
+    translation = null;
+    resultInput.value = '';
+    renderControls();
+  }
 
   function open() {
     modal.classList.remove('hidden');
     sourceInput.value = '';
-    resultInput.value = '';
-    setSaveEnabled(false);
+    clearTranslation();
     sourceInput.focus();
   }
 
   function close() {
     modal.classList.add('hidden');
+    clearTranslation();
   }
 
   async function translate() {
+    if (translateButton.disabled) return;
     const text = sourceInput.value.trim();
     if (!text) {
       sourceInput.focus();
       return;
     }
-    setSaveEnabled(false);
+    const request = { sessionId: getActiveSession()?.id, front: text, back: '', pending: true };
+    translation = request;
+    renderControls();
     resultInput.value = 'Traduzindo...';
-    translateButton.disabled = true;
     try {
-      resultInput.value = await translateText(text);
-      setSaveEnabled(Boolean(resultInput.value));
+      const back = await translateText(text);
+      if (translation !== request) return;
+      if (getActiveSession()?.id !== request.sessionId) {
+        clearTranslation();
+        return;
+      }
+      request.back = back;
+      resultInput.value = back;
     } catch (error) {
+      if (translation !== request) return;
       console.error('Erro no tradutor:', error);
       resultInput.value = 'Erro ao traduzir';
       showToast('Falha na conexão do tradutor.', 'error');
     } finally {
-      translateButton.disabled = false;
+      if (translation === request) {
+        request.pending = false;
+        renderControls();
+      }
     }
   }
 
@@ -67,20 +91,23 @@ export function createTranslatorModal(getActiveSession) {
       showToast('Nenhuma sessão ativa.', 'error');
       return;
     }
-    const front = sourceInput.value.trim();
-    const back = resultInput.value.trim();
-    if (!front || !back || saveButton.classList.contains(INACTIVE)) return;
+    const pair = translation;
+    if (saveButton.disabled || pair?.sessionId !== session.id || pair.front !== sourceInput.value.trim()) return;
 
+    saving = true;
     const restore = setBusy(saveButton, 'Salvando...');
     try {
+      const { front, back } = pair;
       await addFlashcard(session.id, { front, back, topic: session.topic });
       showToast(`Card "${front}" adicionado aos Flashcards!`, 'success');
-      close();
+      if (translation === pair) close();
     } catch (error) {
       console.error('Erro ao salvar card:', error);
       showToast('Erro ao salvar no banco.', 'error');
     } finally {
       restore();
+      saving = false;
+      renderControls();
     }
   }
 
@@ -99,15 +126,15 @@ export function createTranslatorModal(getActiveSession) {
     event.stopPropagation();
     translate();
   });
-  // Qualquer tecla invalida a tradução atual (o texto pode ter mudado). Enter traduz de novo.
-  sourceInput.addEventListener('keyup', (event) => {
-    setSaveEnabled(false);
-    if (event.key === 'Enter') translate();
+  sourceInput.addEventListener('input', clearTranslation);
+  sourceInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.repeat && !event.isComposing) translate();
   });
   saveButton.addEventListener('click', (event) => {
     event.stopPropagation();
     saveFlashcard();
   });
 
+  renderControls();
   return { close, isOpen: () => !modal.classList.contains('hidden') };
 }

@@ -17,6 +17,9 @@ import {
   connectDatabaseEmulator,
   ref,
   get,
+  limitToLast,
+  orderByKey,
+  query,
   set,
   push,
   update,
@@ -39,4 +42,4 @@ if (currentEnvironment.emulators) {
 }
 
 /** Reexporta as funções do SDK usadas pelos serviços (mantém a versão num só lugar). */
-export { initializeApp, ref, get, set, push, update, remove, onValue, onDisconnect, runTransaction };
+export { initializeApp, ref, get, set, push, update, remove, onValue, onDisconnect, runTransaction, query, orderByKey, limitToLast };

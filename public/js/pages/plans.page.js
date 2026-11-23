@@ -56,6 +56,7 @@ let editingWeekKey = null;
 let editingSlot = null;
 /** Plano em edição; null = novo. */
 let editingPlanId = null;
+let editingPlan = null;
 
 const currentDate = () => addWeeks(new Date(), weekOffset);
 const currentWeekKey = () => isoWeekKey(currentDate());
@@ -222,6 +223,7 @@ function addScheduleRow({ index = null, dayOfWeek = 1, startTime = '18:00', endT
 function openPlanModal(id = null, plan = null) {
   planForm.reset();
   editingPlanId = id;
+  editingPlan = plan;
   planModalTitle.textContent = id ? 'Editar plano' : 'Novo plano';
   planName.value = plan?.name ?? '';
   planPrice.value = plan ? String(plan.price).replace('.', ',') : '';
@@ -237,6 +239,7 @@ const closePlanModal = () => planModal.classList.add('hidden');
 
 async function submitPlan(event) {
   event.preventDefault();
+  if (savePlanButton.disabled) return;
   const result = validatePlanInput({
     name: planName.value,
     price: planPrice.value,
@@ -251,22 +254,23 @@ async function submitPlan(event) {
     showToast(result.errors[0], 'error');
     return;
   }
-  let sessionsForSave = result.value.sessions;
-  if (editingPlanId) {
+  const planId = editingPlanId;
+  const previousPlan = editingPlan;
+  let scheduleForSave = { sessions: result.value.sessions, nextSessionIndex: result.value.sessions.length };
+  if (previousPlan) {
     try {
-      // Nunca reutilizar o índice de uma linha removida na mesma edição.
-      sessionsForSave = preservePlanSessionIndices(
-        plans[editingPlanId], result.value.sessions,
+      scheduleForSave = preservePlanSessionIndices(
+        previousPlan, result.value.sessions,
         [...scheduleRows.children].map((row) => row.dataset.slotIndex ?? ''),
       );
     } catch (error) {
       showToast(error.message, 'error');
       return;
     }
-    if (changesExistingPlanSlots(plans[editingPlanId], sessionsForSave)) {
+    if (changesExistingPlanSlots(previousPlan, scheduleForSave.sessions)) {
       const proceed = await confirmDialog({
         title: 'Alterar horários existentes',
-        message: 'Remover ou mudar dias/horários pode desvincular temas já programados em outras semanas. Os índices dos demais horários serão preservados. Continuar?',
+        message: 'Remover um horário ou mudar seu dia desvincula temas já programados. Os demais horários manterão seus encontros. Continuar?',
         confirmText: 'Continuar',
       });
       if (!proceed) return;
@@ -274,8 +278,14 @@ async function submitPlan(event) {
   }
   const restore = setBusy(savePlanButton, 'Salvando...');
   try {
-    await savePlan(editingPlanId, { ...result.value, sessions: sessionsForSave });
-    showToast(editingPlanId ? 'Plano atualizado!' : 'Plano criado!', 'success');
+    const saved = await savePlan(planId, { ...result.value, ...scheduleForSave }, previousPlan);
+    if (!saved) {
+      showToast('Este plano mudou em outra tela. Abra a versão atual e tente novamente.', 'error');
+      closePlanModal();
+      await loadPlans();
+      return;
+    }
+    showToast(planId ? 'Plano atualizado!' : 'Plano criado!', 'success');
     closePlanModal();
     await loadPlans();
   } catch (error) {

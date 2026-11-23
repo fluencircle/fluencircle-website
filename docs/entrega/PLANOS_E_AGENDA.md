@@ -4,7 +4,7 @@
 
 ## Funcionalidades e atores
 
-O recurso acrescenta `plans.html`, disponível para mediador e administrador. As funções de **criar, editar e excluir planos** e **atribuir um plano a cada usuário** são exclusivas de administrador. Mediador e administrador podem escolher o tema, as perguntas de preparação e o link HTTPS de um encontro de um plano numa semana. Um aluno com `users/{uid}/planId` válido vê **apenas** os próprios encontros no painel **Sua semana** da home. Não existe cobrança, checkout nem verificação de pagamento.
+O recurso acrescenta `plans.html`, disponível para mediador e administrador. As funções de **criar, editar e excluir planos** e **atribuir um plano a cada usuário** são exclusivas de administrador. Mediador e administrador podem escolher o tema, as perguntas de preparação e o link HTTPS de um encontro de um plano numa semana. Um aluno com plano válido vê **apenas** os próprios encontros no painel **Sua semana** da home. O cadastro usa `users/{uid}/planId` e aceita o antigo `plan` na ausência de `planId`. Salvar uma edição em **Acessos** atualiza o cadastro para o campo atual. Não existe cobrança, checkout nem verificação de pagamento.
 
 A versão histórica do PR #2 incluía chat, voz WebRTC, várias salas simultâneas e entrada automática de alunos. Esses recursos **não foram importados**, por dependerem de backend e decisões de autorização que ainda não foram testadas. Consulte `docs/auditorias/PR2_AVALIACAO_E_PORTE.md`.
 
@@ -17,7 +17,7 @@ Siga primeiro `docs/entrega/GUIA_DO_ALUNO.md` para instalar Node.js 22, Java 21,
 3. Entre como mediador, abra **Planos e agenda**, selecione a semana, clique no encontro e escolha um tema e link `https://`.
 4. Entre como aluno vinculado em outra janela: confira **Sua semana**, as perguntas de preparação e o botão **Entrar**.
 5. Verifique que um aluno com outro plano não recebe os encontros do primeiro e que alunos sem plano não veem agenda (a matriz RTDB exige testes no Emulator).
-6. Volte ao admin e exclua o primeiro horário de um plano com dois horários. Confirme que o segundo mantém sua própria chave e não passa a mostrar o tema do primeiro.
+6. Volte ao admin, remova um horário com tema definido e salve. Abra o plano em uma nova edição e adicione um horário no mesmo dia. O novo encontro começa com tema a definir. Os outros horários mantêm seus temas e links.
 
 ## Estrutura técnica
 
@@ -29,7 +29,9 @@ Siga primeiro `docs/entrega/GUIA_DO_ALUNO.md` para instalar Node.js 22, Java 21,
 
 **Importante:** `database.rules.proposta.json` e a fonte comentada em `firebase/rules/` são regras **de teste/proposta**, não as regras ativas do banco. A data da agenda é calculada na hora local do navegador; diferenças de fuso e horário de verão devem ser validadas antes de uso internacional.
 
-O índice de cada horário faz parte da chave persistida do encontro. A interface conserva os índices quando horários anteriores são removidos/reordenados; novos horários recebem índices inéditos na mesma edição. Remover ou alterar o dia de um horário pode deixar temas antigos sem associação visível. **Não há migração, limpeza de agenda antiga ou reversão automática.** Excluir um plano pode deixar `planId` antigo em contas já vinculadas; o administrador deve corrigi-las.
+O índice de cada horário faz parte da chave persistida do encontro. O plano grava o próximo índice em `nextSessionIndex`, preservando a identidade dos horários em edições sucessivas. A remoção de um horário ou mudança de dia desvincula o tema antigo. Alterar a hora dentro do mesmo dia mantém os temas do horário. Planos sem contador continuam com seus horários existentes e passam a atribuir novos índices a partir de 100, acima da faixa antiga. Se duas abas editarem o mesmo plano, a edição feita a partir da versão anterior recebe um aviso ao salvar.
+
+O calendário histórico usava uma chave de semana do mês sem armazenar o mês. Uma chave antiga pode apontar para várias semanas ou coincidir com uma chave ISO. Para recuperar um encontro identificado por outra fonte, confira a data e o plano, navegue até a semana correta e defina tema e link nessa semana. As perguntas de preparação reproduzem o tema selecionado no momento desse salvamento. Excluir um plano pode deixar `planId` antigo em contas já vinculadas. A administração pode atualizar esses vínculos em **Acessos**.
 
 ## Testes e limites
 
@@ -39,11 +41,12 @@ npm run rules:check
 npm run test:rules:sim
 npm run test:rules        # exige Java 21 + Firebase Emulator
 npm run test:e2e          # exige Playwright instalado
+npm run test:e2e:emulator # navegador com Auth, RTDB e Hosting Emulator
 node scripts/verify-static.mjs
 node scripts/verify-architecture.mjs
 ```
 
-Os testes unitários exercitam semana ISO, validação, links HTTPS e preservação de índices; os de regras cobrem acesso de aluno, mediador e admin; os E2E usam backend/Firebase **simulados** e não provam a segurança real de produção. A homologação ainda exige revisar as regras ativas, backend, migração de dados e aceite do mantenedor.
+Os testes unitários exercitam semana ISO, validação, links HTTPS e atribuição estável de índices. Os de regras cobrem o acesso de cada perfil e a progressão do contador. Os cenários de navegador cobrem a edição em duas abas e a remoção seguida da criação de um horário no mesmo dia. A homologação exige revisar as regras ativas, o backend, a migração de dados e o aceite do mantenedor.
 
 ## Como continuar
 

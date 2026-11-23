@@ -43,7 +43,9 @@ function makeRef(db, path) {
 }
 
 function snapshot(reference, value) {
-  const v = value === undefined ? null : value;
+  const v = reference._limit && value
+    ? Object.fromEntries(Object.entries(sortKeys(value)).slice(-reference._limit))
+    : value ?? null;
   return {
     key: reference.key,
     ref: reference,
@@ -70,6 +72,9 @@ export function connectDatabaseEmulator(db, host, port) {
 
 export function ref(db, path = '') { return makeRef(db, path); }
 export function child(parent, path) { return makeRef(parent._db, join(parent._path, path)); }
+export const orderByKey = () => ({});
+export const limitToLast = (count) => ({ _limit: count });
+export const query = (reference, ...constraints) => Object.assign({}, reference, ...constraints);
 
 export async function get(reference) {
   const { value } = await call('db.get', { path: reference._path });

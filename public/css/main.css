@@ -1,13 +1,19 @@
 /**
- * main.css — ponto de entrada dos estilos. É o único CSS que as páginas carregam
- * (o tradutor público carrega, além dele, pages/circle-translator.css).
+ * main.css — MANIFESTO dos estilos: a lista, em ordem, das folhas do site.
+ * As páginas NÃO carregam este arquivo: carregam css/app.css, gerado a partir
+ * dele por `npm run css:build` (a CI confere com `npm run css:check`).
+ * Além de app.css, as páginas carregam components/icons.css (gerado) e o
+ * tradutor público, pages/circle-translator.css.
  *
  * A ORDEM IMPORTA: ela reproduz a ordem do antigo style.css, então a cascata
  * continua igual. Regras de celular (responsive/) vêm depois das de desktop e
  * as substituições de atributos style= (overrides/) vêm por último.
  *
- * Sem etapa de build, cada @import é uma requisição. Na arquitetura B (Vite),
- * estes arquivos seriam concatenados automaticamente.
+ * Por que não carregar main.css direto: cada @import só é descoberto depois de
+ * baixar main.css — uma ida e volta a mais antes da primeira pintura e 21
+ * requisições por página (medido: ~300 ms de FCP no perfil móvel;
+ * docs/auditorias/CLAUDE_AUDITORIA_DESEMPENHO.md). Este arquivo só pode conter
+ * @import url("...") relativos.
  */
 @import url("base/tokens.css");
 @import url("base/base.css");

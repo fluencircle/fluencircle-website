@@ -5,10 +5,20 @@
  * - equipe: catálogo inteiro e a semana inteira;
  * - participante: só o próprio plano e, um a um, os encontros dele.
  */
-import { database, ref, get, set, push, update, remove } from '../core/firebase.js';
+import { database, ref, get, set, push, runTransaction, remove } from '../core/firebase.js';
 import { nowIso } from '../domain/format.js';
 import { planSessions, slotKey } from '../domain/plans.js';
 import { DB_PATHS, dbPath } from './db-paths.js';
+
+/** Compara snapshots sem depender da ordem dos campos ou da forma das listas no RTDB. */
+function serializePlan(plan) {
+  return JSON.stringify(plan, (_key, value) => {
+    if (!value || typeof value !== 'object') return value;
+    return Object.fromEntries(Object.keys(value).sort()
+      .filter((key) => value[key] !== null)
+      .map((key) => [key, value[key]]));
+  });
+}
 
 /** @returns {Promise<Record<string, object>>} planos por id (equipe) */
 export async function listPlans() {
@@ -28,16 +38,24 @@ export async function getPlan(planId) {
 /**
  * Cria (sem id) ou atualiza um plano já validado por `validatePlanInput`.
  * @param {string|null} planId
- * @param {{ name: string, price: number, description?: string, sessions: object[] }} plan
- * @returns {Promise<string>} id do plano
+ * @param {{ name: string, price: number, description?: string, sessions: object, nextSessionIndex: number }} plan
+ * @param {object} [previousPlan] versão do plano que o administrador abriu para editar
+ * @returns {Promise<string|null>} id do plano; null se o plano editado mudou ou foi excluído
  */
-export async function savePlan(planId, { name, price, description = '', sessions }) {
+export async function savePlan(planId, { name, price, description = '', sessions, nextSessionIndex }, previousPlan) {
   const now = nowIso();
-  const base = { name, price, sessions, updatedAt: now };
+  const base = { name, price, sessions, nextSessionIndex, updatedAt: now };
   if (planId) {
-    // update() troca `sessions` inteiro; description null apaga a descrição antiga
-    await update(ref(database, dbPath(DB_PATHS.plans, planId)), { ...base, description: description || null });
-    return planId;
+    const previous = serializePlan(previousPlan);
+    const planRef = ref(database, dbPath(DB_PATHS.plans, planId));
+    const result = await runTransaction(planRef, (current) => {
+      // Sem cache a primeira tentativa pode receber null. O SDK repete com o
+      // valor do servidor se o plano existir; se foi excluído, ele fica ausente.
+      if (current === null) return null;
+      if (serializePlan(current) !== previous) return undefined;
+      return { ...current, ...base, description: description || null };
+    }, { applyLocally: false });
+    return result.committed && result.snapshot.exists() ? planId : null;
   }
   const planRef = push(ref(database, DB_PATHS.plans));
   await set(planRef, { ...base, ...(description ? { description } : {}), createdAt: now });

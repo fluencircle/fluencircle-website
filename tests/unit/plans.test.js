@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import {
   isoWeekKey, weekDays, addWeeks, weekRangeLabel, slotKey, planSessions, buildWeekAgenda,
   validatePlanInput, formatPlanPrice, planScheduleSummary, isSafeMeetLink, isValidPlanId,
-  preservePlanSessionIndices, changesExistingPlanSlots,
+  preservePlanSessionIndices, changesExistingPlanSlots, profilePlanId,
 } from '../../public/js/domain/plans.js';
 
 describe('semana ISO', () => {
@@ -74,6 +74,14 @@ describe('horários e agenda', () => {
     assert.equal(isValidPlanId('a/b'), false);
     assert.equal(isValidPlanId(''), false);
   });
+  test('perfil legado usa plan quando planId está ausente e respeita planId explícito', () => {
+    assert.equal(profilePlanId({ plan: 'legado' }), 'legado');
+    assert.equal(profilePlanId({ plan: 'legado', planId: 'atual' }), 'atual');
+    assert.equal(profilePlanId({ plan: 'legado', planId: '' }), '');
+    assert.equal(profilePlanId({ plan: 'fora/do-catalogo' }), '');
+    assert.equal(profilePlanId({ planName: 'Somente nome' }), '');
+    assert.equal(profilePlanId(null), '');
+  });
 });
 
 describe('formulário de plano', () => {
@@ -111,30 +119,48 @@ describe('integridade dos índices de agenda em edição', () => {
       { dayOfWeek: 3, startTime: '19:00', endTime: '19:50' },
       { dayOfWeek: 5, startTime: '20:00', endTime: '20:50' },
     ];
-    const slots = preservePlanSessionIndices(previous, normalized, ['1', '2']);
+    const { sessions: slots, nextSessionIndex } = preservePlanSessionIndices(previous, normalized, ['1', '2']);
     assert.deepEqual(Object.keys(slots), ['1', '2']);
+    assert.equal(nextSessionIndex, 100);
     assert.equal(slotKey('planoA', slots[1].dayOfWeek, 1), 'planoA_3_1');
     assert.equal(changesExistingPlanSlots(previous, slots), true);
   });
-  test('nova linha ganha índice acima do maior existente', () => {
-    const slots = preservePlanSessionIndices(previous, [
+  test('plano sem contador reserva os índices conhecidos por versões anteriores', () => {
+    const { sessions, nextSessionIndex } = preservePlanSessionIndices(previous, [
       { dayOfWeek: 3, startTime: '19:00', endTime: '19:50' },
       { dayOfWeek: 6, startTime: '08:00', endTime: '08:30' },
     ], ['1', '']);
-    assert.deepEqual(Object.keys(slots), ['1', '3']);
+    assert.deepEqual(Object.keys(sessions), ['1', '100']);
+    assert.equal(nextSessionIndex, 101);
+  });
+  test('remover o último índice e adicionar em outra edição não reaproveita a chave', () => {
+    const current = { ...previous, nextSessionIndex: 3 };
+    const reduced = preservePlanSessionIndices(current, previous.sessions.slice(0, 2), ['0', '1']);
+    const updated = preservePlanSessionIndices(reduced, previous.sessions, ['0', '1', '']);
+    assert.deepEqual(Object.keys(updated.sessions), ['0', '1', '3']);
+    assert.equal(updated.nextSessionIndex, 4);
+  });
+  test('mudar o dia e voltar ao dia original não restaura encontros antigos', () => {
+    const original = previous.sessions.slice(0, 1);
+    const changed = preservePlanSessionIndices({ sessions: original, nextSessionIndex: 1 }, [
+      { ...original[0], dayOfWeek: 2 },
+    ], ['0']);
+    const backToMonday = preservePlanSessionIndices(changed, original, ['1']);
+    assert.equal(changed.sessions[1].dayOfWeek, 2);
+    assert.equal(backToMonday.sessions[2].dayOfWeek, 1);
   });
   test('alterar só preço não requer aviso; mudar horário requer', () => {
-    const preserved = preservePlanSessionIndices(previous,
+    const { sessions: preserved } = preservePlanSessionIndices(previous,
       previous.sessions.map((s) => ({ ...s })), ['0', '1', '2']);
     assert.equal(changesExistingPlanSlots(previous, preserved), false);
     const changed = { ...preserved, 1: { ...preserved[1], startTime: '20:00' } };
     assert.equal(changesExistingPlanSlots(previous, changed), true);
   });
-  test('índice 99 exige migração antes de adicionar outro horário', () => {
-    const legacy = { sessions: { 99: { dayOfWeek: 4, startTime: '10:00', endTime: '11:00' } } };
-    assert.throws(() => preservePlanSessionIndices(legacy, [
-      { dayOfWeek: 4, startTime: '10:00', endTime: '11:00' },
+  test('recusa expandir além da faixa de índices aceita pelas regras', () => {
+    const full = { sessions: { 999999: { dayOfWeek: 4, startTime: '10:00', endTime: '11:00' } }, nextSessionIndex: 1000000 };
+    assert.throws(() => preservePlanSessionIndices(full, [
+      full.sessions[999999],
       { dayOfWeek: 4, startTime: '12:00', endTime: '13:00' },
-    ], ['99', '']), RangeError);
+    ], ['999999', '']), RangeError);
   });
 });

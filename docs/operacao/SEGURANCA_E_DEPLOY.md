@@ -7,10 +7,15 @@ documento **não é** script de deploy; deploy é sempre ação humana explícit
 
 | Ambiente | Como é selecionado | Dados | Quem usa | Estado |
 | --- | --- | --- | --- | --- |
-| Local / Emulator | página em `localhost`/`127.0.0.1` (automático) + `npm run emulators` | sintéticos (`npm run emulators:seed`) | estudantes e desenvolvimento | ✅ implementado (ADR-002) |
+| Local / Emulator | **qualquer** endereço fora de `PRODUCTION_HOSTNAMES` (automático) + `npm run emulators` | sintéticos (`npm run emulators:seed`) | estudantes e desenvolvimento | ✅ implementado (ADR-002, revisão de 20/11/2026) |
 | CI (GitHub Actions) | jobs `offline`, `rules-emulator`, `e2e` | sintéticos; Emulator dentro do runner | PRs e `main` | ✅ configurado; **ainda não executado** com estes jobs |
 | Staging | projeto Firebase separado + domínio próprio | cópia controlada ou sintéticos | validação antes de produção | ❌ **não existe** — decisão humana |
-| Produção | qualquer endereço não local (`fluentech-1e18a`) | reais | público | publicação bloqueada |
+| Produção | **somente** `fluentech-1e18a.web.app` e `fluentech-1e18a.firebaseapp.com` (`PRODUCTION_HOSTNAMES`) | reais | público | publicação bloqueada |
+
+**Gate de deploy (ADR-002, revisão de 20/11/2026):** antes de publicar em domínio próprio, incluí-lo em
+`PRODUCTION_HOSTNAMES` (`public/js/config/firebase.config.js`) por PR revisado. Sem isso o site publicado mostra o
+selo "Endereço não reconhecido" e aponta para o Emulator (falha segura). Pré-visualizações do Hosting nunca usam
+produção; para validar com dados, crie um projeto de **staging** (Issue #15).
 
 ## 2. Segredos e credenciais
 

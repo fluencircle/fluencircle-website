@@ -59,6 +59,7 @@ Aprovação humana: pendente/aprovada + referência
 | GM-001 | Gemini | Revisão cruzada independente, planejada | Nenhum resultado ainda | Planejada |
 | CG-002 | ChatGPT | Revisão final, planejada | Depende de código e evidências novos | Planejada |
 | CL-002 | Claude | Hardening e entrega ao aluno (Issue #28): 31 commits em 6 branches empilhados | Unitários 87/87, regras no simulador 65/65, E2E 44/44 executados localmente; Emulator e CI **não executados**; ver `docs/auditorias/CLAUDE_HANDOFF_FINAL.md` | **Em revisão (Draft), sem merge** |
+| CL-003 | Claude | Auditoria técnica independente (Issue #41): segurança, arquitetura, desempenho medido, compatibilidade histórica, diagramas; 8 commits de código/teste e 6 de documentação na branch `audit/claude-security-performance-architecture` | Clone limpo: unitários 153/153, regras no **Emulator oficial** 79/79, simulador 79/79, E2E 60/60, seed verificado; mesclagem de teste com o PR #40 sem conflitos; ver `docs/processo/CLAUDE_IMPLEMENTATION_LOG.md` | **Em revisão (Draft), sem merge**; revisão independente pendente |
 
 ## Critério de fechamento
 Uma Issue só é encerrada quando há PR relacionado, testes/evidências suficientes e decisão registrada. Um PR só pode ser mesclado após revisão dos riscos da sua área e aprovação humana. **Sem merge automático de mudanças de segurança ou de dados.**

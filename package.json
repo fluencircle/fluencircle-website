@@ -8,14 +8,22 @@
     "test:rules": "firebase emulators:exec --config firebase.emulator.json --project demo-fluencircle-audit --only database \"node scripts/test-rules.mjs --driver=emulator\"",
     "test:rules:sim": "node scripts/test-rules.mjs --driver=simulator",
     "test:e2e": "node --test tests/e2e/*.e2e.test.mjs",
+    "test:e2e:emulator": "firebase emulators:exec --config firebase.emulator.json --project demo-fluencircle-audit --only auth,database,hosting \"npm run emulators:seed && npm run emulators:verify && node --test --test-concurrency=1 tests/e2e-emulator/*.test.mjs\"",
     "rules:build": "node scripts/build-rules.mjs",
     "rules:check": "node scripts/build-rules.mjs --check",
-    "emulators": "firebase emulators:start --config firebase.emulator.json --project demo-fluencircle-audit",
+    "emulators": "npm run css:build && firebase emulators:start --config firebase.emulator.json --project demo-fluencircle-audit",
     "emulators:seed": "node scripts/emulator/seed.mjs",
-    "serve": "python3 -m http.server 5501 --directory public"
+    "emulators:verify": "node scripts/emulator/seed.mjs --verify",
+    "serve": "npm run css:build && python3 -m http.server 5501 --bind 127.0.0.1 --directory public",
+    "bench:pages": "firebase emulators:exec --config firebase.emulator.json --project demo-fluencircle-audit --only auth,database \"node scripts/benchmarks/page-performance.mjs\"",
+    "icons:build": "node scripts/build-icons.mjs",
+    "icons:check": "node scripts/build-icons.mjs --check",
+    "css:build": "node scripts/build-css.mjs",
+    "css:check": "node scripts/build-css.mjs --check"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.1",
+    "@fortawesome/fontawesome-free": "6.5.0",
     "firebase": "^12.0.0",
     "firebase-tools": "15.37.0",
     "playwright": "1.63.0"

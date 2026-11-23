@@ -24,8 +24,8 @@ Problemas da forma original:
 ## Decisão
 
 1. **Modelo de dados** (nomes do PR mantidos para não perder dados que já existam):
-   - `users/{uid}/planId`: id do plano. Só o admin grava, e o plano precisa existir.
-   - `plans/{planId}` guarda `{ name, price, description?, sessions[{ dayOfWeek 0–6, startTime "HH:MM", endTime "HH:MM" }], createdAt, updatedAt }`.
+   - `users/{uid}/planId`: id do plano. Só o admin grava, e o plano precisa existir. Perfis cujo campo `planId` está ausente podem usar o identificador legado `plan`. Um `planId` vazio registrado por versão antiga representa desvínculo. Ao editar, a tela Acessos grava a referência canônica e remove os campos `plan` e `planName`.
+   - `plans/{planId}` guarda nome, preço de referência, descrição opcional, horários em `sessions/{i}` (dia de 0 a 6 e início e fim no formato `HH:MM`), `nextSessionIndex`, `createdAt` e `updatedAt`. O contador é opcional para leitura de planos anteriores a esta correção.
    - `weekly_sessions/{AAAA-Www}/{planId}_{dia}_{i}` guarda `{ topicId, topicTitle, questions[], meetLink?, updatedAt }`.
      - A semana segue a **ISO 8601** (semana começa na segunda; a semana 1 é a que contém a primeira quinta-feira).
      - Ela é calculada na data **local**, como os horários do plano.
@@ -52,9 +52,9 @@ Problemas da forma original:
   - há testes de domínio, de regras e E2E.
 - **Custo:** cada encontro do aluno é uma leitura separada. Um plano tem no máximo 14 horários.
 - **Limites conhecidos:**
-  - **Integridade de índice (revisão ChatGPT):** o encontro contém o índice original do horário. Ao remover/reordenar linhas na edição, a interface persiste índices estáveis (`sessions` pode ser objeto com lacunas), impedindo que a remoção da primeira linha reaproveite o índice de outra aula. Novos horários recebem índices superiores aos já existentes. Remover um horário ou mudar seu **dia** ainda pode deixar temas de semanas anteriores ou futuras **órfãos**, e a tela exige confirmação. Se os 100 índices possíveis já estiverem ocupados historicamente, a edição falha e exige migração. Não há limpeza automática de agenda legada.
+  - **Integridade do índice:** a interface preserva o índice ao reordenar ou mudar a hora dentro do mesmo dia. A remoção ou mudança de dia desvincula temas das semanas já programadas. A tela exige confirmação para mudanças nos horários existentes. Os registros desvinculados permanecem armazenados. A próxima edição usa `nextSessionIndex` para evitar reaproveitá-los. Planos sem contador reservam os índices 0–99 para a faixa histórica. A capacidade é de 14 horários ativos por plano e há espaço de 0 a 999999 para identidades. A edição roda em transação e avisa se a versão aberta em outra aba ficou desatualizada.
   - Excluir um plano não limpa `users/*/planId`. A home e Acessos mostram "plano não encontrado / Plano removido".
-  - Dados que o PR #2 possa ter gravado em produção com a chave de semana antiga **não aparecem**: as chaves são diferentes. Não há migração, porque não sabemos se esses dados existem.
+  - Chaves do PR #2 podem coincidir com semanas ISO de janeiro ou fevereiro. O registro legado só guarda a hora de edição, que não identifica a semana letiva. Para recuperar uma linha cuja origem e data estejam confirmadas, a equipe deve verificar o destino antes de vincular o tema e o link na semana correta. Os dados legados ainda precisam ser inventariados.
   - Preço e plano são só informativos. Não há cobrança nem bloqueio de acesso por plano.
 
 ## Verificação

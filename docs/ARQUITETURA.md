@@ -81,7 +81,12 @@ weekly_sessions/{AAAA-Www}/{planoId_dia_i}
 
 O último arquivo reúne as classes que substituíram os antigos atributos `style=`. Ele fica por último de propósito, para manter a precedência que o `style=` tinha.
 
-Sem build, cada `@import` é uma requisição a mais no primeiro carregamento. É o preço de não ter bundler; na arquitetura B o Vite junta tudo num arquivo.
+~~Sem build, cada `@import` é uma requisição a mais no primeiro carregamento.~~ **Desde 20/11/2026** `main.css` é só o
+**manifesto**: `npm run css:build` (`scripts/build-css.mjs`) concatena as partes, na mesma ordem e com as `url()` corrigidas,
+em `css/app.css`, que é o que as páginas carregam; `npm run css:check` (CI offline) recusa um `app.css` desatualizado e
+`verify-static.mjs` recusa página que carregue `main.css`. Medido no perfil móvel: −21 requisições e ~300 ms a menos
+até a primeira pintura (`docs/auditorias/CLAUDE_AUDITORIA_DESEMPENHO.md`). Os ícones vêm de `css/components/icons.css`,
+gerado por `npm run icons:build` só com os ícones usados (antes: Font Awesome inteiro do cdnjs).
 
 ## Limitações conhecidas e próximos passos
 

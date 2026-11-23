@@ -1,0 +1,847 @@
+{
+ "label": "baseline",
+ "date": "2026-11-20T17:04:09.866Z",
+ "options": {
+  "scale": "small",
+  "runs": 5,
+  "network": "mobile",
+  "protocol": "h2",
+  "pages": null,
+  "scenario": "pages",
+  "skipSeed": false,
+  "out": "/tmp/claude-1000/-home-sperotto-fluencircle-website/adb28f5e-233c-4e76-8963-bf48fd5e4fa0/scratchpad/bench/baseline-small-mobile.json",
+  "label": "baseline"
+ },
+ "environment": {
+  "node": "v22.22.3",
+  "chromium": "153.0.8010.12",
+  "platform": "linux",
+  "server": "HTTP/2 + TLS + gzip (local)"
+ },
+ "seed": {
+  "scale": "small",
+  "sessions": 3,
+  "users": 5,
+  "studentSessions": 2,
+  "databaseBytes": 4417
+ },
+ "summary": {
+  "login": {
+   "runs": 5,
+   "redirectedTo": "/auth.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 848,
+    "min": 832,
+    "max": 968
+   },
+   "lcp": {
+    "median": 848,
+    "min": 832,
+    "max": 968
+   },
+   "cls": {
+    "median": 0.11736379752949708,
+    "min": 0.11736379752949708,
+    "max": 0.11736379752949708
+   },
+   "authAt": null,
+   "readyAt": {
+    "median": 199.8000000002794,
+    "min": 193.70000000018626,
+    "max": 204
+   },
+   "load": {
+    "median": 3073.100000000093,
+    "min": 3058.8000000002794,
+    "max": 3167.7999999998137
+   },
+   "requests": {
+    "median": 49,
+    "min": 49,
+    "max": 49
+   },
+   "transferBytes": {
+    "median": 484272,
+    "min": 484184,
+    "max": 484435
+   },
+   "thirdPartyBytes": {
+    "median": 443679,
+    "min": 443614,
+    "max": 443842
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 21,
+    "min": 21,
+    "max": 21
+   },
+   "rtdbReads": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "heapUsedBytes": {
+    "median": 2699456,
+    "min": 2699160,
+    "max": 2699456
+   },
+   "jsEventListeners": {
+    "median": 80,
+    "min": 80,
+    "max": 80
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {}
+  },
+  "translator": {
+   "runs": 5,
+   "redirectedTo": "/circle-translator.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 812,
+    "min": 792,
+    "max": 844
+   },
+   "lcp": {
+    "median": 1464,
+    "min": 1456,
+    "max": 1512
+   },
+   "cls": {
+    "median": 0.0045366204579671224,
+    "min": 0.0045366204579671224,
+    "max": 0.0045366204579671224
+   },
+   "authAt": null,
+   "readyAt": {
+    "median": 1705.7999999998137,
+    "min": 1682.8999999999069,
+    "max": 1748.8000000002794
+   },
+   "load": {
+    "median": 1454.6000000000931,
+    "min": 1446.2999999998137,
+    "max": 1497.1000000000931
+   },
+   "requests": {
+    "median": 43,
+    "min": 43,
+    "max": 43
+   },
+   "transferBytes": {
+    "median": 114447,
+    "min": 114445,
+    "max": 114447
+   },
+   "thirdPartyBytes": {
+    "median": 70507,
+    "min": 70505,
+    "max": 70507
+   },
+   "stylesheets": {
+    "median": 23,
+    "min": 23,
+    "max": 23
+   },
+   "scripts": {
+    "median": 19,
+    "min": 19,
+    "max": 19
+   },
+   "rtdbReads": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbListens": {
+    "median": 1,
+    "min": 1,
+    "max": 1
+   },
+   "rtdbBytesIn": {
+    "median": 203,
+    "min": 203,
+    "max": 203
+   },
+   "heapUsedBytes": {
+    "median": 2467224,
+    "min": 2466716,
+    "max": 2467224
+   },
+   "jsEventListeners": {
+    "median": 70,
+    "min": 70,
+    "max": 70
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "listen /current_session": 1
+   }
+  },
+  "home-student": {
+   "runs": 5,
+   "redirectedTo": "/index.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 824,
+    "min": 816,
+    "max": 864
+   },
+   "lcp": {
+    "median": 824,
+    "min": 816,
+    "max": 864
+   },
+   "cls": {
+    "median": 0.0034642501937018504,
+    "min": 0.0034642501937018504,
+    "max": 0.0034642501937018504
+   },
+   "authAt": {
+    "median": 2557.3000000002794,
+    "min": 2528.2000000001863,
+    "max": 2592
+   },
+   "readyAt": {
+    "median": 2570.5,
+    "min": 2540.5,
+    "max": 2620.399999999907
+   },
+   "load": {
+    "median": 2481.0999999996275,
+    "min": 2479.600000000093,
+    "max": 2540.1999999997206
+   },
+   "requests": {
+    "median": 56,
+    "min": 56,
+    "max": 56
+   },
+   "transferBytes": {
+    "median": 404076,
+    "min": 404055,
+    "max": 404091
+   },
+   "thirdPartyBytes": {
+    "median": 352399,
+    "min": 352396,
+    "max": 352412
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 26,
+    "min": 26,
+    "max": 26
+   },
+   "rtdbReads": {
+    "median": 6,
+    "min": 6,
+    "max": 6
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 1824,
+    "min": 1824,
+    "max": 1824
+   },
+   "heapUsedBytes": {
+    "median": 3282384,
+    "min": 3282128,
+    "max": 3282384
+   },
+   "jsEventListeners": {
+    "median": 65,
+    "min": 65,
+    "max": 65
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 2,
+    "get /plans/plano-essencial": 1,
+    "get /weekly_sessions/2026-W47/plano-essencial_1_0": 1,
+    "get /weekly_sessions/2026-W47/plano-essencial_3_1": 1
+   }
+  },
+  "flashcards-student": {
+   "runs": 5,
+   "redirectedTo": "/flash-cards.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 864,
+    "min": 848,
+    "max": 872
+   },
+   "lcp": {
+    "median": 1068,
+    "min": 1056,
+    "max": 1092
+   },
+   "cls": {
+    "median": 0.002261850039164225,
+    "min": 0.0022596388922797306,
+    "max": 0.002261850039164225
+   },
+   "authAt": {
+    "median": 2519,
+    "min": 2505.899999999907,
+    "max": 2547.600000000093
+   },
+   "readyAt": {
+    "median": 2639.5,
+    "min": 2620.2000000001863,
+    "max": 2677.399999999907
+   },
+   "load": {
+    "median": 2961.7000000001863,
+    "min": 2666.600000000093,
+    "max": 2969
+   },
+   "requests": {
+    "median": 61,
+    "min": 61,
+    "max": 61
+   },
+   "transferBytes": {
+    "median": 413079,
+    "min": 413070,
+    "max": 413112
+   },
+   "thirdPartyBytes": {
+    "median": 352402,
+    "min": 352393,
+    "max": 352412
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 31,
+    "min": 31,
+    "max": 31
+   },
+   "rtdbReads": {
+    "median": 6,
+    "min": 6,
+    "max": 6
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2029,
+    "min": 2029,
+    "max": 2029
+   },
+   "heapUsedBytes": {
+    "median": 3300188,
+    "min": 3300188,
+    "max": 3366476
+   },
+   "jsEventListeners": {
+    "median": 72,
+    "min": 72,
+    "max": 72
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /user_sessions/{uid}": 1,
+    "get /student_reviews/{uid}": 1,
+    "get /flashcards/sess-ambos": 1,
+    "get /flashcards/sess-ana": 1
+   }
+  },
+  "flashcards-staff": {
+   "runs": 5,
+   "redirectedTo": "/flash-cards.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 864,
+    "min": 852,
+    "max": 948
+   },
+   "lcp": {
+    "median": 1100,
+    "min": 1064,
+    "max": 1160
+   },
+   "cls": {
+    "median": 0.0030825571219126385,
+    "min": 0.0030825571219126385,
+    "max": 0.0030825571219126385
+   },
+   "authAt": {
+    "median": 2519.2000000001863,
+    "min": 2490.7999999998137,
+    "max": 2583.3000000002794
+   },
+   "readyAt": {
+    "median": 2613.2999999998137,
+    "min": 2571.899999999907,
+    "max": 2671.5
+   },
+   "load": {
+    "median": 2918.6999999997206,
+    "min": 2876.0999999996275,
+    "max": 2982.600000000093
+   },
+   "requests": {
+    "median": 61,
+    "min": 61,
+    "max": 61
+   },
+   "transferBytes": {
+    "median": 413103,
+    "min": 413095,
+    "max": 413125
+   },
+   "thirdPartyBytes": {
+    "median": 352402,
+    "min": 352394,
+    "max": 352424
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 31,
+    "min": 31,
+    "max": 31
+   },
+   "rtdbReads": {
+    "median": 5,
+    "min": 5,
+    "max": 5
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2738,
+    "min": 2738,
+    "max": 2738
+   },
+   "heapUsedBytes": {
+    "median": 3301116,
+    "min": 3300820,
+    "max": 3301116
+   },
+   "jsEventListeners": {
+    "median": 74,
+    "min": 74,
+    "max": 74
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /meeting_sessions": 1,
+    "get /flashcards": 1,
+    "get /student_reviews/{uid}": 1
+   }
+  },
+  "sessions-staff": {
+   "runs": 5,
+   "redirectedTo": "/manage-meetings.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 808,
+    "min": 796,
+    "max": 828
+   },
+   "lcp": {
+    "median": 1036,
+    "min": 1028,
+    "max": 1052
+   },
+   "cls": {
+    "median": 0.00323089427418179,
+    "min": 0.00323089427418179,
+    "max": 0.00323089427418179
+   },
+   "authAt": {
+    "median": 2476.2000000001863,
+    "min": 2453.600000000093,
+    "max": 2572.2999999998137
+   },
+   "readyAt": {
+    "median": 2547.899999999907,
+    "min": 2530.8000000002794,
+    "max": 2648.100000000093
+   },
+   "load": {
+    "median": 2840.7000000001863,
+    "min": 2825,
+    "max": 2947.399999999907
+   },
+   "requests": {
+    "median": 58,
+    "min": 58,
+    "max": 58
+   },
+   "transferBytes": {
+    "median": 407620,
+    "min": 407614,
+    "max": 407627
+   },
+   "thirdPartyBytes": {
+    "median": 352403,
+    "min": 352397,
+    "max": 352410
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 28,
+    "min": 28,
+    "max": 28
+   },
+   "rtdbReads": {
+    "median": 4,
+    "min": 4,
+    "max": 4
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2693,
+    "min": 2693,
+    "max": 2693
+   },
+   "heapUsedBytes": {
+    "median": 3240128,
+    "min": 3239640,
+    "max": 3240128
+   },
+   "jsEventListeners": {
+    "median": 74,
+    "min": 74,
+    "max": 74
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /meeting_sessions": 1,
+    "get /flashcards": 1
+   }
+  },
+  "presentation-staff": {
+   "runs": 5,
+   "redirectedTo": "/presentation.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 896,
+    "min": 864,
+    "max": 912
+   },
+   "lcp": {
+    "median": 1104,
+    "min": 1084,
+    "max": 1136
+   },
+   "cls": {
+    "median": 0.0036626570489671495,
+    "min": 0.0036626570489671495,
+    "max": 0.0036626570489671495
+   },
+   "authAt": {
+    "median": 2661.2000000001863,
+    "min": 2649,
+    "max": 2695.600000000093
+   },
+   "readyAt": {
+    "median": 2677,
+    "min": 2668.1999999997206,
+    "max": 2722.600000000093
+   },
+   "load": {
+    "median": 2566.399999999907,
+    "min": 2554,
+    "max": 2588.6999999997206
+   },
+   "requests": {
+    "median": 67,
+    "min": 67,
+    "max": 67
+   },
+   "transferBytes": {
+    "median": 392973,
+    "min": 392963,
+    "max": 392981
+   },
+   "thirdPartyBytes": {
+    "median": 326293,
+    "min": 326283,
+    "max": 326301
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 38,
+    "min": 38,
+    "max": 38
+   },
+   "rtdbReads": {
+    "median": 4,
+    "min": 4,
+    "max": 4
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2356,
+    "min": 2356,
+    "max": 2356
+   },
+   "heapUsedBytes": {
+    "median": 3263232,
+    "min": 3262764,
+    "max": 3328488
+   },
+   "jsEventListeners": {
+    "median": 93,
+    "min": 93,
+    "max": 93
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /meetings": 1,
+    "get /users": 1
+   }
+  },
+  "plans-admin": {
+   "runs": 5,
+   "redirectedTo": "/plans.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 836,
+    "min": 824,
+    "max": 876
+   },
+   "lcp": {
+    "median": 1056,
+    "min": 1028,
+    "max": 1064
+   },
+   "cls": {
+    "median": 0.00409089113606347,
+    "min": 0.00409089113606347,
+    "max": 0.004115378710958692
+   },
+   "authAt": {
+    "median": 2586.7999999998137,
+    "min": 2560.7000000001863,
+    "max": 2630
+   },
+   "readyAt": {
+    "median": 2700.899999999907,
+    "min": 2665.8000000002794,
+    "max": 2755.6999999997206
+   },
+   "load": {
+    "median": 2523.600000000093,
+    "min": 2515.100000000093,
+    "max": 2566.100000000093
+   },
+   "requests": {
+    "median": 59,
+    "min": 59,
+    "max": 59
+   },
+   "transferBytes": {
+    "median": 410235,
+    "min": 410213,
+    "max": 410327
+   },
+   "thirdPartyBytes": {
+    "median": 352412,
+    "min": 352390,
+    "max": 352504
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 29,
+    "min": 29,
+    "max": 29
+   },
+   "rtdbReads": {
+    "median": 5,
+    "min": 5,
+    "max": 5
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2389,
+    "min": 2389,
+    "max": 2389
+   },
+   "heapUsedBytes": {
+    "median": 3336548,
+    "min": 3336292,
+    "max": 3336568
+   },
+   "jsEventListeners": {
+    "median": 88,
+    "min": 88,
+    "max": 88
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /plans": 1,
+    "get /meetings": 1,
+    "get /weekly_sessions/2026-W47": 1
+   }
+  },
+  "admin": {
+   "runs": 5,
+   "redirectedTo": "/admin.html",
+   "readyTimeouts": 0,
+   "fcp": {
+    "median": 852,
+    "min": 848,
+    "max": 888
+   },
+   "lcp": {
+    "median": 1040,
+    "min": 1032,
+    "max": 1076
+   },
+   "cls": {
+    "median": 0.007757685237460666,
+    "min": 0.007757685237460666,
+    "max": 0.007757685237460666
+   },
+   "authAt": {
+    "median": 2580.2999999998137,
+    "min": 2561.100000000093,
+    "max": 2655.6999999997206
+   },
+   "readyAt": {
+    "median": 2647.5,
+    "min": 2624.2999999998137,
+    "max": 2739.6999999997206
+   },
+   "load": {
+    "median": 2515.2999999998137,
+    "min": 2508.600000000093,
+    "max": 2545.0999999996275
+   },
+   "requests": {
+    "median": 56,
+    "min": 56,
+    "max": 56
+   },
+   "transferBytes": {
+    "median": 382180,
+    "min": 382169,
+    "max": 382205
+   },
+   "thirdPartyBytes": {
+    "median": 326300,
+    "min": 326284,
+    "max": 326313
+   },
+   "stylesheets": {
+    "median": 24,
+    "min": 24,
+    "max": 24
+   },
+   "scripts": {
+    "median": 27,
+    "min": 27,
+    "max": 27
+   },
+   "rtdbReads": {
+    "median": 4,
+    "min": 4,
+    "max": 4
+   },
+   "rtdbListens": {
+    "median": 0,
+    "min": 0,
+    "max": 0
+   },
+   "rtdbBytesIn": {
+    "median": 2428,
+    "min": 2428,
+    "max": 2428
+   },
+   "heapUsedBytes": {
+    "median": 3031476,
+    "min": 2991828,
+    "max": 3401748
+   },
+   "jsEventListeners": {
+    "median": 81,
+    "min": 81,
+    "max": 81
+   },
+   "consoleErrors": [],
+   "rtdbOperations": {
+    "get /deleted_users/{uid}": 1,
+    "get /users/{uid}": 1,
+    "get /users": 1,
+    "get /plans": 1
+   }
+  }
+ }
+}

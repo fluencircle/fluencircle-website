@@ -1,0 +1,63 @@
+{
+ "label": "codex",
+ "date": "2026-11-20T17:17:37.032Z",
+ "options": {
+  "scale": "small",
+  "runs": 20,
+  "network": "none",
+  "protocol": "h2",
+  "pages": null,
+  "scenario": "study-loop",
+  "skipSeed": true,
+  "out": "/tmp/claude-1000/-home-sperotto-fluencircle-website/adb28f5e-233c-4e76-8963-bf48fd5e4fa0/scratchpad/bench/codex-study-loop-v2.json",
+  "label": "codex"
+ },
+ "environment": {
+  "node": "v22.22.3",
+  "chromium": "153.0.8010.12",
+  "platform": "linux",
+  "server": "HTTP/2 + TLS + gzip (local)"
+ },
+ "seed": null,
+ "studyLoop": {
+  "samples": [
+   {
+    "iteration": 0,
+    "heapUsedBytes": 2361808,
+    "domNodes": 231,
+    "jsEventListeners": 32
+   },
+   {
+    "iteration": 1,
+    "heapUsedBytes": 3099556,
+    "domNodes": 236,
+    "jsEventListeners": 45
+   },
+   {
+    "iteration": 5,
+    "heapUsedBytes": 3238736,
+    "domNodes": 236,
+    "jsEventListeners": 45
+   },
+   {
+    "iteration": 10,
+    "heapUsedBytes": 3280252,
+    "domNodes": 236,
+    "jsEventListeners": 45
+   },
+   {
+    "iteration": 15,
+    "heapUsedBytes": 3313252,
+    "domNodes": 236,
+    "jsEventListeners": 45
+   },
+   {
+    "iteration": 20,
+    "heapUsedBytes": 3352776,
+    "domNodes": 236,
+    "jsEventListeners": 45
+   }
+  ],
+  "detachedElements": []
+ }
+}

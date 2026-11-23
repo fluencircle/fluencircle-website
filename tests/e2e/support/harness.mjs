@@ -28,6 +28,10 @@ export const RULES = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'docs/fireb
 export const ORIGINS = Object.freeze({
   local: 'http://localhost:4173',
   production: 'https://fluentech-1e18a.web.app',
+  /** Endereço de rede local (ex.: celular abrindo o servidor de desenvolvimento). Não é produção. */
+  lan: 'http://192.168.0.10:5501',
+  /** Canal de pré-visualização do Firebase Hosting. Não é produção. */
+  preview: 'https://fluentech-1e18a--pr41-abc123.web.app',
 });
 
 /** Instante fixo dos testes (as sessões sintéticas são de 10 a 17/11/2026). */
